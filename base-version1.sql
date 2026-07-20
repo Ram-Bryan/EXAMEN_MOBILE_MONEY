@@ -10,20 +10,10 @@ PRAGMA foreign_keys = ON;
 -- ============================================================
 
 -- Table : Configurations des préfixes de l'opérateur
-
 CREATE TABLE operateur_prefixes (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    nom TEXT,
-    est_notre_operateur INTEGER NOT NULL DEFAULT 0, -- 1 = c'est nous, 0 = opérateur externe
+    prefixe TEXT NOT NULL UNIQUE,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-);
-
-CREATE TABLE historique_operateur_prefixes (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    operateur_prefixe_id INTEGER NOT NULL,
-    prefixe TEXT NOT NULL,
-    date_modif DATETIME DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (operateur_prefixe_id) REFERENCES operateur_prefixes(id)
 );
 
 -- Table : Types d'opérations
@@ -31,20 +21,6 @@ CREATE TABLE types_operation (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     code TEXT NOT NULL UNIQUE,
     nom TEXT NOT NULL
-);
-
-CREATE TABLE commissions (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    operateur_destination_id INTEGER NOT NULL, -- l'opérateur externe concerné
-    FOREIGN KEY (operateur_destination_id) REFERENCES operateur_prefixes(id)
-);
-
-CREATE TABLE commissions_historique (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    commission_id INTEGER NOT NULL,
-    pourcentage REAL NOT NULL, -- ex: 1.5 pour 1.5%
-    date_modif DATETIME DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (commission_id) REFERENCES commissions(id)
 );
 
 -- Table : Barèmes des frais
