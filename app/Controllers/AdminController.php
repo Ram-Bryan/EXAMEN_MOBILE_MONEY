@@ -204,6 +204,17 @@ class AdminController extends BaseController
     }
 
     // ----------------------------------------------------------------
+    // Commissions inter-opérateurs
+    // ----------------------------------------------------------------
+
+    public function commissions()
+    {
+        return view('admin/commissions', [
+            'commissions' => $this->commissionModel->getAllCommissions(),
+        ]);
+    }
+
+    // ----------------------------------------------------------------
     // Gains (v2 : séparation nous / autres opérateurs)
     // ----------------------------------------------------------------
 

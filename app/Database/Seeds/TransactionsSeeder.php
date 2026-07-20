@@ -8,6 +8,10 @@ class TransactionsSeeder extends Seeder
 {
     public function run()
     {
+        if ($this->db->table('transactions')->countAll() > 0) {
+            return;
+        }
+
         $db = \Config\Database::connect();
 
         $depotId = $db->table('types_operation')->where('code', 'DEPOT')->get()->getRow()->id;

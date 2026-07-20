@@ -8,6 +8,10 @@ class BaremesFraisSeeder extends Seeder
 {
     public function run()
     {
+        if ($this->db->table('baremes_frais')->countAll() > 0) {
+            return;
+        }
+
         // Barèmes - 5 opérateurs × 3 types = 15 baremes
         $baremes = [];
         $id = 1;

@@ -36,6 +36,7 @@ class Filters extends BaseFilters
         'performance'   => PerformanceMetrics::class,
         'adminAuth'     => \App\Filters\AdminFilter::class,
         'clientAuth'    => \App\Filters\ClientFilter::class,
+        'noAuth'        => \App\Filters\NoAuthFilter::class,
     ];
 
     /**
@@ -111,5 +112,6 @@ class Filters extends BaseFilters
     public array $filters = [
         'adminAuth'  => ['before' => ['admin', 'admin/*']],
         'clientAuth' => ['before' => ['client', 'client/*', 'api/*']],
+        'noAuth'     => ['before' => ['login/*']],
     ];
 }

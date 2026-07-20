@@ -6,7 +6,7 @@ use App\Models\ClientModel;
 use App\Models\TypeOperationModel;
 use App\Models\BaremeFraisModel;
 
-class Api extends BaseController
+class ApiController extends BaseController
 {
     protected $clientModel;
     protected $typeOperationModel;
@@ -15,15 +15,12 @@ class Api extends BaseController
 
     public function __construct()
     {
-        $this->clientModel = new ClientModel();
+        $this->clientModel        = new ClientModel();
         $this->typeOperationModel = new TypeOperationModel();
-        $this->baremeFraisModel = new BaremeFraisModel();
-        $this->session = session();
+        $this->baremeFraisModel   = new BaremeFraisModel();
+        $this->session            = session();
     }
 
-    /**
-     * Get the logged-in client's balance as JSON.
-     */
     public function getBalance()
     {
         if (!$this->session->get('isLoggedIn') || $this->session->get('role') !== 'client') {
@@ -34,7 +31,7 @@ class Api extends BaseController
         }
 
         $clientId = $this->session->get('client_id');
-        $balance = $this->clientModel->getBalance($clientId);
+        $balance  = $this->clientModel->getBalance($clientId);
 
         return $this->response->setJSON([
             'success' => true,
@@ -42,9 +39,6 @@ class Api extends BaseController
         ]);
     }
 
-    /**
-     * Calculate fee dynamically for preview.
-     */
     public function calculateFees()
     {
         if (!$this->session->get('isLoggedIn')) {
@@ -54,10 +48,10 @@ class Api extends BaseController
             ])->setStatusCode(401);
         }
 
-        $typeCode = $this->request->getGet('type_code') ?? $this->request->getPost('type_code');
-        $amount = (float)($this->request->getGet('amount') ?? $this->request->getPost('amount'));
+        $typeCode     = $this->request->getGet('type_code') ?? $this->request->getPost('type_code');
+        $amount       = (float)($this->request->getGet('amount') ?? $this->request->getPost('amount'));
         $recipientPhone = $this->request->getGet('recipient_phone') ?? $this->request->getPost('recipient_phone');
-        $clientId = $this->session->get('client_id');
+        $clientId     = $this->session->get('client_id');
 
         if (!$typeCode || $amount <= 0 || !$clientId) {
             return $this->response->setJSON([
@@ -97,9 +91,9 @@ class Api extends BaseController
         }
 
         return $this->response->setJSON([
-            'success'          => true,
-            'fee'              => $fee,
-            'commission'       => $commission,
+            'success'           => true,
+            'fee'               => $fee,
+            'commission'        => $commission,
             'is_inter_operator' => $isInterOperator
         ]);
     }

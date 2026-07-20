@@ -6,73 +6,53 @@ use CodeIgniter\Router\RouteCollection;
  * @var RouteCollection $routes
  */
 
-// ==================== ACCUEIL → Redirige vers login ====================
-$routes->get('/', 'AuthController::loginClient');
+$routes->get('/', 'HomeController::index');
 
-// ==================== AUTH ROUTES ====================
-$routes->get('login', function() {
-    return redirect()->to('login/client');
+$routes->group('login', function ($routes) {
+    $routes->get('client', 'AuthController::loginClient');
+    $routes->post('client', 'AuthController::doLoginClient');
+    $routes->get('admin', 'AuthController::loginAdmin');
+    $routes->post('admin', 'AuthController::doLoginAdmin');
 });
-
-$routes->get('login/client', 'AuthController::loginClient');
-$routes->post('login/client', 'AuthController::doLoginClient');
-
-$routes->get('login/admin', 'AuthController::loginAdmin');
-$routes->post('login/admin', 'AuthController::doLoginAdmin');
 
 $routes->get('logout', 'AuthController::logout');
 
-// ==================== ADMIN ROUTES (protégées par AdminFilter) ====================
-$routes->group('admin', function($routes) {
-    // Dashboard
+$routes->group('admin', ['filter' => 'adminAuth'], function ($routes) {
     $routes->get('dashboard', 'AdminController::dashboard');
-    
-    // Préfixes Opérateurs CRUD
+
     $routes->get('operators', 'AdminController::operators');
     $routes->get('operators/detail/(:num)', 'AdminController::operatorDetail/$1');
     $routes->post('operators/create', 'AdminController::createOperator');
     $routes->post('operators/update/(:num)', 'AdminController::updateOperator/$1');
     $routes->post('operators/delete/(:num)', 'AdminController::deleteOperator/$1');
 
-    // Barèmes de Frais (par opérateur)
     $routes->post('operators/(:num)/fees/create', 'AdminController::createFee/$1');
     $routes->post('operators/(:num)/fees/update/(:num)', 'AdminController::updateFee/$2/$1');
 
-    // Préfixes historiques d'un opérateur (v2)
     $routes->post('operators/(:num)/prefixes/add', 'AdminController::addPrefixe/$1');
 
-    // Commissions inter-opérateurs (v2)
     $routes->post('operators/(:num)/commission/update', 'AdminController::updateCommission/$1');
 
-    // Comptes Clients
     $routes->get('clients', 'AdminController::clients');
-
-    // Commissions inter-opérateurs
     $routes->get('commissions', 'AdminController::commissions');
-    $routes->post('commissions/update/(:num)', 'AdminController::updateCommission/$1');
-
-    // Historique des transactions
     $routes->get('transactions', 'AdminController::transactionsHistory');
-
-    // Situation des Gains
     $routes->get('gains', 'AdminController::gains');
+    $routes->get('commissions', 'AdminController::commissions');
 });
 
-// ==================== CLIENT ROUTES (protégées par ClientFilter) ====================
-$routes->group('client', function($routes) {
-    $routes->get('dashboard', 'Client::dashboard');
-    $routes->get('balance', 'Client::balance');
-    $routes->get('deposit', 'Client::deposit');
-    $routes->post('deposit', 'Client::doDeposit');
-    $routes->get('withdraw', 'Client::withdraw');
-    $routes->post('withdraw', 'Client::doWithdraw');
-    $routes->get('transfer', 'Client::transfer');
-    $routes->post('transfer', 'Client::doTransfer');
-    $routes->get('history', 'Client::history');
+$routes->group('client', ['filter' => 'clientAuth'], function ($routes) {
+    $routes->get('dashboard', 'ClientController::dashboard');
+    $routes->get('balance', 'ClientController::balance');
+    $routes->get('deposit', 'ClientController::deposit');
+    $routes->post('deposit', 'ClientController::doDeposit');
+    $routes->get('withdraw', 'ClientController::withdraw');
+    $routes->post('withdraw', 'ClientController::doWithdraw');
+    $routes->get('transfer', 'ClientController::transfer');
+    $routes->post('transfer', 'ClientController::doTransfer');
+    $routes->get('history', 'ClientController::history');
 });
 
-// ==================== API ROUTES (protégées par ClientFilter) ====================
-$routes->group('api', function($routes) {
-    $routes->get('client/balance', 'Api::getBalance');
-    $routes->get('fees/calculate', 'Api::calculateFees');
+$routes->group('api', ['filter' => 'clientAuth'], function ($routes) {
+    $routes->get('client/balance', 'ApiController::getBalance');
+    $routes->get('fees/calculate', 'ApiController::calculateFees');
 });

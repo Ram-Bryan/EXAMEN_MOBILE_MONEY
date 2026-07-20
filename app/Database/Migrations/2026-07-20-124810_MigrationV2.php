@@ -125,12 +125,13 @@ class MigrationV2 extends Migration
         ");
         
         $this->db->query("
-            INSERT INTO baremes_frais_historique (bareme_id, montant_min, montant_max, frais_fixe)
+            INSERT INTO baremes_frais_historique (bareme_id, montant_min, montant_max, frais_fixe, date_modif)
             SELECT
                 new.id,
                 hist.montant_min,
                 hist.montant_max,
-                hist.frais_fixe
+                hist.frais_fixe,
+                hist.date_modif
             FROM baremes_frais new
             JOIN baremes_frais ref ON ref.type_operation_id = new.type_operation_id AND ref.operateur_id = 1
             JOIN baremes_frais_historique hist ON hist.bareme_id = ref.id
