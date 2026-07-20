@@ -5,6 +5,9 @@ namespace App\Controllers;
 use App\Models\OperateurPrefixeModel;
 use App\Models\BaremeFraisModel;
 use App\Models\BaremeFraisHistoriqueModel;
+use App\Models\HistoriqueOperateurPrefixesModel;
+use App\Models\CommissionModel;
+use App\Models\CommissionHistoriqueModel;
 use App\Models\TransactionModel;
 use App\Models\ClientModel;
 use App\Models\TypeOperationModel;
@@ -14,6 +17,9 @@ class AdminController extends BaseController
     protected $operateurPrefixeModel;
     protected $baremeFraisModel;
     protected $baremeFraisHistoriqueModel;
+    protected $historiqueOperateurModel;
+    protected $commissionModel;
+    protected $commissionHistoriqueModel;
     protected $transactionModel;
     protected $clientModel;
     protected $typeOperationModel;
@@ -23,6 +29,9 @@ class AdminController extends BaseController
         $this->operateurPrefixeModel      = new OperateurPrefixeModel();
         $this->baremeFraisModel           = new BaremeFraisModel();
         $this->baremeFraisHistoriqueModel = new BaremeFraisHistoriqueModel();
+        $this->historiqueOperateurModel   = new HistoriqueOperateurPrefixesModel();
+        $this->commissionModel            = new CommissionModel();
+        $this->commissionHistoriqueModel  = new CommissionHistoriqueModel();
         $this->transactionModel           = new TransactionModel();
         $this->clientModel                = new ClientModel();
         $this->typeOperationModel         = new TypeOperationModel();
@@ -42,7 +51,7 @@ class AdminController extends BaseController
     }
 
     // ----------------------------------------------------------------
-    // Préfixes opérateurs
+    // Opérateurs (préfixes)
     // ----------------------------------------------------------------
 
     public function operators()
@@ -55,21 +64,25 @@ class AdminController extends BaseController
     public function createOperator()
     {
         $ok = $this->operateurPrefixeModel->insert([
-            'prefixe' => $this->request->getPost('prefixe'),
+            'prefixe'             => $this->request->getPost('prefixe'),
+            'nom'                 => $this->request->getPost('nom') ?: null,
+            'est_notre_operateur' => (int)$this->request->getPost('est_notre_operateur'),
         ]);
 
         return redirect()->to('/admin/operators')
-            ->with($ok ? 'success' : 'error', $ok ? 'Préfixe ajouté.' : 'Erreur lors de l\'ajout.');
+            ->with($ok ? 'success' : 'error', $ok ? 'Opérateur ajouté.' : 'Erreur lors de l\'ajout.');
     }
 
     public function updateOperator($id)
     {
         $ok = $this->operateurPrefixeModel->update($id, [
-            'prefixe' => $this->request->getPost('prefixe'),
+            'prefixe'             => $this->request->getPost('prefixe'),
+            'nom'                 => $this->request->getPost('nom') ?: null,
+            'est_notre_operateur' => (int)$this->request->getPost('est_notre_operateur'),
         ]);
 
         return redirect()->to('/admin/operators')
-            ->with($ok ? 'success' : 'error', $ok ? 'Préfixe mis à jour.' : 'Erreur lors de la mise à jour.');
+            ->with($ok ? 'success' : 'error', $ok ? 'Opérateur mis à jour.' : 'Erreur lors de la mise à jour.');
     }
 
     public function deleteOperator($id)
@@ -77,11 +90,11 @@ class AdminController extends BaseController
         $ok = $this->operateurPrefixeModel->delete($id);
 
         return redirect()->to('/admin/operators')
-            ->with($ok ? 'success' : 'error', $ok ? 'Préfixe supprimé.' : 'Erreur lors de la suppression.');
+            ->with($ok ? 'success' : 'error', $ok ? 'Opérateur supprimé.' : 'Erreur lors de la suppression.');
     }
 
     // ----------------------------------------------------------------
-    // Barèmes de frais par opérateur
+    // Détail opérateur : barèmes + préfixes + commission
     // ----------------------------------------------------------------
 
     public function operatorDetail($id)
@@ -91,14 +104,25 @@ class AdminController extends BaseController
             return redirect()->to('/admin/operators')->with('error', 'Opérateur introuvable.');
         }
 
+        // Commission actuelle (uniquement pour les opérateurs externes)
+        $commission = null;
+        if (!$operator->est_notre_operateur) {
+            $commission = $this->commissionModel->getCommissionByOperateur($id);
+        }
+
         return view('admin/operator_detail', [
-            'operator'       => $operator,
-            'baremes'        => $this->baremeFraisModel->getBaremesByOperateur($id),
-            'allBaremes'     => $this->baremeFraisModel->getAllBaremesByOperateur($id),
-            'types_operation' => $this->typeOperationModel->findAll(),
-            'gains'          => $this->transactionModel->getGainsParOperateur($id),
+            'operator'         => $operator,
+            'baremes'          => $this->baremeFraisModel->getBaremesByOperateur($id),
+            'types_operation'  => $this->typeOperationModel->findAll(),
+            'gains'            => $this->transactionModel->getGainsParOperateur($id),
+            'prefixes'         => $this->historiqueOperateurModel->getByOperateur($id),
+            'commission'       => $commission,
         ]);
     }
+
+    // ----------------------------------------------------------------
+    // Barèmes de frais
+    // ----------------------------------------------------------------
 
     public function createFee($operateurId)
     {
@@ -128,6 +152,47 @@ class AdminController extends BaseController
     }
 
     // ----------------------------------------------------------------
+    // Préfixes historiques d'un opérateur
+    // ----------------------------------------------------------------
+
+    public function addPrefixe($operateurId)
+    {
+        $prefixe = trim($this->request->getPost('prefixe'));
+        if (!$prefixe) {
+            return redirect()->to('/admin/operators/detail/' . $operateurId)
+                ->with('error', 'Le préfixe est requis.');
+        }
+
+        $ok = $this->historiqueOperateurModel->addPrefixe($operateurId, $prefixe);
+
+        return redirect()->to('/admin/operators/detail/' . $operateurId)
+            ->with($ok ? 'success' : 'error', $ok ? 'Préfixe ajouté.' : 'Erreur lors de l\'ajout du préfixe.');
+    }
+
+    // ----------------------------------------------------------------
+    // Commissions inter-opérateurs
+    // ----------------------------------------------------------------
+
+    public function updateCommission($operateurId)
+    {
+        $pourcentage = (float)$this->request->getPost('pourcentage');
+
+        if ($pourcentage < 0 || $pourcentage > 100) {
+            return redirect()->to('/admin/operators/detail/' . $operateurId)
+                ->with('error', 'Le pourcentage doit être entre 0 et 100.');
+        }
+
+        // Récupère ou crée l'entrée dans commissions
+        $commissionId = $this->commissionModel->getOrCreate($operateurId);
+
+        // INSERT dans commissions_historique (jamais d'UPDATE)
+        $ok = $this->commissionHistoriqueModel->addPourcentage($commissionId, $pourcentage);
+
+        return redirect()->to('/admin/operators/detail/' . $operateurId)
+            ->with($ok ? 'success' : 'error', $ok ? 'Commission mise à jour (' . $pourcentage . '%).' : 'Erreur.');
+    }
+
+    // ----------------------------------------------------------------
     // Comptes clients
     // ----------------------------------------------------------------
 
@@ -139,13 +204,28 @@ class AdminController extends BaseController
     }
 
     // ----------------------------------------------------------------
-    // Gains
+    // Gains (v2 : séparation nous / autres opérateurs)
     // ----------------------------------------------------------------
 
     public function gains()
     {
+        // Vérifier si les vues v2 existent
+        $gainsSepaRes = [];
+        $montantsAEnvoyer = [];
+
+        try {
+            $gainsSepaRes = $this->transactionModel->getGainsSepares();
+            $montantsAEnvoyer = $this->transactionModel->getMontantsAEnvoyer();
+        } catch (\Exception $e) {
+            // Fallback si les vues v2 ne sont pas encore créées
+            $gainsSepaRes = [];
+            $montantsAEnvoyer = [];
+        }
+
         return view('admin/gains', [
-            'gains' => $this->transactionModel->getGainsParType(),
+            'gains'            => $this->transactionModel->getGainsParType(),
+            'gainsSepares'     => $gainsSepaRes,
+            'montantsAEnvoyer' => $montantsAEnvoyer,
         ]);
     }
 }

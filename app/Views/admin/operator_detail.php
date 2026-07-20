@@ -4,13 +4,22 @@
 
 <div class="d-flex justify-content-between align-items-center mb-4">
     <div>
-        <h2 class="fw-bold mb-1" style="color: var(--text-dark);">
-            <span class="badge bg-green" style="padding:8px 18px; border-radius:20px; font-weight:700; margin-right:12px; font-size:18px;">
+        <h2 class="fw-bold mb-1" style="color: #0f172a;">
+            <span style="background:#eff6ff; color:#2563eb; padding:6px 16px; border-radius:20px; font-weight:700; margin-right:12px; font-size:20px;">
                 <?= esc($operator->prefixe) ?>
             </span>
-            Barèmes de l'opérateur
+            <?= esc($operator->nom ?? 'Opérateur') ?>
+            <?php if ($operator->est_notre_operateur): ?>
+                <span style="background:#dcfce7; color:#16a34a; padding:3px 12px; border-radius:20px; font-size:13px; font-weight:600; margin-left:8px;">
+                    <i class="fas fa-star me-1"></i>Notre opérateur
+                </span>
+            <?php else: ?>
+                <span style="background:#f1f5f9; color:#64748b; padding:3px 12px; border-radius:20px; font-size:13px; font-weight:600; margin-left:8px;">
+                    <i class="fas fa-exchange-alt me-1"></i>Opérateur externe
+                </span>
+            <?php endif; ?>
         </h2>
-        <p class="text-muted mb-0" style="font-size: 14px;">Tranches de frais pour l'opérateur <?= esc($operator->prefixe) ?> (ajouté le <?= esc($operator->created_at ?? '') ?>)</p>
+        <p class="text-muted mb-0" style="font-size: 14px;">Ajouté le <?= esc($operator->created_at ?? '') ?></p>
     </div>
     <div>
         <a href="<?= base_url('admin/operators') ?>" class="btn btn-sm btn-secondary">
@@ -222,6 +231,85 @@ $typeColors = [
 </div>
 <?php endif; ?>
 
+<!-- Section Préfixes associés (v2) -->
+<div class="premium-card mb-4">
+    <div class="card-header">
+        <span><i class="fas fa-hashtag me-2"></i> Préfixes associés</span>
+        <button class="btn btn-sm btn-primary-custom" data-bs-toggle="modal" data-bs-target="#addPrefixModal">
+            <i class="fas fa-plus me-1"></i> Ajouter
+        </button>
+    </div>
+    <div class="card-body p-0">
+        <table class="table-custom w-100">
+            <thead>
+                <tr>
+                    <th>Préfixe</th>
+                    <th>Date d'ajout</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php if (empty($prefixes)): ?>
+                    <tr>
+                        <td colspan="2" class="text-center text-muted py-3">
+                            <i class="fas fa-info-circle me-1"></i> Aucun préfixe historique.
+                        </td>
+                    </tr>
+                <?php else: ?>
+                    <?php foreach ($prefixes as $p): ?>
+                    <tr>
+                        <td>
+                            <span style="background:#dbeafe; color:#2563eb; padding:3px 12px; border-radius:20px; font-weight:700; font-size:14px;">
+                                <?= esc($p->prefixe) ?>
+                            </span>
+                        </td>
+                        <td style="color:#94a3b8; font-size:13px;"><?= esc($p->date_modif) ?></td>
+                    </tr>
+                    <?php endforeach; ?>
+                <?php endif; ?>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Section Commission inter-opérateurs (v2, uniquement pour opérateurs externes) -->
+<?php if (!$operator->est_notre_operateur): ?>
+<div class="premium-card mb-4">
+    <div class="card-header">
+        <span><i class="fas fa-percent me-2 text-warning"></i> Commission transferts inter-opérateurs</span>
+    </div>
+    <div class="card-body">
+        <div class="row align-items-center">
+            <div class="col-md-6">
+                <p class="text-muted mb-2" style="font-size:14px;">
+                    Pourcentage de commission appliqué en plus du frais fixe lors d'un transfert vers cet opérateur.
+                </p>
+                <?php if ($commission): ?>
+                    <p class="mb-0">
+                        <span class="fw-bold" style="font-size:24px; color:#f59e0b;"><?= number_format($commission->pourcentage, 2) ?> %</span>
+                        <span class="text-muted small ms-2">depuis le <?= esc($commission->date_modif) ?></span>
+                    </p>
+                <?php else: ?>
+                    <p class="text-muted fst-italic mb-0">Aucune commission configurée (0%).</p>
+                <?php endif; ?>
+            </div>
+            <div class="col-md-6">
+                <form action="<?= base_url('admin/operators/' . $operator->id . '/commission/update') ?>" method="POST" class="d-flex align-items-center gap-2">
+                    <div class="input-group" style="max-width:220px;">
+                        <input type="number" name="pourcentage" class="form-control" min="0" max="100" step="0.01"
+                               value="<?= $commission ? $commission->pourcentage : 0 ?>" required>
+                        <span class="input-group-text">%</span>
+                    </div>
+                    <button type="submit" class="btn btn-sm btn-primary-custom">
+                        <i class="fas fa-save me-1"></i> Enregistrer
+                    </button>
+                </form>
+                <small class="text-muted mt-1 d-block">L'historique est préservé. Un INSERT sera effectué.</small>
+            </div>
+        </div>
+    </div>
+</div>
+<?php endif; ?>
+
 <!-- Modal Ajout Tranche -->
 <div class="modal fade" id="addFeeModal" tabindex="-1">
     <div class="modal-dialog">
@@ -295,6 +383,29 @@ $typeColors = [
                 <div class="modal-footer">
                     <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Annuler</button>
                     <button type="submit" class="btn btn-sm btn-primary-custom">Valider la modification</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Ajout Préfixe (v2) -->
+<div class="modal fade" id="addPrefixModal" tabindex="-1">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content" style="border-radius:12px;">
+            <div class="modal-header">
+                <h5 class="modal-title fw-bold" style="color: var(--text-dark);"><i class="fas fa-hashtag me-2 text-primary"></i>Ajouter un préfixe</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form action="<?= base_url('admin/operators/' . $operator->id . '/prefixes/add') ?>" method="POST">
+                <div class="modal-body">
+                    <label class="form-label fw-semibold" style="font-size:14px; color:#475569;">Préfixe (ex: 037)</label>
+                    <input type="text" name="prefixe" class="form-control" placeholder="037" maxlength="5" required pattern="[0-9]+" title="Chiffres uniquement">
+                    <small class="text-muted mt-1 d-block">Ce préfixe sera ajouté à l'historique de cet opérateur.</small>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                    <button type="submit" class="btn btn-sm btn-primary-custom">Ajouter</button>
                 </div>
             </form>
         </div>

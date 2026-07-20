@@ -232,10 +232,64 @@ class MigrationV2 extends Migration
             LEFT JOIN clients cd ON cd.id = tr.destinataire_id
         ");
 
-        // Vue v_transactions_frais
+        // Vue v_transactions_frais (fixed: no alias reuse for SQLite compatibility)
         $this->db->query("
             CREATE VIEW v_transactions_frais AS
-            WITH frais_base AS (
+            SELECT
+                fb.transaction_id,
+                fb.type_operation_id,
+                fb.expediteur_id,
+                fb.destinataire_id,
+                fb.montant_brut,
+                fb.date_transaction,
+                fb.operateur_id,
+                fb.frais_inclus,
+                fb.frais_fixe,
+                CASE
+                    WHEN fb.type_operation_id = (SELECT id FROM types_operation WHERE code = 'TRANSFERT')
+                         AND EXISTS (
+                             SELECT 1 FROM clients c
+                             JOIN operateur_prefixes o ON o.id = c.operateur_id
+                             WHERE c.id = fb.destinataire_id AND o.est_notre_operateur = 0
+                         )
+                    THEN (
+                        SELECT COALESCE(ch.pourcentage, 0) * fb.montant_brut / 100
+                        FROM commissions_historique ch
+                        JOIN commissions cm ON cm.id = ch.commission_id
+                        WHERE cm.operateur_destination_id = (
+                            SELECT o2.id FROM clients c2
+                            JOIN operateur_prefixes o2 ON o2.id = c2.operateur_id
+                            WHERE c2.id = fb.destinataire_id
+                        )
+                        AND ch.date_modif <= fb.date_transaction
+                        ORDER BY ch.date_modif DESC LIMIT 1
+                    )
+                    ELSE 0
+                END AS commission,
+                COALESCE(fb.frais_fixe, 0) + COALESCE(
+                    CASE
+                        WHEN fb.type_operation_id = (SELECT id FROM types_operation WHERE code = 'TRANSFERT')
+                             AND EXISTS (
+                                 SELECT 1 FROM clients c
+                                 JOIN operateur_prefixes o ON o.id = c.operateur_id
+                                 WHERE c.id = fb.destinataire_id AND o.est_notre_operateur = 0
+                             )
+                        THEN (
+                            SELECT COALESCE(ch.pourcentage, 0) * fb.montant_brut / 100
+                            FROM commissions_historique ch
+                            JOIN commissions cm ON cm.id = ch.commission_id
+                            WHERE cm.operateur_destination_id = (
+                                SELECT o2.id FROM clients c2
+                                JOIN operateur_prefixes o2 ON o2.id = c2.operateur_id
+                                WHERE c2.id = fb.destinataire_id
+                            )
+                            AND ch.date_modif <= fb.date_transaction
+                            ORDER BY ch.date_modif DESC LIMIT 1
+                        )
+                        ELSE 0
+                    END,
+                0) AS frais_applique
+            FROM (
                 SELECT
                     tc.transaction_id,
                     tc.type_operation_id,
@@ -262,37 +316,7 @@ class MigrationV2 extends Migration
                         LIMIT 1
                     ) AS frais_fixe
                 FROM v_transactions_operateur tc
-            )
-            SELECT
-                fb.*,
-                CASE
-                    WHEN fb.type_operation_id = (SELECT id FROM types_operation WHERE code = 'TRANSFERT')
-                         AND EXISTS (
-                             SELECT 1 FROM clients c
-                             JOIN operateur_prefixes o ON o.id = c.operateur_id
-                             WHERE c.id = fb.destinataire_id AND o.est_notre_operateur = 0
-                         )
-                    THEN (
-                        SELECT COALESCE(ch.pourcentage, 0) * fb.montant_brut / 100
-                        FROM commissions_historique ch
-                        JOIN commissions c ON c.id = ch.commission_id
-                        WHERE c.operateur_destination_id = (
-                            SELECT o.id FROM clients c2
-                            JOIN operateur_prefixes o ON o.id = c2.operateur_id
-                            WHERE c2.id = fb.destinataire_id
-                        )
-                        AND ch.date_modif = (
-                            SELECT MAX(ch2.date_modif)
-                            FROM commissions_historique ch2
-                            WHERE ch2.commission_id = ch.commission_id
-                              AND ch2.date_modif <= fb.date_transaction
-                        )
-                        ORDER BY ch.date_modif DESC LIMIT 1
-                    )
-                    ELSE 0
-                END AS commission,
-                COALESCE(fb.frais_fixe, 0) + COALESCE(commission, 0) AS frais_applique
-            FROM frais_base fb
+            ) fb
         ");
 
         // Vue v_situation_gains

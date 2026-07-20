@@ -44,6 +44,28 @@ class TransactionModel extends Model
         return $db->query($sql, [$operateurId])->getResultObject();
     }
 
+    /**
+     * Retourne les gains séparés : notre opérateur vs opérateurs externes
+     * Utilise la vue v_situation_gains créée en v2
+     */
+    public function getGainsSepares()
+    {
+        $db = \Config\Database::connect();
+        $sql = "SELECT * FROM v_situation_gains ORDER BY est_notre_operateur DESC, type_operation";
+        return $db->query($sql)->getResultObject();
+    }
+
+    /**
+     * Retourne les montants totaux à envoyer à chaque opérateur externe
+     * Utilise la vue v_montants_a_envoyer créée en v2
+     */
+    public function getMontantsAEnvoyer()
+    {
+        $db = \Config\Database::connect();
+        $sql = "SELECT * FROM v_montants_a_envoyer ORDER BY montant_total_a_envoyer DESC";
+        return $db->query($sql)->getResultObject();
+    }
+
     public function getClientTransactions(int $clientId, int $limit = null)
     {
         $db = $this->db;

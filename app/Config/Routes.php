@@ -38,6 +38,12 @@ $routes->group('admin', function($routes) {
     $routes->post('operators/(:num)/fees/create', 'AdminController::createFee/$1');
     $routes->post('operators/(:num)/fees/update/(:num)', 'AdminController::updateFee/$2/$1');
 
+    // Préfixes historiques d'un opérateur (v2)
+    $routes->post('operators/(:num)/prefixes/add', 'AdminController::addPrefixe/$1');
+
+    // Commissions inter-opérateurs (v2)
+    $routes->post('operators/(:num)/commission/update', 'AdminController::updateCommission/$1');
+
     // Comptes Clients
     $routes->get('clients', 'AdminController::clients');
 
