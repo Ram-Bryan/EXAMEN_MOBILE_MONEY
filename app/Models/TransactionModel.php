@@ -15,4 +15,14 @@ class TransactionModel extends Model
     protected $useTimestamps    = true;
     protected $createdField     = 'date_transaction';
     protected $updatedField     = null;
+
+    public function getGainsParType()
+    {
+        $db = \Config\Database::connect();
+        $sql = "SELECT t.nom AS type_operation, SUM(COALESCE(vf.frais_applique, 0)) AS total_gains
+                FROM v_transactions_frais vf
+                JOIN types_operation t ON vf.type_operation_id = t.id
+                GROUP BY vf.type_operation_id, t.nom";
+        return $db->query($sql)->getResultObject();
+    }
 }

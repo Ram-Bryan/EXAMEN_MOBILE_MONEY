@@ -15,4 +15,9 @@ class AdminModel extends Model
     protected $useTimestamps    = true;
     protected $createdField     = 'created_at';
     protected $updatedField     = null;
+
+    public function findByEmail($email)
+    {
+        return $this->where('email', $email)->first();
+    }
 }

@@ -15,4 +15,14 @@ class BaremeFraisHistoriqueModel extends Model
     protected $useTimestamps    = true;
     protected $createdField     = 'date_modif';
     protected $updatedField     = null;
+
+    public function addHistorique($bareme_id, $montant_min, $montant_max, $frais_fixe)
+    {
+        return $this->insert([
+            'bareme_id' => $bareme_id,
+            'montant_min' => $montant_min,
+            'montant_max' => $montant_max === '' ? null : $montant_max,
+            'frais_fixe' => $frais_fixe
+        ]);
+    }
 }

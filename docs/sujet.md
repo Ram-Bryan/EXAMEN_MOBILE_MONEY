@@ -77,9 +77,3 @@ Un système qui simule un **opérateur de mobile money**.
 5. `Taches.md` à jour
 6. `base.sql` à jour (tables + vues + seed)
 7. Tag `v1` poussé sur le dépôt public, branche `main`
-
-Je fais une application de mobile mney. Lis sujet.md pour savoir le sjet.
-Je suis le devA (backaoffice) lis Taches.md et fais toutes les taches de devA
-
-J ai deja qq base (models,..) deja en place.
-Je veux un code MVC SOC, pas de connection dans controller mais connection fais avec les models.
