@@ -85,11 +85,12 @@
                     <div class="mb-4">
                         <label for="include_fees" class="form-label">Options de transfert</label>
                         <select class="form-select" id="include_fees" name="include_fees" onchange="previewTransferFee()">
-                            <option value="1">1. Transférer uniquement le montant (sans frais)</option>
-                            <option value="2">2. Transférer le montant + frais + commission</option>
+                            <option value="1">1. Transférer le montant + frais + commission (frais en plus)</option>
+                            <option value="2">2. Transférer le montant (frais inclus dans le montant)</option>
                         </select>
                         <small class="text-muted mt-1 d-block">
-                            Si option 2 : les frais fixes + commission inter-opérateur seront ajoutés au débit.
+                            Option 1 : le total débité = montant + frais + commission.<br>
+                            Option 2 : le total débité = montant (les frais et commission sont déduits du montant reçu).
                         </small>
                     </div>
 
@@ -278,12 +279,14 @@ function previewTransferFee() {
     const count = phones.length;
     const amountPer = (currentMode === 'multiple' && count > 1) ? Math.floor(totalAmount / count) : totalAmount;
 
-    if (includeFees === '1') {
+    // include_fees == '1': frais en plus (frais_inclus=0) → total = amount + fee + commission
+    // include_fees == '2': frais inclus (frais_inclus=1) → total = amount
+    if (includeFees === '2') {
         if (currentMode === 'single' || count <= 1) {
             $('#singlePreview').removeClass('d-none');
             $('#multiPreview').addClass('d-none');
             $('#amountShow').text(formatAr(amountPer));
-            $('#feeShow').text('0 Ar (sans frais)');
+            $('#feeShow').text('0 Ar (inclus)');
             $('#commissionRow').addClass('d-none');
             $('#totalShow').text(formatAr(amountPer));
         } else {
@@ -338,18 +341,55 @@ function previewTransferFee() {
                     accumulatedResults[index] = { phone: phone, fee: 0, commission: 0, is_inter: false };
                 }
                 pendingRequests--;
-                if (pendingRequests === 0) renderPreview(targetPreview, amountPer, balance);
+                if (pendingRequests === 0) renderPreview(targetPreview, amountPer, balance, includeFees);
             },
             error: function() {
                 accumulatedResults[index] = { phone: phone, fee: 0, commission: 0, is_inter: false };
                 pendingRequests--;
-                if (pendingRequests === 0) renderPreview(targetPreview, amountPer, balance);
+                if (pendingRequests === 0) renderPreview(targetPreview, amountPer, balance, includeFees);
             }
         });
     });
 }
 
-function renderPreview(mode, amountPer, balance) {
+function renderPreview(mode, amountPer, balance, includeFees) {
+    // includeFees == '1': frais en plus (frais_inclus=0) → total = amount + fee + commission
+    // includeFees == '2': frais inclus (frais_inclus=1) → total = amount
+    if (includeFees === '2') {
+        if (mode === 'single') {
+            $('#singlePreview').removeClass('d-none');
+            $('#multiPreview').addClass('d-none');
+            $('#amountShow').text(formatAr(amountPer));
+            $('#feeShow').text('0 Ar (inclus)');
+            $('#commissionRow').addClass('d-none');
+            $('#totalShow').text(formatAr(amountPer));
+        } else {
+            $('#singlePreview').addClass('d-none');
+            $('#multiPreview').removeClass('d-none');
+            let tbody = '';
+            let totalDebit = 0;
+            for (let i = 0; i < accumulatedResults.length; i++) {
+                const r = accumulatedResults[i];
+                tbody += `<tr>
+                    <td><strong>${r.phone}</strong></td>
+                    <td class="text-end">${formatAr(amountPer)}</td>
+                    <td class="text-end text-muted">0 Ar</td>
+                    <td class="text-end text-muted">0 Ar</td>
+                    <td class="text-end fw-bold">${formatAr(amountPer)}</td>
+                </tr>`;
+                totalDebit += amountPer;
+            }
+            $('#multiPreviewBody').html(tbody);
+            $('#multiTotalShow').text(formatAr(totalDebit));
+        }
+        if (amountPer > balance) { // For single transfer, check amountPer; for multi, totalAmount was checked in previewFee
+            $('#balanceAlert').removeClass('d-none');
+        } else {
+            $('#balanceAlert').addClass('d-none');
+        }
+        return;
+    }
+
     if (mode === 'single') {
         const r = accumulatedResults[0] || { fee: 0, commission: 0 };
         const total = amountPer + r.fee + r.commission;

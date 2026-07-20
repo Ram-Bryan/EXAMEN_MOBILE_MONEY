@@ -26,18 +26,13 @@ class BaremesFraisSeeder extends Seeder
         # Ces commandes fonctionnent si tu as installé CodeIgniter 4 Shield
 
 
-        // Historique des frais - DÉPÔT
+        // Historique des frais - DÉPÔT (0 frais pour tous les opérateurs)
         $this->db->table('baremes_frais_historique')->insertBatch([
-            ['bareme_id' => 1, 'montant_min' => 0, 'montant_max' => 100000, 'frais_fixe' => 100, 'date_modif' => '2026-01-01 00:00:00'],
-            ['bareme_id' => 1, 'montant_min' => 100001, 'montant_max' => null, 'frais_fixe' => 500, 'date_modif' => '2026-01-01 00:00:00'],
-            ['bareme_id' => 2, 'montant_min' => 0, 'montant_max' => 100000, 'frais_fixe' => 200, 'date_modif' => '2026-01-01 00:00:00'],
-            ['bareme_id' => 2, 'montant_min' => 100001, 'montant_max' => null, 'frais_fixe' => 1000, 'date_modif' => '2026-01-01 00:00:00'],
-            ['bareme_id' => 3, 'montant_min' => 0, 'montant_max' => 100000, 'frais_fixe' => 150, 'date_modif' => '2026-01-01 00:00:00'],
-            ['bareme_id' => 3, 'montant_min' => 100001, 'montant_max' => null, 'frais_fixe' => 750, 'date_modif' => '2026-01-01 00:00:00'],
-            ['bareme_id' => 4, 'montant_min' => 0, 'montant_max' => null, 'frais_fixe' => 100, 'date_modif' => '2026-01-01 00:00:00'],
-            // Opérateur 5 (031 - Vodacom) - copie opérateur 1
-            ['bareme_id' => 5, 'montant_min' => 0, 'montant_max' => 100000, 'frais_fixe' => 100, 'date_modif' => '2026-01-01 00:00:00'],
-            ['bareme_id' => 5, 'montant_min' => 100001, 'montant_max' => null, 'frais_fixe' => 500, 'date_modif' => '2026-01-01 00:00:00'],
+            ['bareme_id' => 1, 'montant_min' => 0, 'montant_max' => null, 'frais_fixe' => 0, 'date_modif' => '2026-01-01 00:00:00'],
+            ['bareme_id' => 2, 'montant_min' => 0, 'montant_max' => null, 'frais_fixe' => 0, 'date_modif' => '2026-01-01 00:00:00'],
+            ['bareme_id' => 3, 'montant_min' => 0, 'montant_max' => null, 'frais_fixe' => 0, 'date_modif' => '2026-01-01 00:00:00'],
+            ['bareme_id' => 4, 'montant_min' => 0, 'montant_max' => null, 'frais_fixe' => 0, 'date_modif' => '2026-01-01 00:00:00'],
+            ['bareme_id' => 5, 'montant_min' => 0, 'montant_max' => null, 'frais_fixe' => 0, 'date_modif' => '2026-01-01 00:00:00'],
         ]);
 
         // Historique des frais - RETRAIT

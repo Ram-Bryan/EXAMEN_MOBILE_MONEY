@@ -165,25 +165,26 @@ INSERT INTO baremes_frais (id, type_operation_id, operateur_id) VALUES
 (11, 3, 3),
 (12, 3, 4);
 
--- 4.4 Historique des frais - DÉPÔT (barèmes 1 à 4)
--- Opérateur 1 (033) : 0.5% du montant, min 100 Ar
-INSERT INTO baremes_frais_historique (bareme_id, montant_min, montant_max, frais_fixe) VALUES
-(1, 0, 100000, 100),
-(1, 100001, NULL, 500);
+-- 4.4 Historique des frais - DÉPÔT (barèmes 1 à 5) - AUCUN FRAIS pour les dépôts
+-- Opérateur 1 (033) : 0 frais
+INSERT INTO baremes_frais_historique (bareme_id, montant_min, montant_max, frais_fixe, date_modif) VALUES
+(1, 0, NULL, 0, '2026-01-01 00:00:00');
 
--- Opérateur 2 (034) : 1% du montant, min 200 Ar
-INSERT INTO baremes_frais_historique (bareme_id, montant_min, montant_max, frais_fixe) VALUES
-(2, 0, 100000, 200),
-(2, 100001, NULL, 1000);
+-- Opérateur 2 (034) : 0 frais
+INSERT INTO baremes_frais_historique (bareme_id, montant_min, montant_max, frais_fixe, date_modif) VALUES
+(2, 0, NULL, 0, '2026-01-01 00:00:00');
 
--- Opérateur 3 (037) : 0.75% du montant, min 150 Ar
-INSERT INTO baremes_frais_historique (bareme_id, montant_min, montant_max, frais_fixe) VALUES
-(3, 0, 100000, 150),
-(3, 100001, NULL, 750);
+-- Opérateur 3 (037) : 0 frais
+INSERT INTO baremes_frais_historique (bareme_id, montant_min, montant_max, frais_fixe, date_modif) VALUES
+(3, 0, NULL, 0, '2026-01-01 00:00:00');
 
--- Opérateur 4 (038) : Frais fixes 100 Ar
-INSERT INTO baremes_frais_historique (bareme_id, montant_min, montant_max, frais_fixe) VALUES
-(4, 0, NULL, 100);
+-- Opérateur 4 (038) : 0 frais
+INSERT INTO baremes_frais_historique (bareme_id, montant_min, montant_max, frais_fixe, date_modif) VALUES
+(4, 0, NULL, 0, '2026-01-01 00:00:00');
+
+-- Opérateur 5 (031 - Vodacom) : 0 frais
+INSERT INTO baremes_frais_historique (bareme_id, montant_min, montant_max, frais_fixe, date_modif) VALUES
+(5, 0, NULL, 0, '2026-01-01 00:00:00');
 
 -- 4.5 Historique des frais - RETRAIT (barèmes 5 à 8)
 -- Opérateur 1 (033) : 1% → 2% progressif
@@ -404,6 +405,18 @@ VALUES
 --       AND (:date_fin   IS NULL OR tf.date_transaction <= :date_fin)
 -- WHERE c.id = :client_id
 -- GROUP BY c.id, c.telephone;
+
+
+-- telephone nom code solde actuel
+-- SELECT c.telephone, c.nom, c.code,
+--        COALESCE(SUM(CASE 
+--            WHEN tf.destinataire_id = c.id THEN tf.montant_brut
+--            WHEN tf.expediteur_id = c.id THEN -(tf.montant_brut + COALESCE(tf.frais_applique, 0))
+--        END), 0) AS solde
+-- FROM clients c
+-- LEFT JOIN v_transactions_frais tf ON tf.expediteur_id = c.id OR tf.destinataire_id = c.id
+-- GROUP BY c.id, c.telephone, c.nom, c.code
+-- ORDER BY c.nom;
 
 -- ============================================================
 -- 6. VÉRIFICATIONS (optionnelles)

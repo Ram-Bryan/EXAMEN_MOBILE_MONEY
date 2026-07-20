@@ -333,19 +333,30 @@ class Client extends BaseController
             $recipientClient = $entry['client'];
             $fee = 0;
             $commission = 0;
+            $isInterOp = $this->baremeFraisModel->isInterOperator($sender->operateur_id, $recipientClient->operateur_id);
 
-            if ($includeFees == '2') {
-                $fee = $this->baremeFraisModel->getFrais($typeOp->id, $sender->operateur_id, $amountPerRecipient);
-                if ($fee === null) {
-                    return redirect()->back()->withInput()->with('error', 'Aucun barème de frais ne couvre le montant de ' . number_format($amountPerRecipient, 0, ',', ' ') . ' Ar.');
-                }
-
-                if ($this->baremeFraisModel->isInterOperator($sender->operateur_id, $recipientClient->operateur_id)) {
-                    $commission = $this->baremeFraisModel->getCommission($recipientClient->operateur_id, $amountPerRecipient);
-                }
+            // Calculate fee for ALL transfers (both frais_inclus options)
+            $fee = $this->baremeFraisModel->getFrais($typeOp->id, $sender->operateur_id, $amountPerRecipient);
+            if ($fee === null) {
+                return redirect()->back()->withInput()->with('error', 'Aucun barème de frais ne couvre le montant de ' . number_format($amountPerRecipient, 0, ',', ' ') . ' Ar.');
             }
 
-            $debitPerRecipient = $amountPerRecipient + $fee + $commission;
+            // Commission applies to ALL inter-operator transfers
+            if ($isInterOp) {
+                $commission = $this->baremeFraisModel->getCommission($recipientClient->operateur_id, $amountPerRecipient);
+            }
+
+            // Calculate debit based on frais_inclus option
+            // Option 1 (frais_inclus=0): debit = amount + fee + commission
+            // Option 2 (frais_inclus=1): debit = amount ONLY (fees deducted from amount)
+            $fraisInclus = ($includeFees == '2') ? 1 : 0;
+            
+            if ($fraisInclus == 1) {
+                $debitPerRecipient = $amountPerRecipient;
+            } else {
+                $debitPerRecipient = $amountPerRecipient + $fee + $commission;
+            }
+            
             $totalDebit += $debitPerRecipient;
 
             $transactionsData[] = [
@@ -355,6 +366,7 @@ class Client extends BaseController
                 'fee'           => $fee,
                 'commission'    => $commission,
                 'debit'         => $debitPerRecipient,
+                'frais_inclus'  => $fraisInclus,
             ];
         }
 
@@ -371,7 +383,7 @@ class Client extends BaseController
                 $senderId,
                 $txData['recipient']->id,
                 $txData['amount'],
-                $fraisInclus
+                $txData['frais_inclus']
             );
             if ($ok) {
                 $insertedCount++;
