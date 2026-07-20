@@ -1,1 +1,1 @@
-__ci_last_regenerate|i:1784540453;__ci_vars|a:0:{}_ci_previous_url|s:44:"http://localhost:8080/index.php/login/client";
+__ci_last_regenerate|i:1784540825;_ci_previous_url|s:44:"http://localhost:8080/index.php/login/client";_ci_old_input|a:2:{s:3:"get";a:0:{}s:4:"post";a:3:{s:14:"csrf_test_name";s:32:"9b9fab5fc3f64e64df42d9106d46d0d5";s:5:"phone";s:10:"0331234567";s:4:"code";s:4:"1234";}}__ci_vars|a:2:{s:13:"_ci_old_input";s:3:"old";s:5:"error";s:3:"old";}error|s:57:"Numéro de téléphone invalide (préfixe non supporté).";

@@ -24,10 +24,26 @@ class TransactionModel extends Model
                 JOIN types_operation t ON vf.type_operation_id = t.id
                 GROUP BY vf.type_operation_id, t.nom";
         return $db->query($sql)->getResultObject();
+    }
 
-        
+    public function getGainsParOperateur(int $operateurId)
+    {
+        $db = \Config\Database::connect();
+        $sql = "
+            SELECT
+                t.code AS type_operation,
+                t.nom,
+                COUNT(*) AS nb_operations,
+                SUM(tf.frais_applique) AS total_gains
+            FROM v_transactions_frais tf
+            JOIN types_operation t ON t.id = tf.type_operation_id
+            WHERE tf.frais_applique IS NOT NULL
+              AND tf.operateur_id = ?
+            GROUP BY t.code, t.nom
+        ";
+        return $db->query($sql, [$operateurId])->getResultObject();
+    }
 
-        }
     public function getClientTransactions(int $clientId, int $limit = null)
     {
         $db = $this->db;

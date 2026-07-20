@@ -22,6 +22,65 @@
     </div>
 </div>
 
+<!-- Situation des gains -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="premium-card">
+            <div class="card-header bg-white border-bottom-0 pt-4 pb-0">
+                <h5 class="fw-bold"><i class="fas fa-chart-line me-2 text-success"></i> Situation des gains (<?= esc($operator->prefixe) ?>)</h5>
+                <p class="text-muted small mb-0">Total des frais collectés pour cet opérateur</p>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table-custom w-100">
+                        <thead>
+                            <tr>
+                                <th>Type d'opération</th>
+                                <th>Nombre d'opérations</th>
+                                <th style="text-align:right; padding-right:24px;">Total des frais collectés</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php 
+                            $totalNb = 0;
+                            $totalAmount = 0;
+                            if (empty($gains)): ?>
+                                <tr>
+                                    <td colspan="3" class="text-center text-muted py-4">
+                                        <i class="fas fa-info-circle me-1"></i> Aucun gain enregistré pour cet opérateur.
+                                    </td>
+                                </tr>
+                            <?php else: ?>
+                                <?php foreach ($gains as $g): 
+                                    $totalNb += $g->nb_operations;
+                                    $totalAmount += $g->total_gains;
+                                ?>
+                                <tr>
+                                    <td>
+                                        <span class="fw-bold" style="color: #334155;"><?= esc($g->nom) ?></span>
+                                    </td>
+                                    <td><?= number_format($g->nb_operations, 0, ',', ' ') ?></td>
+                                    <td style="text-align:right; padding-right:24px;">
+                                        <span class="fw-bold text-success"><?= number_format($g->total_gains, 0, ',', ' ') ?> Ar</span>
+                                    </td>
+                                </tr>
+                                <?php endforeach; ?>
+                                <tr style="background-color: #f8fafc; border-top: 2px solid #e2e8f0;">
+                                    <td><strong style="color: #0f172a; font-size: 15px;">Total Général</strong></td>
+                                    <td><strong style="font-size: 15px;"><?= number_format($totalNb, 0, ',', ' ') ?></strong></td>
+                                    <td style="text-align:right; padding-right:24px;">
+                                        <strong class="text-success" style="font-size: 18px;"><?= number_format($totalAmount, 0, ',', ' ') ?> Ar</strong>
+                                    </td>
+                                </tr>
+                            <?php endif; ?>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <?php
 $grouped = [];
 foreach ($baremes ?? [] as $b) {
