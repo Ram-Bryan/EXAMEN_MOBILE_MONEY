@@ -1,5 +1,0 @@
-
-- dans le tranfert.php il faut d 'abord mettre une suggestion de oui transfert de 
-    1- argent+frais_fixe ou 2 - argent seulement 
--  je tape 1 pour non 
-- je tape 2 pour oui 
