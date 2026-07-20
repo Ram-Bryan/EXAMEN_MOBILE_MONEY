@@ -2,11 +2,10 @@
 
 <?= $this->section('content') ?>
 
-<!-- KPI Cards -->
 <div class="row g-4 mb-4">
     <div class="col-md-4">
         <div class="stat-card">
-            <div class="icon blue">
+            <div class="icon green">
                 <i class="fas fa-network-wired"></i>
             </div>
             <div class="details">
@@ -17,7 +16,7 @@
     </div>
     <div class="col-md-4">
         <div class="stat-card">
-            <div class="icon green">
+            <div class="icon blue">
                 <i class="fas fa-users"></i>
             </div>
             <div class="details">
@@ -39,10 +38,9 @@
     </div>
 </div>
 
-<!-- Quick Links -->
 <div class="row g-4">
     <div class="col-md-6">
-        <div class="premium-card">
+        <div class="card">
             <div class="card-header">
                 <span><i class="fas fa-chart-pie me-2"></i> Situation des gains</span>
                 <a href="<?= base_url('admin/gains') ?>" class="btn btn-primary-custom btn-sm">Voir tout</a>
@@ -56,7 +54,7 @@
         </div>
     </div>
     <div class="col-md-6">
-        <div class="premium-card">
+        <div class="card">
             <div class="card-header">
                 <span><i class="fas fa-wallet me-2"></i> Comptes clients</span>
                 <a href="<?= base_url('admin/clients') ?>" class="btn btn-primary-custom btn-sm">Voir tout</a>

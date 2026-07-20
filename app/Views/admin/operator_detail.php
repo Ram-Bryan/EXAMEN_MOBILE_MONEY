@@ -4,8 +4,8 @@
 
 <div class="d-flex justify-content-between align-items-center mb-4">
     <div>
-        <h2 class="fw-bold mb-1" style="color: #0f172a;">
-            <span style="background:#eff6ff; color:#2563eb; padding:6px 16px; border-radius:20px; font-weight:700; margin-right:12px; font-size:20px;">
+        <h2 class="fw-bold mb-1" style="color: var(--text-dark);">
+            <span class="badge bg-green" style="padding:8px 18px; border-radius:20px; font-weight:700; margin-right:12px; font-size:18px;">
                 <?= esc($operator->prefixe) ?>
             </span>
             Barèmes de l'opérateur
@@ -25,9 +25,9 @@
 <!-- Situation des gains -->
 <div class="row mb-4">
     <div class="col-12">
-        <div class="premium-card">
-            <div class="card-header bg-white border-bottom-0 pt-4 pb-0">
-                <h5 class="fw-bold"><i class="fas fa-chart-line me-2 text-success"></i> Situation des gains (<?= esc($operator->prefixe) ?>)</h5>
+        <div class="card">
+            <div class="card-header">
+                <h5 class="fw-bold mb-0"><i class="fas fa-chart-line me-2 text-success"></i> Situation des gains (<?= esc($operator->prefixe) ?>)</h5>
                 <p class="text-muted small mb-0">Total des frais collectés pour cet opérateur</p>
             </div>
             <div class="card-body">
@@ -41,7 +41,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <?php 
+                            <?php
                             $totalNb = 0;
                             $totalAmount = 0;
                             if (empty($gains)): ?>
@@ -51,7 +51,7 @@
                                     </td>
                                 </tr>
                             <?php else: ?>
-                                <?php foreach ($gains as $g): 
+                                <?php foreach ($gains as $g):
                                     $totalNb += $g->nb_operations;
                                     $totalAmount += $g->total_gains;
                                 ?>
@@ -65,8 +65,8 @@
                                     </td>
                                 </tr>
                                 <?php endforeach; ?>
-                                <tr style="background-color: #f8fafc; border-top: 2px solid #e2e8f0;">
-                                    <td><strong style="color: #0f172a; font-size: 15px;">Total Général</strong></td>
+                                <tr style="background-color: var(--primary-bg); border-top: 2px solid var(--primary-border);">
+                                    <td><strong style="color: var(--text-dark); font-size: 15px;">Total Général</strong></td>
                                     <td><strong style="font-size: 15px;"><?= number_format($totalNb, 0, ',', ' ') ?></strong></td>
                                     <td style="text-align:right; padding-right:24px;">
                                         <strong class="text-success" style="font-size: 18px;"><?= number_format($totalAmount, 0, ',', ' ') ?> Ar</strong>
@@ -87,7 +87,7 @@ foreach ($baremes ?? [] as $b) {
     $grouped[$b->type_nom][] = $b;
 }
 $typeColors = [
-    'Dépôt' => ['bg' => '#f0fdf4', 'color' => '#16a34a', 'badge' => '#dcfce7'],
+    'Dépôt' => ['bg' => 'var(--primary-bg)', 'color' => 'var(--primary)', 'badge' => 'var(--primary-badge-bg)'],
     'Retrait' => ['bg' => '#fef2f2', 'color' => '#dc2626', 'badge' => '#fee2e2'],
     'Transfert' => ['bg' => '#eff6ff', 'color' => '#2563eb', 'badge' => '#dbeafe'],
 ];
@@ -95,7 +95,7 @@ foreach ($grouped as $typeNom => $rows):
     $colors = $typeColors[$typeNom] ?? ['bg' => '#f8fafc', 'color' => '#475569', 'badge' => '#e2e8f0'];
 ?>
 
-<div class="premium-card mb-4">
+<div class="card mb-4">
     <div class="card-header">
         <span>
             <span style="background:<?= $colors['badge'] ?>; color:<?= $colors['color'] ?>; padding:4px 14px; border-radius:20px; font-weight:600; margin-right:10px;">
@@ -132,9 +132,9 @@ foreach ($grouped as $typeNom => $rows):
                             <?= number_format($b->frais_fixe, 0, ',', ' ') ?> Ar
                         </span>
                     </td>
-                    <td style="color:#94a3b8; font-size:13px;"><?= esc($b->date_modif) ?></td>
+                    <td style="color: var(--text-muted); font-size:13px;"><?= esc($b->date_modif) ?></td>
                     <td style="text-align:right; padding-right:24px;">
-                        <button class="btn btn-sm" style="background:#fff7ed; color:#ea580c; border:none; border-radius:6px;"
+                        <button class="btn btn-sm btn-primary-custom"
                             onclick="openEditFee(<?= $b->bareme_id ?>, <?= $b->montant_min ?>, <?= $b->montant_max ?? 'null' ?>, <?= $b->frais_fixe ?>)">
                             <i class="fas fa-edit"></i> Modifier
                         </button>
@@ -149,9 +149,9 @@ foreach ($grouped as $typeNom => $rows):
 <?php endforeach; ?>
 
 <?php if (empty($grouped)): ?>
-<div class="premium-card">
+<div class="card">
     <div class="card-body text-center py-5 text-muted">
-        <i class="fas fa-percentage fa-3x mb-3 d-block" style="color:#e2e8f0;"></i>
+        <i class="fas fa-percentage fa-3x mb-3 d-block" style="color: var(--primary-border);"></i>
         Aucun barème configuré pour cet opérateur.
     </div>
 </div>
@@ -160,15 +160,15 @@ foreach ($grouped as $typeNom => $rows):
 <!-- Modal Ajout Tranche -->
 <div class="modal fade" id="addFeeModal" tabindex="-1">
     <div class="modal-dialog">
-        <div class="modal-content" style="border-radius: 12px; border: none; box-shadow: 0 20px 40px rgba(0,0,0,0.15);">
-            <div class="modal-header" style="border-bottom: 1px solid #f1f5f9;">
-                <h5 class="modal-title fw-bold" style="color: #0f172a;"><i class="fas fa-plus me-2 text-primary"></i>Nouvelle tranche de frais</h5>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title fw-bold" style="color: var(--text-dark);"><i class="fas fa-plus me-2 text-success"></i>Nouvelle tranche de frais</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <form action="<?= base_url('admin/operators/' . $operator->id . '/fees/create') ?>" method="POST">
                 <div class="modal-body">
                     <div class="mb-3">
-                        <label class="form-label fw-semibold" style="font-size:14px; color:#475569;">Type d'opération</label>
+                        <label class="form-label">Type d'opération</label>
                         <select name="type_operation_id" class="form-select" required>
                             <?php foreach ($types_operation ?? [] as $t): ?>
                             <option value="<?= $t->id ?>"><?= esc($t->nom) ?></option>
@@ -177,20 +177,20 @@ foreach ($grouped as $typeNom => $rows):
                     </div>
                     <div class="row">
                         <div class="col-md-6 mb-3">
-                            <label class="form-label fw-semibold" style="font-size:14px; color:#475569;">Montant min (Ar)</label>
+                            <label class="form-label">Montant min (Ar)</label>
                             <input type="number" name="montant_min" class="form-control" min="0" step="1" required>
                         </div>
                         <div class="col-md-6 mb-3">
-                            <label class="form-label fw-semibold" style="font-size:14px; color:#475569;">Montant max (Ar) <small class="text-muted">(vide = illimité)</small></label>
+                            <label class="form-label">Montant max (Ar) <small class="text-muted">(vide = illimité)</small></label>
                             <input type="number" name="montant_max" class="form-control" min="1" step="1" placeholder="Laisser vide si illimité">
                         </div>
                     </div>
                     <div class="mb-3">
-                        <label class="form-label fw-semibold" style="font-size:14px; color:#475569;">Frais fixe (Ar)</label>
+                        <label class="form-label">Frais fixe (Ar)</label>
                         <input type="number" name="frais_fixe" class="form-control" min="0" step="1" required>
                     </div>
                 </div>
-                <div class="modal-footer" style="border-top: 1px solid #f1f5f9;">
+                <div class="modal-footer">
                     <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Annuler</button>
                     <button type="submit" class="btn btn-sm btn-primary-custom">Enregistrer</button>
                 </div>
@@ -199,12 +199,12 @@ foreach ($grouped as $typeNom => $rows):
     </div>
 </div>
 
-<!-- Modal Modification Tranche (INSERT uniquement) -->
+<!-- Modal Modification Tranche -->
 <div class="modal fade" id="editFeeModal" tabindex="-1">
     <div class="modal-dialog">
-        <div class="modal-content" style="border-radius: 12px; border: none; box-shadow: 0 20px 40px rgba(0,0,0,0.15);">
-            <div class="modal-header" style="border-bottom: 1px solid #f1f5f9;">
-                <h5 class="modal-title fw-bold" style="color: #0f172a;"><i class="fas fa-history me-2 text-warning"></i>Modifier la tranche <small class="text-muted fs-6">(historique préservé)</small></h5>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title fw-bold" style="color: var(--text-dark);"><i class="fas fa-history me-2 text-warning"></i>Modifier la tranche <small class="text-muted fs-6">(historique préservé)</small></h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <form id="editFeeForm" method="POST">
@@ -214,20 +214,20 @@ foreach ($grouped as $typeNom => $rows):
                     </div>
                     <div class="row">
                         <div class="col-md-6 mb-3">
-                            <label class="form-label fw-semibold" style="font-size:14px; color:#475569;">Montant min (Ar)</label>
+                            <label class="form-label">Montant min (Ar)</label>
                             <input type="number" name="montant_min" id="editMontantMin" class="form-control" min="0" step="1" required>
                         </div>
                         <div class="col-md-6 mb-3">
-                            <label class="form-label fw-semibold" style="font-size:14px; color:#475569;">Montant max (Ar)</label>
+                            <label class="form-label">Montant max (Ar)</label>
                             <input type="number" name="montant_max" id="editMontantMax" class="form-control" min="1" step="1" placeholder="Vide si illimité">
                         </div>
                     </div>
                     <div class="mb-3">
-                        <label class="form-label fw-semibold" style="font-size:14px; color:#475569;">Nouveau frais (Ar)</label>
+                        <label class="form-label">Nouveau frais (Ar)</label>
                         <input type="number" name="frais_fixe" id="editFrais" class="form-control" min="0" step="1" required>
                     </div>
                 </div>
-                <div class="modal-footer" style="border-top: 1px solid #f1f5f9;">
+                <div class="modal-footer">
                     <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Annuler</button>
                     <button type="submit" class="btn btn-sm btn-primary-custom">Valider la modification</button>
                 </div>

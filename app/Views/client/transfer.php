@@ -1,31 +1,31 @@
 <?= $this->extend('layout/client') ?>
 
 <?= $this->section('content') ?>
-<div class="dashboard-header mb-4">
-    <h1 class="h2"><i class="fas fa-exchange-alt text-orange"></i> Effectuer un Transfert</h1>
+<div class="mb-4">
+    <h2 class="fw-bold" style="color: var(--text-dark);"><i class="fas fa-exchange-alt text-green"></i> Effectuer un Transfert</h2>
     <p class="text-muted">Envoyez des fonds instantanément à un autre numéro.</p>
 </div>
 
 <div class="row">
     <div class="col-md-7 mb-4">
         <div class="card border-0 shadow-sm" style="border-radius: 16px;">
-            <div class="card-header bg-orange text-white py-3 border-0" style="border-radius: 16px 16px 0 0 !important;">
-                <h5 class="mb-0 font-weight-bold"><i class="fas fa-exchange-alt me-2"></i> Formulaire de Transfert</h5>
+            <div class="card-header text-white py-3 border-0" style="background: var(--primary-gradient); border-radius: 16px 16px 0 0 !important;">
+                <h5 class="mb-0 fw-bold"><i class="fas fa-exchange-alt me-2"></i> Formulaire de Transfert</h5>
             </div>
             <div class="card-body p-4">
                 <div class="mb-3">
                     <span class="text-muted">Solde disponible :</span>
-                    <strong class="text-orange" id="clientBalance" data-balance="<?= $balance ?>"><?= number_format($balance, 0, ',', ' ') ?> Ar</strong>
+                    <strong class="text-green" id="clientBalance" data-balance="<?= $balance ?>"><?= number_format($balance, 0, ',', ' ') ?> Ar</strong>
                 </div>
 
                 <form id="transferForm" action="<?= base_url('client/transfer') ?>" method="POST">
                     <?= csrf_field() ?>
-                    
+
                     <div class="mb-3">
-                        <label for="recipient_phone" class="form-label font-weight-bold">Numéro de téléphone du destinataire</label>
+                        <label for="recipient_phone" class="form-label">Numéro de téléphone du destinataire</label>
                         <div class="input-group">
-                            <span class="input-group-text bg-white border-2 border-end-0" style="border-radius: 12px 0 0 12px; border-color: #e0e0e0; font-weight: bold; color: #666;"><i class="fas fa-user-friends"></i></span>
-                            <input type="tel" class="form-control required border-2 border-start-0" id="recipient_phone" name="recipient_phone" placeholder="Ex: 0349876543" required style="border-radius: 0 12px 12px 0;">
+                            <span class="input-group-text"><i class="fas fa-user-friends"></i></span>
+                            <input type="tel" class="form-control" id="recipient_phone" name="recipient_phone" placeholder="Ex: 0349876543" required>
                         </div>
                         <small class="text-muted mt-2 d-block">
                             Le numéro doit être un client Mobile Money existant (033, 034, 037, 038).
@@ -33,25 +33,25 @@
                     </div>
 
                     <div class="mb-4">
-                        <label for="amount" class="form-label font-weight-bold">Montant à transférer (Ar)</label>
+                        <label for="amount" class="form-label">Montant à transférer (Ar)</label>
                         <div class="input-group">
-                            <span class="input-group-text bg-white border-2 border-end-0" style="border-radius: 12px 0 0 12px; border-color: #e0e0e0; font-weight: bold; color: #666;">Ar</span>
-                            <input type="number" class="form-control required border-2 border-start-0" id="amount" name="amount" placeholder="Entrez le montant" required min="1" style="border-radius: 0 12px 12px 0;" oninput="previewTransferFee(this.value)">
+                            <span class="input-group-text" style="font-weight: bold;">Ar</span>
+                            <input type="number" class="form-control" id="amount" name="amount" placeholder="Entrez le montant" required min="1" oninput="previewTransferFee(this.value)">
                         </div>
                     </div>
 
                     <!-- Transfer Fee Preview -->
-                    <div id="feePreviewBox" class="p-3 mb-4 border border-warning bg-light rounded-3 d-none animate-fade-in">
+                    <div id="feePreviewBox" class="p-3 mb-4 border bg-light rounded-3 d-none animate-fade-in" style="border-color: var(--primary-border) !important;">
                         <div class="d-flex justify-content-between mb-1">
                             <span class="text-muted">Montant à transférer :</span>
-                            <span id="amountShow" class="font-weight-bold">0 Ar</span>
+                            <span id="amountShow" class="fw-bold">0 Ar</span>
                         </div>
                         <div class="d-flex justify-content-between mb-1">
                             <span class="text-muted">Frais de transfert :</span>
-                            <span id="feeShow" class="font-weight-bold text-danger">0 Ar</span>
+                            <span id="feeShow" class="fw-bold text-danger">0 Ar</span>
                         </div>
                         <hr class="my-2">
-                        <div class="d-flex justify-content-between font-weight-bold">
+                        <div class="d-flex justify-content-between fw-bold">
                             <span>Total débité de votre compte :</span>
                             <span id="totalShow" class="text-danger">0 Ar</span>
                         </div>
@@ -60,7 +60,7 @@
                         </div>
                     </div>
 
-                    <button type="submit" class="btn btn-orange btn-lg w-100" id="submitBtn">
+                    <button type="submit" class="btn btn-green btn-lg w-100" id="submitBtn">
                         <i class="fas fa-check-circle me-1"></i> Confirmer le Transfert
                     </button>
                 </form>
@@ -71,13 +71,13 @@
     <div class="col-md-5 mb-4">
         <div class="card border-0 shadow-sm" style="border-radius: 16px;">
             <div class="card-header bg-white border-0 pt-4 px-4 pb-0">
-                <h5 class="font-weight-bold mb-0">Tarifs & Frais de Transfert</h5>
+                <h5 class="fw-bold mb-0">Tarifs & Frais de Transfert</h5>
             </div>
             <div class="card-body p-4">
                 <div class="table-responsive">
                     <table class="table table-sm table-hover mb-0">
                         <thead>
-                            <tr class="bg-light">
+                            <tr style="background: var(--primary-bg);">
                                 <th>Tranche de Montant</th>
                                 <th class="text-end">Frais</th>
                             </tr>
@@ -91,10 +91,10 @@
                                 <?php foreach ($fees as $fee): ?>
                                     <tr>
                                         <td>
-                                            <?= number_format($fee->montant_min, 0, ',', ' ') ?> Ar - 
+                                            <?= number_format($fee->montant_min, 0, ',', ' ') ?> Ar -
                                             <?= $fee->montant_max ? number_format($fee->montant_max, 0, ',', ' ') . ' Ar' : 'Illimité' ?>
                                         </td>
-                                        <td class="text-end font-weight-bold text-danger">
+                                        <td class="text-end fw-bold text-danger">
                                             <?= number_format($fee->frais_fixe, 0, ',', ' ') ?> Ar
                                         </td>
                                     </tr>
@@ -121,7 +121,7 @@ function validatePhone(phone) {
 function previewTransferFee(amount) {
     amount = parseFloat(amount);
     const balance = parseFloat($('#clientBalance').data('balance'));
-    
+
     if (isNaN(amount) || amount <= 0) {
         $('#feePreviewBox').addClass('d-none');
         return;
@@ -138,7 +138,7 @@ function previewTransferFee(amount) {
             if (response.success) {
                 $('#feePreviewBox').removeClass('d-none');
                 $('#amountShow').text(new Intl.NumberFormat('fr-MG').format(amount) + ' Ar');
-                
+
                 if (response.fee === null) {
                     $('#feeShow').text('Aucun barème');
                     $('#totalShow').text('N/A');
@@ -146,10 +146,10 @@ function previewTransferFee(amount) {
                 } else {
                     const fee = parseFloat(response.fee);
                     const total = amount + fee;
-                    
+
                     $('#feeShow').text(new Intl.NumberFormat('fr-MG').format(fee) + ' Ar');
                     $('#totalShow').text(new Intl.NumberFormat('fr-MG').format(total) + ' Ar');
-                    
+
                     if (total > balance) {
                         $('#balanceAlert').removeClass('d-none');
                     } else {

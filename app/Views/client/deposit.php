@@ -1,50 +1,50 @@
 <?= $this->extend('layout/client') ?>
 
 <?= $this->section('content') ?>
-<div class="dashboard-header mb-4">
-    <h1 class="h2"><i class="fas fa-plus-circle text-orange"></i> Effectuer un Dépôt</h1>
+<div class="mb-4">
+    <h2 class="fw-bold" style="color: var(--text-dark);"><i class="fas fa-plus-circle text-green"></i> Effectuer un Dépôt</h2>
     <p class="text-muted">Déposez de l'argent instantanément sur votre compte.</p>
 </div>
 
 <div class="row">
     <div class="col-md-7 mb-4">
         <div class="card border-0 shadow-sm" style="border-radius: 16px;">
-            <div class="card-header bg-orange text-white py-3 border-0" style="border-radius: 16px 16px 0 0 !important;">
-                <h5 class="mb-0 font-weight-bold"><i class="fas fa-plus-circle me-2"></i> Formulaire de Dépôt</h5>
+            <div class="card-header text-white py-3 border-0" style="background: var(--primary-gradient); border-radius: 16px 16px 0 0 !important;">
+                <h5 class="mb-0 fw-bold"><i class="fas fa-plus-circle me-2"></i> Formulaire de Dépôt</h5>
             </div>
             <div class="card-body p-4">
                 <form id="depositForm" action="<?= base_url('client/deposit') ?>" method="POST">
                     <?= csrf_field() ?>
-                    
+
                     <div class="mb-4">
-                        <label for="amount" class="form-label font-weight-bold">Montant à déposer (Ar)</label>
+                        <label for="amount" class="form-label">Montant à déposer (Ar)</label>
                         <div class="input-group">
-                            <span class="input-group-text bg-white border-2 border-end-0" style="border-radius: 12px 0 0 12px; border-color: #e0e0e0; font-weight: bold; color: #666;">Ar</span>
-                            <input type="number" class="form-control required border-2 border-start-0" id="amount" name="amount" placeholder="Entrez le montant" required min="1" style="border-radius: 0 12px 12px 0;" oninput="previewFee(this.value)">
+                            <span class="input-group-text" style="font-weight: bold;">Ar</span>
+                            <input type="number" class="form-control" id="amount" name="amount" placeholder="Entrez le montant" required min="1" oninput="previewFee(this.value)">
                         </div>
                         <small class="text-muted mt-2 d-block">
                             Saisissez le montant brut du dépôt. Le calcul des frais s'effectue dynamiquement.
                         </small>
                     </div>
 
-                    <!-- Fee Preview (Dynamic via AJAX) -->
-                    <div id="feePreviewBox" class="p-3 mb-4 border border-warning bg-light rounded-3 d-none animate-fade-in">
+                    <!-- Fee Preview -->
+                    <div id="feePreviewBox" class="p-3 mb-4 border bg-light rounded-3 d-none animate-fade-in" style="border-color: var(--primary-border) !important;">
                         <div class="d-flex justify-content-between mb-1">
                             <span class="text-muted">Montant saisi :</span>
-                            <span id="amountShow" class="font-weight-bold">0 Ar</span>
+                            <span id="amountShow" class="fw-bold">0 Ar</span>
                         </div>
                         <div class="d-flex justify-content-between mb-1">
                             <span class="text-muted">Frais applicables :</span>
-                            <span id="feeShow" class="font-weight-bold text-danger">0 Ar</span>
+                            <span id="feeShow" class="fw-bold text-danger">0 Ar</span>
                         </div>
                         <hr class="my-2">
-                        <div class="d-flex justify-content-between font-weight-bold">
+                        <div class="d-flex justify-content-between fw-bold">
                             <span>Total à imputer :</span>
-                            <span id="totalShow" class="text-orange">0 Ar</span>
+                            <span id="totalShow" class="text-green">0 Ar</span>
                         </div>
                     </div>
 
-                    <button type="submit" class="btn btn-orange btn-lg w-100">
+                    <button type="submit" class="btn btn-green btn-lg w-100">
                         <i class="fas fa-check-circle me-1"></i> Confirmer le Dépôt
                     </button>
                 </form>
@@ -55,19 +55,19 @@
     <div class="col-md-5 mb-4">
         <div class="card border-0 shadow-sm" style="border-radius: 16px;">
             <div class="card-header bg-white border-0 pt-4 px-4 pb-0">
-                <h5 class="font-weight-bold mb-0">Informations & Tarifs</h5>
+                <h5 class="fw-bold mb-0">Informations & Tarifs</h5>
             </div>
             <div class="card-body p-4">
-                <div class="alert alert-info border-0" style="background-color: rgba(255, 107, 0, 0.05); color: var(--orange-dark); border-radius: 12px;">
+                <div class="alert" style="background-color: var(--primary-bg); color: var(--primary-dark); border-radius: 12px;">
                     <i class="fas fa-info-circle me-2"></i>
                     Les dépôts sont immédiatement crédités sur votre compte et sont soumis au barème des frais de votre opérateur.
                 </div>
-                
-                <h6 class="font-weight-bold mt-4 mb-3"><i class="fas fa-percent text-orange me-1"></i> Frais de Dépôt Actuels</h6>
+
+                <h6 class="fw-bold mt-4 mb-3"><i class="fas fa-percent text-green me-1"></i> Frais de Dépôt Actuels</h6>
                 <div class="table-responsive">
                     <table class="table table-sm table-hover mb-0">
                         <thead>
-                            <tr class="bg-light">
+                            <tr style="background: var(--primary-bg);">
                                 <th>Tranche</th>
                                 <th class="text-end">Frais</th>
                             </tr>
@@ -81,10 +81,10 @@
                                 <?php foreach ($fees as $fee): ?>
                                     <tr>
                                         <td>
-                                            <?= number_format($fee->montant_min, 0, ',', ' ') ?> Ar - 
+                                            <?= number_format($fee->montant_min, 0, ',', ' ') ?> Ar -
                                             <?= $fee->montant_max ? number_format($fee->montant_max, 0, ',', ' ') . ' Ar' : 'Illimité' ?>
                                         </td>
-                                        <td class="text-end font-weight-bold text-danger">
+                                        <td class="text-end fw-bold text-danger">
                                             <?= number_format($fee->frais_fixe, 0, ',', ' ') ?> Ar
                                         </td>
                                     </tr>

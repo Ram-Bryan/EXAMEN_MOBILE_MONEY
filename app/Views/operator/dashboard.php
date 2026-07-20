@@ -3,39 +3,47 @@ $page_title = 'Dashboard Opérateur';
 ob_start();
 ?>
 
-<div class="dashboard-header">
-    <h1><i class="fas fa-user-cog"></i> Dashboard Opérateur</h1>
-    <p>Gestion des opérations mobile money</p>
+<div class="mb-4">
+    <h2 class="fw-bold" style="color: var(--text-dark);"><i class="fas fa-user-cog text-green"></i> Dashboard Opérateur</h2>
+    <p class="text-muted">Gestion des opérations mobile money</p>
 </div>
 
 <!-- Stats Cards -->
 <div class="row mb-4">
     <div class="col-md-3">
-        <div class="stats-card">
-            <i class="fas fa-users"></i>
-            <div class="number">567</div>
-            <div>Clients actifs</div>
+        <div class="stat-card">
+            <div class="icon green"><i class="fas fa-users"></i></div>
+            <div class="details">
+                <h3>567</h3>
+                <p>Clients actifs</p>
+            </div>
         </div>
     </div>
     <div class="col-md-3">
-        <div class="stats-card">
-            <i class="fas fa-exchange-alt"></i>
-            <div class="number">2,345</div>
-            <div>Transactions aujourd'hui</div>
+        <div class="stat-card">
+            <div class="icon blue"><i class="fas fa-exchange-alt"></i></div>
+            <div class="details">
+                <h3>2,345</h3>
+                <p>Transactions aujourd'hui</p>
+            </div>
         </div>
     </div>
     <div class="col-md-3">
-        <div class="stats-card">
-            <i class="fas fa-money-bill-wave"></i>
-            <div class="number">5,678,901 Ar</div>
-            <div>Volume total</div>
+        <div class="stat-card">
+            <div class="icon purple"><i class="fas fa-money-bill-wave"></i></div>
+            <div class="details">
+                <h3>5,678,901 Ar</h3>
+                <p>Volume total</p>
+            </div>
         </div>
     </div>
     <div class="col-md-3">
-        <div class="stats-card">
-            <i class="fas fa-coins"></i>
-            <div class="number">234,567 Ar</div>
-            <div>Gains totaux</div>
+        <div class="stat-card">
+            <div class="icon orange"><i class="fas fa-coins"></i></div>
+            <div class="details">
+                <h3>234,567 Ar</h3>
+                <p>Gains totaux</p>
+            </div>
         </div>
     </div>
 </div>
@@ -43,20 +51,20 @@ ob_start();
 <!-- Prefix Configuration -->
 <div class="card mb-4">
     <div class="card-header">
-        <h5><i class="fas fa-code"></i> Configuration des préfixes</h5>
-        <button class="btn btn-orange btn-sm float-end" onclick="editPrefixes()">
+        <span><i class="fas fa-code me-2"></i> Configuration des préfixes</span>
+        <button class="btn btn-primary-custom btn-sm" onclick="editPrefixes()">
             <i class="fas fa-edit"></i> Modifier
         </button>
     </div>
     <div class="card-body">
         <div class="row">
             <div class="col-md-6">
-                <label>Préfixes actifs</label>
-                <div class="prefix-badges">
-                    <span class="badge bg-orange">033</span>
-                    <span class="badge bg-orange">034</span>
-                    <span class="badge bg-orange">037</span>
-                    <span class="badge bg-orange">038</span>
+                <label class="form-label">Préfixes actifs</label>
+                <div>
+                    <span class="badge bg-green" style="padding:6px 14px; font-size:14px;">033</span>
+                    <span class="badge bg-green" style="padding:6px 14px; font-size:14px;">034</span>
+                    <span class="badge bg-green" style="padding:6px 14px; font-size:14px;">037</span>
+                    <span class="badge bg-green" style="padding:6px 14px; font-size:14px;">038</span>
                 </div>
             </div>
         </div>
@@ -66,29 +74,35 @@ ob_start();
 <!-- Operation Types -->
 <div class="card mb-4">
     <div class="card-header">
-        <h5><i class="fas fa-tasks"></i> Types d'opérations</h5>
+        <span><i class="fas fa-tasks me-2"></i> Types d'opérations</span>
     </div>
     <div class="card-body">
         <div class="row">
             <div class="col-md-4">
-                <div class="stats-card bg-success">
-                    <i class="fas fa-plus-circle"></i>
-                    <div class="number">Dépôt</div>
-                    <div>Frais: Variable</div>
+                <div class="stat-card" style="border-left: 4px solid var(--primary);">
+                    <div class="icon green"><i class="fas fa-plus-circle"></i></div>
+                    <div class="details">
+                        <h3>Dépôt</h3>
+                        <p>Frais: Variable</p>
+                    </div>
                 </div>
             </div>
             <div class="col-md-4">
-                <div class="stats-card bg-danger">
-                    <i class="fas fa-minus-circle"></i>
-                    <div class="number">Retrait</div>
-                    <div>Frais: Variable</div>
+                <div class="stat-card" style="border-left: 4px solid #dc2626;">
+                    <div class="icon red"><i class="fas fa-minus-circle"></i></div>
+                    <div class="details">
+                        <h3>Retrait</h3>
+                        <p>Frais: Variable</p>
+                    </div>
                 </div>
             </div>
             <div class="col-md-4">
-                <div class="stats-card bg-info">
-                    <i class="fas fa-exchange-alt"></i>
-                    <div class="number">Transfert</div>
-                    <div>Frais: Variable</div>
+                <div class="stat-card" style="border-left: 4px solid #2563eb;">
+                    <div class="icon blue"><i class="fas fa-exchange-alt"></i></div>
+                    <div class="details">
+                        <h3>Transfert</h3>
+                        <p>Frais: Variable</p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -98,14 +112,11 @@ ob_start();
 <!-- Fee Schedule -->
 <div class="card">
     <div class="card-header">
-        <h5><i class="fas fa-table"></i> Barème des frais</h5>
-        <a href="/operator/fees-config.php" class="btn btn-orange btn-sm float-end">
-            <i class="fas fa-cog"></i> Configurer
-        </a>
+        <span><i class="fas fa-table me-2"></i> Barème des frais</span>
     </div>
     <div class="card-body">
         <div class="table-responsive">
-            <table class="table table-sm">
+            <table class="table-custom w-100">
                 <thead>
                     <tr>
                         <th>Montant</th>
@@ -181,7 +192,7 @@ function editPrefixes() {
         <form id="prefixForm">
             <div class="mb-3">
                 <label class="form-label">Préfixes (séparés par des virgules)</label>
-                <input type="text" class="form-control required" name="prefixes" value="033,034,037,038" required>
+                <input type="text" class="form-control" name="prefixes" value="033,034,037,038" required>
                 <small class="text-muted">Exemple: 033,034,037,038</small>
             </div>
         </form>
