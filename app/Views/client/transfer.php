@@ -438,6 +438,15 @@ $('#transferForm').on('submit', function(e) {
 
     if (mode === 'single') {
         document.getElementById('recipient_phone').value = phones[0];
+    } else {
+        document.querySelectorAll('input[name="recipients[]"]').forEach(el => el.remove());
+        phones.forEach(function(p) {
+            const h = document.createElement('input');
+            h.type = 'hidden';
+            h.name = 'recipients[]';
+            h.value = p;
+            document.getElementById('transferForm').appendChild(h);
+        });
     }
 
     this.submit();
