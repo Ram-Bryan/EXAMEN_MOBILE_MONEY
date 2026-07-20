@@ -107,7 +107,6 @@ function previewWithdrawFee(amount) {
     
     if (isNaN(amount) || amount <= 0) {
         $('#feePreviewBox').addClass('d-none');
-        $('#submitBtn').prop('disabled', false);
         return;
     }
 
@@ -124,10 +123,9 @@ function previewWithdrawFee(amount) {
                 $('#amountShow').text(new Intl.NumberFormat('fr-MG').format(amount) + ' Ar');
                 
                 if (response.fee === null) {
-                    $('#feeShow').text('Non supporté / Pas de barème');
+                    $('#feeShow').text('Aucun barème');
                     $('#totalShow').text('N/A');
                     $('#balanceAlert').addClass('d-none');
-                    $('#submitBtn').prop('disabled', true);
                 } else {
                     const fee = parseFloat(response.fee);
                     const total = amount + fee;
@@ -137,20 +135,16 @@ function previewWithdrawFee(amount) {
                     
                     if (total > balance) {
                         $('#balanceAlert').removeClass('d-none');
-                        $('#submitBtn').prop('disabled', true);
                     } else {
                         $('#balanceAlert').addClass('d-none');
-                        $('#submitBtn').prop('disabled', false);
                     }
                 }
             } else {
                 $('#feePreviewBox').addClass('d-none');
-                $('#submitBtn').prop('disabled', false);
             }
         },
         error: function() {
             $('#feePreviewBox').addClass('d-none');
-            $('#submitBtn').prop('disabled', false);
         }
     });
 }

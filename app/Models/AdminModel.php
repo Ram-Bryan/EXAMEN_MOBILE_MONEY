@@ -12,9 +12,9 @@ class AdminModel extends Model
     protected $returnType       = 'object';
     protected $useSoftDeletes   = false;
     protected $allowedFields    = ['email', 'password'];
-    protected $useTimestamps    = true;
+    protected $useTimestamps    = false;
     protected $createdField     = 'created_at';
-    protected $updatedField     = null;
+    protected $updatedField     = '';
 
     public function findByEmail($email)
     {

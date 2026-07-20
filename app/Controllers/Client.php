@@ -195,13 +195,16 @@ class Client extends BaseController
             return redirect()->back()->withInput()->with('error', 'Client introuvable.');
         }
 
-        // Fetch type operation RETRAIT
+        $balance = $this->clientModel->getBalance($clientId);
+        if ($balance <= 0) {
+            return redirect()->back()->withInput()->with('error', 'Solde insuffisant ou inexistant. Veuillez effectuer un dépôt d\'abord.');
+        }
+
         $typeOp = $this->typeOperationModel->where('code', 'RETRAIT')->first();
         if (!$typeOp) {
             return redirect()->back()->withInput()->with('error', 'Type d\'opération de retrait inexistant.');
         }
 
-        // Calculate fee
         $fee = $this->baremeFraisModel->getFrais($typeOp->id, $client->operateur_id, $amount);
         if ($fee === null) {
             return redirect()->back()->withInput()->with('error', 'Aucun barème de frais ne couvre ce montant.');
@@ -209,13 +212,10 @@ class Client extends BaseController
 
         $totalWithdraw = $amount + $fee;
         
-        // Verify balance
-        $balance = $this->clientModel->getBalance($clientId);
         if ($totalWithdraw > $balance) {
             return redirect()->back()->withInput()->with('error', 'Solde insuffisant. Le montant avec frais (' . number_format($totalWithdraw, 0, ',', ' ') . ' Ar) dépasse votre solde disponible (' . number_format($balance, 0, ',', ' ') . ' Ar).');
         }
 
-        // Insert transaction
         $inserted = $this->transactionModel->createTransaction($typeOp->id, $clientId, null, $amount);
 
         if ($inserted) {
@@ -268,11 +268,14 @@ class Client extends BaseController
             return redirect()->back()->withInput()->with('error', 'Montant invalide.');
         }
 
+        if (!preg_match('/^0(33|34|37|38)\d{7}$/', $recipientPhone)) {
+            return redirect()->back()->withInput()->with('error', 'Numéro de téléphone invalide. Le numéro doit faire 10 chiffres et commencer par 033, 034, 037 ou 038.');
+        }
+
         if ($recipientPhone === $senderPhone) {
             return redirect()->back()->withInput()->with('error', 'Vous ne pouvez pas effectuer un transfert vers votre propre numéro.');
         }
 
-        // Find or auto-create recipient
         $recipient = $this->clientModel->getByTelephone($recipientPhone);
         if (!$recipient) {
             return redirect()->back()->withInput()->with('error', 'Numéro destinataire introuvable. Le destinataire doit être un client existant.');
@@ -280,13 +283,16 @@ class Client extends BaseController
 
         $sender = $this->clientModel->find($senderId);
 
-        // Fetch type operation TRANSFERT
+        $balance = $this->clientModel->getBalance($senderId);
+        if ($balance <= 0) {
+            return redirect()->back()->withInput()->with('error', 'Solde insuffisant ou inexistant. Veuillez effectuer un dépôt d\'abord.');
+        }
+
         $typeOp = $this->typeOperationModel->where('code', 'TRANSFERT')->first();
         if (!$typeOp) {
             return redirect()->back()->withInput()->with('error', 'Type d\'opération de transfert inexistant.');
         }
 
-        // Calculate fee
         $fee = $this->baremeFraisModel->getFrais($typeOp->id, $sender->operateur_id, $amount);
         if ($fee === null) {
             return redirect()->back()->withInput()->with('error', 'Aucun barème de frais ne couvre ce montant.');
@@ -294,13 +300,10 @@ class Client extends BaseController
 
         $totalTransfer = $amount + $fee;
 
-        // Verify balance
-        $balance = $this->clientModel->getBalance($senderId);
         if ($totalTransfer > $balance) {
             return redirect()->back()->withInput()->with('error', 'Solde insuffisant. Le transfert avec frais (' . number_format($totalTransfer, 0, ',', ' ') . ' Ar) dépasse votre solde disponible (' . number_format($balance, 0, ',', ' ') . ' Ar).');
         }
 
-        // Insert transaction
         $inserted = $this->transactionModel->createTransaction($typeOp->id, $senderId, $recipient->id, $amount);
 
         if ($inserted) {

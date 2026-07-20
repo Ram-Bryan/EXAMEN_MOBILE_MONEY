@@ -28,7 +28,7 @@
                             <input type="tel" class="form-control required border-2 border-start-0" id="recipient_phone" name="recipient_phone" placeholder="Ex: 0349876543" required style="border-radius: 0 12px 12px 0;">
                         </div>
                         <small class="text-muted mt-2 d-block">
-                            Le destinataire sera automatiquement inscrit s'il n'existe pas encore (avec un préfixe valide).
+                            Le numéro doit être un client Mobile Money existant (033, 034, 037, 038).
                         </small>
                     </div>
 
@@ -109,13 +109,21 @@
 </div>
 
 <script>
+const validPrefixes = ['033', '034', '037', '038'];
+
+function validatePhone(phone) {
+    phone = phone.trim();
+    if (phone.length !== 10) return false;
+    if (!/^\d{10}$/.test(phone)) return false;
+    return validPrefixes.includes(phone.substring(0, 3));
+}
+
 function previewTransferFee(amount) {
     amount = parseFloat(amount);
     const balance = parseFloat($('#clientBalance').data('balance'));
     
     if (isNaN(amount) || amount <= 0) {
         $('#feePreviewBox').addClass('d-none');
-        $('#submitBtn').prop('disabled', false);
         return;
     }
 
@@ -132,10 +140,9 @@ function previewTransferFee(amount) {
                 $('#amountShow').text(new Intl.NumberFormat('fr-MG').format(amount) + ' Ar');
                 
                 if (response.fee === null) {
-                    $('#feeShow').text('Non supporté / Pas de barème');
+                    $('#feeShow').text('Aucun barème');
                     $('#totalShow').text('N/A');
                     $('#balanceAlert').addClass('d-none');
-                    $('#submitBtn').prop('disabled', true);
                 } else {
                     const fee = parseFloat(response.fee);
                     const total = amount + fee;
@@ -145,29 +152,33 @@ function previewTransferFee(amount) {
                     
                     if (total > balance) {
                         $('#balanceAlert').removeClass('d-none');
-                        $('#submitBtn').prop('disabled', true);
                     } else {
                         $('#balanceAlert').addClass('d-none');
-                        $('#submitBtn').prop('disabled', false);
                     }
                 }
             } else {
                 $('#feePreviewBox').addClass('d-none');
-                $('#submitBtn').prop('disabled', false);
             }
         },
         error: function() {
             $('#feePreviewBox').addClass('d-none');
-            $('#submitBtn').prop('disabled', false);
         }
     });
 }
 
 $('#transferForm').on('submit', function(e) {
     const recipient = $('#recipient_phone').val().trim();
-    if (recipient === '<?= esc($phone) ?>') {
+    const senderPhone = '<?= esc($phone) ?>';
+
+    if (recipient === senderPhone) {
         e.preventDefault();
         alert('Vous ne pouvez pas effectuer un transfert vers votre propre numéro');
+        return false;
+    }
+
+    if (!validatePhone(recipient)) {
+        e.preventDefault();
+        alert('Numéro de téléphone invalide. Utilisez un numéro à 10 chiffres commençant par 033, 034, 037 ou 038.');
         return false;
     }
 });

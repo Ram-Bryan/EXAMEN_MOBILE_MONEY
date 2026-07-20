@@ -12,9 +12,9 @@ class TransactionModel extends Model
     protected $returnType       = 'object';
     protected $useSoftDeletes   = false;
     protected $allowedFields    = ['type_operation_id', 'expediteur_id', 'destinataire_id', 'montant_brut', 'date_transaction'];
-    protected $useTimestamps    = true;
+    protected $useTimestamps    = false;
     protected $createdField     = 'date_transaction';
-    protected $updatedField     = null;
+    protected $updatedField     = '';
 
     public function getGainsParType()
     {
@@ -76,6 +76,7 @@ class TransactionModel extends Model
         if ($expediteurId !== null) {
             $data['expediteur_id'] = $expediteurId;
         }
+        
         if ($destinataireId !== null) {
             $data['destinataire_id'] = $destinataireId;
         }
