@@ -36,8 +36,7 @@ class CreateBaremesFraisHistoriqueTable extends Migration
             ],
             'date_modif' => [
                 'type'       => 'DATETIME',
-                'null'       => false,
-                'default'    => 'CURRENT_TIMESTAMP',
+                'null'       => true,
             ],
         ]);
         $this->forge->addKey('id', true);

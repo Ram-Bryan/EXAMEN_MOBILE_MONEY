@@ -39,8 +39,7 @@ class CreateTransactionsTable extends Migration
             ],
             'date_transaction' => [
                 'type'       => 'DATETIME',
-                'null'       => false,
-                'default'    => 'CURRENT_TIMESTAMP',
+                'null'       => true,
             ],
         ]);
         $this->forge->addKey('id', true);
