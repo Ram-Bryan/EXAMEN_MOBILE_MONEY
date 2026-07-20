@@ -8,7 +8,6 @@ class DatabaseSeeder extends Seeder
 {
     public function run()
     {
-        // Appeler les seeders dans l'ordre (respect des clés étrangères)
         $this->call(OperateurPrefixesSeeder::class);
         $this->call(TypesOperationSeeder::class);
         $this->call(BaremesFraisSeeder::class);

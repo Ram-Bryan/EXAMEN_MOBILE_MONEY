@@ -123,6 +123,7 @@ class BaremeFraisModel extends Model
     public function getFeesSchedules(string $typeCode, int $operateurId)
     {
         $db = $this->db;
+        $now = date('Y-m-d H:i:s');
         $sql = "
             SELECT h.montant_min, h.montant_max, h.frais_fixe
             FROM baremes_frais b
@@ -134,12 +135,12 @@ class BaremeFraisModel extends Model
                   SELECT MAX(h2.date_modif)
                   FROM baremes_frais_historique h2
                   WHERE h2.bareme_id = h.bareme_id
-                    AND h2.date_modif <= CURRENT_TIMESTAMP
+                    AND h2.date_modif <= ?
               )
             ORDER BY h.montant_min ASC
         ";
         
-        $query = $db->query($sql, [$typeCode, $operateurId]);
+        $query = $db->query($sql, [$typeCode, $operateurId, $now]);
         return $query->getResult();
     }
 }

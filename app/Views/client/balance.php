@@ -37,10 +37,6 @@
                     <span class="text-muted">Nom du Client :</span>
                     <span class="font-weight-bold"><?= esc(session()->get('name')) ?></span>
                 </div>
-                <div class="d-flex justify-content-between border-bottom py-3">
-                    <span class="text-muted">Code Client unique :</span>
-                    <span class="badge bg-secondary font-monospace" style="font-size: 14px;"><?= esc(session()->get('client_code')) ?></span>
-                </div>
                 <div class="d-flex justify-content-between py-3">
                     <span class="text-muted">Opérateur de réseau :</span>
                     <span class="badge bg-orange px-3 py-2"><?= esc($operator_prefix) ?></span>

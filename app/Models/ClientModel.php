@@ -12,9 +12,9 @@ class ClientModel extends Model
     protected $returnType       = 'object';
     protected $useSoftDeletes   = false;
     protected $allowedFields    = ['nom', 'telephone', 'code', 'operateur_id'];
-    protected $useTimestamps    = true;
+    protected $useTimestamps    = false;
     protected $createdField     = 'created_at';
-    protected $updatedField     = null;
+    protected $updatedField     = '';
 
     public function getClientsSoldes()
     {

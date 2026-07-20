@@ -81,7 +81,6 @@ class AuthController extends BaseController
             'isLoggedIn'  => true,
             'client_id'   => $client->id,
             'phone'       => $client->telephone,
-            'client_code' => $client->code,
             'name'        => $client->nom,
             'role'        => 'client'
         ]);

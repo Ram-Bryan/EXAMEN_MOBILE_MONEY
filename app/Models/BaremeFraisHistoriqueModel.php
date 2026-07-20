@@ -12,9 +12,9 @@ class BaremeFraisHistoriqueModel extends Model
     protected $returnType       = 'object';
     protected $useSoftDeletes   = false;
     protected $allowedFields    = ['bareme_id', 'montant_min', 'montant_max', 'frais_fixe', 'date_modif'];
-    protected $useTimestamps    = true;
+    protected $useTimestamps    = false;
     protected $createdField     = 'date_modif';
-    protected $updatedField     = null;
+    protected $updatedField     = '';
 
     public function addHistorique($bareme_id, $montant_min, $montant_max, $frais_fixe)
     {
