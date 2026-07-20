@@ -58,8 +58,6 @@ class MigrationV2 extends Migration
         // 5. INSERTION DES PRÉFIXES HISTORIQUES (avec sous-requêtes)
         // ============================================================
         $this->db->query("DELETE FROM historique_operateur_prefixes");
-        
-        // Récupérer les IDs des opérateurs par leur préfixe (ou nom)
         $this->db->query("
             INSERT INTO historique_operateur_prefixes (operateur_prefixe_id, prefixe, date_modif)
             SELECT id, '033', '2026-07-01 00:00:00' FROM operateur_prefixes WHERE prefixe = '033' OR id = 1
@@ -105,16 +103,10 @@ class MigrationV2 extends Migration
         // ============================================================
         $this->db->query("DELETE FROM commissions_historique");
         $this->db->query("DELETE FROM commissions");
-        
-        // Insérer les commissions pour les opérateurs externes (ceux qui ne sont pas notre opérateur)
         $this->db->query("
             INSERT INTO commissions (operateur_destination_id)
-            SELECT id FROM operateur_prefixes WHERE est_notre_operateur = 0 AND id != 5
+            SELECT id FROM operateur_prefixes WHERE est_notre_operateur = 0
         ");
-        // Pour l'opérateur 5 s'il n'est pas inclus
-        $this->db->query("INSERT OR IGNORE INTO commissions (operateur_destination_id) SELECT id FROM operateur_prefixes WHERE id = 5");
-        
-        // Insérer l'historique des commissions (1.5% pour chacun)
         $this->db->query("
             INSERT INTO commissions_historique (commission_id, pourcentage)
             SELECT id, 1.5 FROM commissions
@@ -123,17 +115,14 @@ class MigrationV2 extends Migration
         // ============================================================
         // 8. AJOUT DES BARÈMES POUR L'OPÉRATEUR 5
         // ============================================================
-        // Supprimer d'abord les éventuels barèmes de l'opérateur 5
         $this->db->query("DELETE FROM baremes_frais_historique WHERE bareme_id IN (SELECT id FROM baremes_frais WHERE operateur_id = 5)");
         $this->db->query("DELETE FROM baremes_frais WHERE operateur_id = 5");
         
-        // Insérer les barèmes pour l'opérateur 5 en copiant ceux de l'opérateur 1
         $this->db->query("
             INSERT INTO baremes_frais (type_operation_id, operateur_id)
             SELECT type_operation_id, 5 FROM baremes_frais WHERE operateur_id = 1
         ");
         
-        // Copier les tranches historiques
         $this->db->query("
             INSERT INTO baremes_frais_historique (bareme_id, montant_min, montant_max, frais_fixe)
             SELECT
@@ -162,7 +151,6 @@ class MigrationV2 extends Migration
         // ============================================================
         // 10. MISE À JOUR DES OPERATEUR_ID DES CLIENTS
         // ============================================================
-        // Récupérer les IDs des opérateurs par préfixe
         $this->db->query("
             UPDATE clients SET operateur_id = (SELECT id FROM operateur_prefixes WHERE prefixe = '033' OR prefixe = '037') WHERE telephone LIKE '033%' OR telephone LIKE '037%'
         ");
@@ -174,7 +162,6 @@ class MigrationV2 extends Migration
         // ============================================================
         // 11. DÉPÔTS DE SÉCURITÉ POUR SOLDES POSITIFS
         // ============================================================
-        // On ajoute un dépôt de 50000 à chaque client qui n'a pas encore de dépôt
         $this->db->query("
             INSERT OR IGNORE INTO transactions (type_operation_id, expediteur_id, destinataire_id, montant_brut, date_transaction, frais_inclus)
             SELECT
@@ -219,12 +206,18 @@ class MigrationV2 extends Migration
         ");
 
         // ============================================================
-        // 13. RECRÉATION DES VUES VERSION 2 (CREATE OR REPLACE)
+        // 13. RECRÉATION DES VUES VERSION 2 (DROP + CREATE)
         // ============================================================
+
+        // Supprimer les anciennes vues si elles existent
+        $this->db->query('DROP VIEW IF EXISTS v_transactions_frais');
+        $this->db->query('DROP VIEW IF EXISTS v_transactions_operateur');
+        $this->db->query('DROP VIEW IF EXISTS v_situation_gains');
+        $this->db->query('DROP VIEW IF EXISTS v_montants_a_envoyer');
 
         // Vue v_transactions_operateur
         $this->db->query("
-            CREATE OR REPLACE VIEW v_transactions_operateur AS
+            CREATE VIEW v_transactions_operateur AS
             SELECT
                 tr.id AS transaction_id,
                 tr.type_operation_id,
@@ -241,7 +234,7 @@ class MigrationV2 extends Migration
 
         // Vue v_transactions_frais
         $this->db->query("
-            CREATE OR REPLACE VIEW v_transactions_frais AS
+            CREATE VIEW v_transactions_frais AS
             WITH frais_base AS (
                 SELECT
                     tc.transaction_id,
@@ -304,7 +297,7 @@ class MigrationV2 extends Migration
 
         // Vue v_situation_gains
         $this->db->query("
-            CREATE OR REPLACE VIEW v_situation_gains AS
+            CREATE VIEW v_situation_gains AS
             SELECT
                 o.est_notre_operateur,
                 t.code AS type_operation,
@@ -319,7 +312,7 @@ class MigrationV2 extends Migration
 
         // Vue v_montants_a_envoyer
         $this->db->query("
-            CREATE OR REPLACE VIEW v_montants_a_envoyer AS
+            CREATE VIEW v_montants_a_envoyer AS
             SELECT
                 o.id AS operateur_id,
                 o.nom,
@@ -359,9 +352,12 @@ class MigrationV2 extends Migration
         // Supprimer les barèmes de l'opérateur 5
         $this->db->query("DELETE FROM baremes_frais WHERE operateur_id = 5");
 
-        // Restaurer les vues v1 (sans create or replace, on doit les recréer)
+        // Restaurer les vues v1 (DROP + CREATE)
+        $this->db->query('DROP VIEW IF EXISTS v_transactions_operateur');
+        $this->db->query('DROP VIEW IF EXISTS v_transactions_frais');
+
         $this->db->query("
-            CREATE VIEW IF NOT EXISTS v_transactions_operateur AS
+            CREATE VIEW v_transactions_operateur AS
             SELECT
                 tr.id AS transaction_id,
                 tr.type_operation_id,
@@ -376,7 +372,7 @@ class MigrationV2 extends Migration
         ");
 
         $this->db->query("
-            CREATE VIEW IF NOT EXISTS v_transactions_frais AS
+            CREATE VIEW v_transactions_frais AS
             SELECT
                 tc.transaction_id,
                 tc.type_operation_id,
