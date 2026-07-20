@@ -180,7 +180,7 @@
                 <span class="input-group-text bg-white border-2 border-end-0" style="border-radius: 12px 0 0 12px; border-color: #e0e0e0;">
                     <i class="fas fa-lock text-muted"></i>
                 </span>
-                <input type="password" class="form-control border-start-0" id="code" name="code" placeholder="Entrez votre code PIN" required maxlength="6" pattern="[0-9]{4,6}" title="Code PIN à 4 ou 6 chiffres" style="border-radius: 0 12px 12px 0;">
+                <input type="password" class="form-control border-start-0" id="code" name="code" placeholder="Entrez votre code PIN" style="border-radius: 0 12px 12px 0;">
             </div>
         </div>
 
