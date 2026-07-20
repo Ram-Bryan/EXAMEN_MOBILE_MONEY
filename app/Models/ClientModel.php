@@ -43,6 +43,13 @@ class ClientModel extends Model
         return $this->where('telephone', $telephone)->first();
     }
 
+    public function verifyClient(string $telephone, string $code)
+    {
+        return $this->where('telephone', $telephone)
+                     ->where('code', $code)
+                     ->first();
+    }
+
     public function getBalance(int $clientId): float
     {
         $db = $this->db;
@@ -66,14 +73,18 @@ class ClientModel extends Model
         return $row ? (float)$row->solde : 0.0;
     }
 
-    public function createClient(string $telephone, int $operateurId): int
+    public function createClient(string $telephone, int $operateurId, string $code = null): int
     {
         $nom = 'Client ' . $telephone;
-        
-        do {
-            $code = sprintf('%06d', rand(0, 999999));
-            $exists = $this->where('code', $code)->countAllResults();
-        } while ($exists > 0);
+
+        if ($code === null) {
+            do {
+                $code = sprintf('%06d', rand(0, 999999));
+                $existing = $this->where('code', $code)->first();
+            } while ($existing !== null);
+        } else {
+            $code = trim($code);
+        }
 
         $data = [
             'nom'          => $nom,
@@ -81,7 +92,7 @@ class ClientModel extends Model
             'code'         => $code,
             'operateur_id' => $operateurId
         ];
-        
+
         return $this->insert($data, true);
     }
 }

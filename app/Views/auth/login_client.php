@@ -164,7 +164,7 @@
     <form action="<?= base_url('login/client') ?>" method="POST">
         <?= csrf_field() ?>
         
-        <div class="mb-4">
+        <div class="mb-3">
             <label for="phone" class="form-label font-weight-bold" style="color: #333;">Numéro de téléphone</label>
             <div class="input-group">
                 <span class="input-group-text bg-white border-2 border-end-0" style="border-radius: 12px 0 0 12px; border-color: #e0e0e0;">
@@ -172,13 +172,25 @@
                 </span>
                 <input type="tel" class="form-control border-start-0" id="phone" name="phone" placeholder="Ex: 0341234567" required style="border-radius: 0 12px 12px 0;">
             </div>
-            <div class="mt-3 text-center">
-                <small class="text-muted d-block mb-1">Préfixes valides de l'opérateur :</small>
-                <div class="d-flex justify-content-center flex-wrap">
-                    <span class="prefix-badge">033</span>
-                    <span class="prefix-badge">034</span>
-                    <span class="prefix-badge">038</span>
-                </div>
+        </div>
+
+        <div class="mb-3">
+            <label for="code" class="form-label font-weight-bold" style="color: #333;">Code PIN</label>
+            <div class="input-group">
+                <span class="input-group-text bg-white border-2 border-end-0" style="border-radius: 12px 0 0 12px; border-color: #e0e0e0;">
+                    <i class="fas fa-lock text-muted"></i>
+                </span>
+                <input type="password" class="form-control border-start-0" id="code" name="code" placeholder="Entrez votre code PIN" required maxlength="6" pattern="[0-9]{4,6}" title="Code PIN à 4 ou 6 chiffres" style="border-radius: 0 12px 12px 0;">
+            </div>
+        </div>
+
+        <div class="mb-4 text-center">
+            <small class="text-muted d-block mb-1">Préfixes valides de l'opérateur :</small>
+            <div class="d-flex justify-content-center flex-wrap">
+                <span class="prefix-badge">033</span>
+                <span class="prefix-badge">034</span>
+                <span class="prefix-badge">037</span>
+                <span class="prefix-badge">038</span>
             </div>
         </div>
 
@@ -188,7 +200,7 @@
 
         <div class="text-center mt-3">
             <small class="text-muted d-block mb-2">
-                Saisissez un numéro valide pour créer automatiquement votre compte.
+                Première connexion ? Entrez votre numéro pour créer un compte automatiquement.
             </small>
             <hr class="my-3">
             <a href="<?= base_url('login/admin') ?>" class="link-switch">

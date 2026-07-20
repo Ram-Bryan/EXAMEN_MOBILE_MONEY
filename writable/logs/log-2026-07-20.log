@@ -227,3 +227,517 @@ Stack trace:
 #13 /home/itu/Lessons/S4/SI/FINAL/system/Boot.php(166): CodeIgniter\Boot::runCommand()
 #14 /home/itu/Lessons/S4/SI/FINAL/spark(87): CodeIgniter\Boot::bootSpark()
 #15 {main}
+ERROR - 2026-07-20 08:27:47 --> near ")": syntax error
+in SYSTEMPATH/Database/SQLite3/Connection.php on line 163.
+ 1 SYSTEMPATH/Database/SQLite3/Connection.php(163): SQLite3->exec()
+ 2 SYSTEMPATH/Database/BaseConnection.php(910): CodeIgniter\Database\SQLite3\Connection->execute()
+ 3 SYSTEMPATH/Database/BaseConnection.php(827): CodeIgniter\Database\BaseConnection->simpleQuery()
+ 4 SYSTEMPATH/Database/BaseBuilder.php(2345): CodeIgniter\Database\BaseConnection->query()
+ 5 SYSTEMPATH/Model.php(355): CodeIgniter\Database\BaseBuilder->insert()
+ 6 SYSTEMPATH/BaseModel.php(899): CodeIgniter\Model->doInsert()
+ 7 SYSTEMPATH/Model.php(668): CodeIgniter\BaseModel->insert()
+ 8 APPPATH/Controllers/AdminController.php(57): CodeIgniter\Model->insert()
+ 9 SYSTEMPATH/CodeIgniter.php(951): App\Controllers\AdminController->createOperator()
+10 SYSTEMPATH/CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController()
+11 SYSTEMPATH/CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest()
+12 SYSTEMPATH/Boot.php(417): CodeIgniter\CodeIgniter->run()
+13 SYSTEMPATH/Boot.php(68): CodeIgniter\Boot::runCodeIgniter()
+14 FCPATH/index.php(59): CodeIgniter\Boot::bootWeb()
+15 SYSTEMPATH/rewrite.php(44): require_once('/home/itu/Lessons/S4/SI/FINAL/public/index.php')
+CRITICAL - 2026-07-20 08:27:48 --> CodeIgniter\Database\Exceptions\DatabaseException: near ")": syntax error
+[Method: POST, Route: admin/operators/create]
+in SYSTEMPATH/Database/BaseConnection.php on line 865.
+ 1 SYSTEMPATH/Database/BaseBuilder.php(2345): CodeIgniter\Database\BaseConnection->query()
+ 2 SYSTEMPATH/Model.php(355): CodeIgniter\Database\BaseBuilder->insert()
+ 3 SYSTEMPATH/BaseModel.php(899): CodeIgniter\Model->doInsert()
+ 4 SYSTEMPATH/Model.php(668): CodeIgniter\BaseModel->insert()
+ 5 APPPATH/Controllers/AdminController.php(57): CodeIgniter\Model->insert()
+ 6 SYSTEMPATH/CodeIgniter.php(951): App\Controllers\AdminController->createOperator()
+ 7 SYSTEMPATH/CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController()
+ 8 SYSTEMPATH/CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest()
+ 9 SYSTEMPATH/Boot.php(417): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH/Boot.php(68): CodeIgniter\Boot::runCodeIgniter()
+11 FCPATH/index.php(59): CodeIgniter\Boot::bootWeb()
+12 SYSTEMPATH/rewrite.php(44): require_once('/home/itu/Lessons/S4/SI/FINAL/public/index.php')
+CRITICAL - 2026-07-20 08:27:48 --> [Caused by] CodeIgniter\Database\Exceptions\DatabaseException: near ")": syntax error
+in SYSTEMPATH/Database/SQLite3/Connection.php on line 174.
+ 1 SYSTEMPATH/Database/BaseConnection.php(910): CodeIgniter\Database\SQLite3\Connection->execute()
+ 2 SYSTEMPATH/Database/BaseConnection.php(827): CodeIgniter\Database\BaseConnection->simpleQuery()
+ 3 SYSTEMPATH/Database/BaseBuilder.php(2345): CodeIgniter\Database\BaseConnection->query()
+ 4 SYSTEMPATH/Model.php(355): CodeIgniter\Database\BaseBuilder->insert()
+ 5 SYSTEMPATH/BaseModel.php(899): CodeIgniter\Model->doInsert()
+ 6 SYSTEMPATH/Model.php(668): CodeIgniter\BaseModel->insert()
+ 7 APPPATH/Controllers/AdminController.php(57): CodeIgniter\Model->insert()
+ 8 SYSTEMPATH/CodeIgniter.php(951): App\Controllers\AdminController->createOperator()
+ 9 SYSTEMPATH/CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController()
+10 SYSTEMPATH/CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest()
+11 SYSTEMPATH/Boot.php(417): CodeIgniter\CodeIgniter->run()
+12 SYSTEMPATH/Boot.php(68): CodeIgniter\Boot::runCodeIgniter()
+13 FCPATH/index.php(59): CodeIgniter\Boot::bootWeb()
+14 SYSTEMPATH/rewrite.php(44): require_once('/home/itu/Lessons/S4/SI/FINAL/public/index.php')
+CRITICAL - 2026-07-20 08:27:48 --> [Caused by] Exception: near ")": syntax error
+in SYSTEMPATH/Database/SQLite3/Connection.php on line 163.
+ 1 SYSTEMPATH/Database/SQLite3/Connection.php(163): SQLite3->exec()
+ 2 SYSTEMPATH/Database/BaseConnection.php(910): CodeIgniter\Database\SQLite3\Connection->execute()
+ 3 SYSTEMPATH/Database/BaseConnection.php(827): CodeIgniter\Database\BaseConnection->simpleQuery()
+ 4 SYSTEMPATH/Database/BaseBuilder.php(2345): CodeIgniter\Database\BaseConnection->query()
+ 5 SYSTEMPATH/Model.php(355): CodeIgniter\Database\BaseBuilder->insert()
+ 6 SYSTEMPATH/BaseModel.php(899): CodeIgniter\Model->doInsert()
+ 7 SYSTEMPATH/Model.php(668): CodeIgniter\BaseModel->insert()
+ 8 APPPATH/Controllers/AdminController.php(57): CodeIgniter\Model->insert()
+ 9 SYSTEMPATH/CodeIgniter.php(951): App\Controllers\AdminController->createOperator()
+10 SYSTEMPATH/CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController()
+11 SYSTEMPATH/CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest()
+12 SYSTEMPATH/Boot.php(417): CodeIgniter\CodeIgniter->run()
+13 SYSTEMPATH/Boot.php(68): CodeIgniter\Boot::runCodeIgniter()
+14 FCPATH/index.php(59): CodeIgniter\Boot::bootWeb()
+15 SYSTEMPATH/rewrite.php(44): require_once('/home/itu/Lessons/S4/SI/FINAL/public/index.php')
+ERROR - 2026-07-20 08:28:09 --> near ")": syntax error
+in SYSTEMPATH/Database/SQLite3/Connection.php on line 163.
+ 1 SYSTEMPATH/Database/SQLite3/Connection.php(163): SQLite3->exec()
+ 2 SYSTEMPATH/Database/BaseConnection.php(910): CodeIgniter\Database\SQLite3\Connection->execute()
+ 3 SYSTEMPATH/Database/BaseConnection.php(827): CodeIgniter\Database\BaseConnection->simpleQuery()
+ 4 SYSTEMPATH/Database/BaseBuilder.php(2345): CodeIgniter\Database\BaseConnection->query()
+ 5 SYSTEMPATH/Model.php(355): CodeIgniter\Database\BaseBuilder->insert()
+ 6 SYSTEMPATH/BaseModel.php(899): CodeIgniter\Model->doInsert()
+ 7 SYSTEMPATH/Model.php(668): CodeIgniter\BaseModel->insert()
+ 8 APPPATH/Controllers/AdminController.php(57): CodeIgniter\Model->insert()
+ 9 SYSTEMPATH/CodeIgniter.php(951): App\Controllers\AdminController->createOperator()
+10 SYSTEMPATH/CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController()
+11 SYSTEMPATH/CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest()
+12 SYSTEMPATH/Boot.php(417): CodeIgniter\CodeIgniter->run()
+13 SYSTEMPATH/Boot.php(68): CodeIgniter\Boot::runCodeIgniter()
+14 FCPATH/index.php(59): CodeIgniter\Boot::bootWeb()
+15 SYSTEMPATH/rewrite.php(44): require_once('/home/itu/Lessons/S4/SI/FINAL/public/index.php')
+CRITICAL - 2026-07-20 08:28:09 --> CodeIgniter\Database\Exceptions\DatabaseException: near ")": syntax error
+[Method: POST, Route: admin/operators/create]
+in SYSTEMPATH/Database/BaseConnection.php on line 865.
+ 1 SYSTEMPATH/Database/BaseBuilder.php(2345): CodeIgniter\Database\BaseConnection->query()
+ 2 SYSTEMPATH/Model.php(355): CodeIgniter\Database\BaseBuilder->insert()
+ 3 SYSTEMPATH/BaseModel.php(899): CodeIgniter\Model->doInsert()
+ 4 SYSTEMPATH/Model.php(668): CodeIgniter\BaseModel->insert()
+ 5 APPPATH/Controllers/AdminController.php(57): CodeIgniter\Model->insert()
+ 6 SYSTEMPATH/CodeIgniter.php(951): App\Controllers\AdminController->createOperator()
+ 7 SYSTEMPATH/CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController()
+ 8 SYSTEMPATH/CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest()
+ 9 SYSTEMPATH/Boot.php(417): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH/Boot.php(68): CodeIgniter\Boot::runCodeIgniter()
+11 FCPATH/index.php(59): CodeIgniter\Boot::bootWeb()
+12 SYSTEMPATH/rewrite.php(44): require_once('/home/itu/Lessons/S4/SI/FINAL/public/index.php')
+CRITICAL - 2026-07-20 08:28:09 --> [Caused by] CodeIgniter\Database\Exceptions\DatabaseException: near ")": syntax error
+in SYSTEMPATH/Database/SQLite3/Connection.php on line 174.
+ 1 SYSTEMPATH/Database/BaseConnection.php(910): CodeIgniter\Database\SQLite3\Connection->execute()
+ 2 SYSTEMPATH/Database/BaseConnection.php(827): CodeIgniter\Database\BaseConnection->simpleQuery()
+ 3 SYSTEMPATH/Database/BaseBuilder.php(2345): CodeIgniter\Database\BaseConnection->query()
+ 4 SYSTEMPATH/Model.php(355): CodeIgniter\Database\BaseBuilder->insert()
+ 5 SYSTEMPATH/BaseModel.php(899): CodeIgniter\Model->doInsert()
+ 6 SYSTEMPATH/Model.php(668): CodeIgniter\BaseModel->insert()
+ 7 APPPATH/Controllers/AdminController.php(57): CodeIgniter\Model->insert()
+ 8 SYSTEMPATH/CodeIgniter.php(951): App\Controllers\AdminController->createOperator()
+ 9 SYSTEMPATH/CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController()
+10 SYSTEMPATH/CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest()
+11 SYSTEMPATH/Boot.php(417): CodeIgniter\CodeIgniter->run()
+12 SYSTEMPATH/Boot.php(68): CodeIgniter\Boot::runCodeIgniter()
+13 FCPATH/index.php(59): CodeIgniter\Boot::bootWeb()
+14 SYSTEMPATH/rewrite.php(44): require_once('/home/itu/Lessons/S4/SI/FINAL/public/index.php')
+CRITICAL - 2026-07-20 08:28:09 --> [Caused by] Exception: near ")": syntax error
+in SYSTEMPATH/Database/SQLite3/Connection.php on line 163.
+ 1 SYSTEMPATH/Database/SQLite3/Connection.php(163): SQLite3->exec()
+ 2 SYSTEMPATH/Database/BaseConnection.php(910): CodeIgniter\Database\SQLite3\Connection->execute()
+ 3 SYSTEMPATH/Database/BaseConnection.php(827): CodeIgniter\Database\BaseConnection->simpleQuery()
+ 4 SYSTEMPATH/Database/BaseBuilder.php(2345): CodeIgniter\Database\BaseConnection->query()
+ 5 SYSTEMPATH/Model.php(355): CodeIgniter\Database\BaseBuilder->insert()
+ 6 SYSTEMPATH/BaseModel.php(899): CodeIgniter\Model->doInsert()
+ 7 SYSTEMPATH/Model.php(668): CodeIgniter\BaseModel->insert()
+ 8 APPPATH/Controllers/AdminController.php(57): CodeIgniter\Model->insert()
+ 9 SYSTEMPATH/CodeIgniter.php(951): App\Controllers\AdminController->createOperator()
+10 SYSTEMPATH/CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController()
+11 SYSTEMPATH/CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest()
+12 SYSTEMPATH/Boot.php(417): CodeIgniter\CodeIgniter->run()
+13 SYSTEMPATH/Boot.php(68): CodeIgniter\Boot::runCodeIgniter()
+14 FCPATH/index.php(59): CodeIgniter\Boot::bootWeb()
+15 SYSTEMPATH/rewrite.php(44): require_once('/home/itu/Lessons/S4/SI/FINAL/public/index.php')
+ERROR - 2026-07-20 08:29:05 --> near "=": syntax error
+in SYSTEMPATH/Database/SQLite3/Connection.php on line 163.
+ 1 SYSTEMPATH/Database/SQLite3/Connection.php(163): SQLite3->exec()
+ 2 SYSTEMPATH/Database/BaseConnection.php(910): CodeIgniter\Database\SQLite3\Connection->execute()
+ 3 SYSTEMPATH/Database/BaseConnection.php(827): CodeIgniter\Database\BaseConnection->simpleQuery()
+ 4 SYSTEMPATH/Database/BaseBuilder.php(2521): CodeIgniter\Database\BaseConnection->query()
+ 5 SYSTEMPATH/Model.php(406): CodeIgniter\Database\BaseBuilder->update()
+ 6 SYSTEMPATH/BaseModel.php(1074): CodeIgniter\Model->doUpdate()
+ 7 SYSTEMPATH/Model.php(709): CodeIgniter\BaseModel->update()
+ 8 APPPATH/Controllers/AdminController.php(67): CodeIgniter\Model->update()
+ 9 SYSTEMPATH/CodeIgniter.php(951): App\Controllers\AdminController->updateOperator()
+10 SYSTEMPATH/CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController()
+11 SYSTEMPATH/CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest()
+12 SYSTEMPATH/Boot.php(417): CodeIgniter\CodeIgniter->run()
+13 SYSTEMPATH/Boot.php(68): CodeIgniter\Boot::runCodeIgniter()
+14 FCPATH/index.php(59): CodeIgniter\Boot::bootWeb()
+15 SYSTEMPATH/rewrite.php(44): require_once('/home/itu/Lessons/S4/SI/FINAL/public/index.php')
+CRITICAL - 2026-07-20 08:29:05 --> CodeIgniter\Database\Exceptions\DatabaseException: near "=": syntax error
+[Method: POST, Route: admin/operators/update/1]
+in SYSTEMPATH/Database/BaseConnection.php on line 865.
+ 1 SYSTEMPATH/Database/BaseBuilder.php(2521): CodeIgniter\Database\BaseConnection->query()
+ 2 SYSTEMPATH/Model.php(406): CodeIgniter\Database\BaseBuilder->update()
+ 3 SYSTEMPATH/BaseModel.php(1074): CodeIgniter\Model->doUpdate()
+ 4 SYSTEMPATH/Model.php(709): CodeIgniter\BaseModel->update()
+ 5 APPPATH/Controllers/AdminController.php(67): CodeIgniter\Model->update()
+ 6 SYSTEMPATH/CodeIgniter.php(951): App\Controllers\AdminController->updateOperator()
+ 7 SYSTEMPATH/CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController()
+ 8 SYSTEMPATH/CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest()
+ 9 SYSTEMPATH/Boot.php(417): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH/Boot.php(68): CodeIgniter\Boot::runCodeIgniter()
+11 FCPATH/index.php(59): CodeIgniter\Boot::bootWeb()
+12 SYSTEMPATH/rewrite.php(44): require_once('/home/itu/Lessons/S4/SI/FINAL/public/index.php')
+CRITICAL - 2026-07-20 08:29:05 --> [Caused by] CodeIgniter\Database\Exceptions\DatabaseException: near "=": syntax error
+in SYSTEMPATH/Database/SQLite3/Connection.php on line 174.
+ 1 SYSTEMPATH/Database/BaseConnection.php(910): CodeIgniter\Database\SQLite3\Connection->execute()
+ 2 SYSTEMPATH/Database/BaseConnection.php(827): CodeIgniter\Database\BaseConnection->simpleQuery()
+ 3 SYSTEMPATH/Database/BaseBuilder.php(2521): CodeIgniter\Database\BaseConnection->query()
+ 4 SYSTEMPATH/Model.php(406): CodeIgniter\Database\BaseBuilder->update()
+ 5 SYSTEMPATH/BaseModel.php(1074): CodeIgniter\Model->doUpdate()
+ 6 SYSTEMPATH/Model.php(709): CodeIgniter\BaseModel->update()
+ 7 APPPATH/Controllers/AdminController.php(67): CodeIgniter\Model->update()
+ 8 SYSTEMPATH/CodeIgniter.php(951): App\Controllers\AdminController->updateOperator()
+ 9 SYSTEMPATH/CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController()
+10 SYSTEMPATH/CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest()
+11 SYSTEMPATH/Boot.php(417): CodeIgniter\CodeIgniter->run()
+12 SYSTEMPATH/Boot.php(68): CodeIgniter\Boot::runCodeIgniter()
+13 FCPATH/index.php(59): CodeIgniter\Boot::bootWeb()
+14 SYSTEMPATH/rewrite.php(44): require_once('/home/itu/Lessons/S4/SI/FINAL/public/index.php')
+CRITICAL - 2026-07-20 08:29:05 --> [Caused by] Exception: near "=": syntax error
+in SYSTEMPATH/Database/SQLite3/Connection.php on line 163.
+ 1 SYSTEMPATH/Database/SQLite3/Connection.php(163): SQLite3->exec()
+ 2 SYSTEMPATH/Database/BaseConnection.php(910): CodeIgniter\Database\SQLite3\Connection->execute()
+ 3 SYSTEMPATH/Database/BaseConnection.php(827): CodeIgniter\Database\BaseConnection->simpleQuery()
+ 4 SYSTEMPATH/Database/BaseBuilder.php(2521): CodeIgniter\Database\BaseConnection->query()
+ 5 SYSTEMPATH/Model.php(406): CodeIgniter\Database\BaseBuilder->update()
+ 6 SYSTEMPATH/BaseModel.php(1074): CodeIgniter\Model->doUpdate()
+ 7 SYSTEMPATH/Model.php(709): CodeIgniter\BaseModel->update()
+ 8 APPPATH/Controllers/AdminController.php(67): CodeIgniter\Model->update()
+ 9 SYSTEMPATH/CodeIgniter.php(951): App\Controllers\AdminController->updateOperator()
+10 SYSTEMPATH/CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController()
+11 SYSTEMPATH/CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest()
+12 SYSTEMPATH/Boot.php(417): CodeIgniter\CodeIgniter->run()
+13 SYSTEMPATH/Boot.php(68): CodeIgniter\Boot::runCodeIgniter()
+14 FCPATH/index.php(59): CodeIgniter\Boot::bootWeb()
+15 SYSTEMPATH/rewrite.php(44): require_once('/home/itu/Lessons/S4/SI/FINAL/public/index.php')
+DEBUG - 2026-07-20 08:32:29 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+ERROR - 2026-07-20 08:32:29 --> Error connecting to the database: Exception: Unable to open database: unable to open database file in /home/itu/Lessons/S4/SI/FINAL/system/Database/SQLite3/Connection.php:111
+Stack trace:
+#0 /home/itu/Lessons/S4/SI/FINAL/system/Database/SQLite3/Connection.php(111): SQLite3->__construct()
+#1 /home/itu/Lessons/S4/SI/FINAL/system/Database/BaseConnection.php(555): CodeIgniter\Database\SQLite3\Connection->connect()
+#2 /home/itu/Lessons/S4/SI/FINAL/system/Database/SQLite3/Connection.php(74): CodeIgniter\Database\BaseConnection->initialize()
+#3 /home/itu/Lessons/S4/SI/FINAL/system/Database/BaseConnection.php(795): CodeIgniter\Database\SQLite3\Connection->initialize()
+#4 /home/itu/Lessons/S4/SI/FINAL/system/Database/BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query()
+#5 /home/itu/Lessons/S4/SI/FINAL/system/Model.php(253): CodeIgniter\Database\BaseBuilder->get()
+#6 /home/itu/Lessons/S4/SI/FINAL/system/BaseModel.php(676): CodeIgniter\Model->doFindAll()
+#7 /home/itu/Lessons/S4/SI/FINAL/app/Controllers/AdminController.php(51): CodeIgniter\BaseModel->findAll()
+#8 /home/itu/Lessons/S4/SI/FINAL/system/CodeIgniter.php(951): App\Controllers\AdminController->operators()
+#9 /home/itu/Lessons/S4/SI/FINAL/system/CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController()
+#10 /home/itu/Lessons/S4/SI/FINAL/system/CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest()
+#11 /home/itu/Lessons/S4/SI/FINAL/system/Boot.php(417): CodeIgniter\CodeIgniter->run()
+#12 /home/itu/Lessons/S4/SI/FINAL/system/Boot.php(68): CodeIgniter\Boot::runCodeIgniter()
+#13 /home/itu/Lessons/S4/SI/FINAL/public/index.php(59): CodeIgniter\Boot::bootWeb()
+#14 /home/itu/Lessons/S4/SI/FINAL/system/rewrite.php(44): require_once('...')
+#15 {main}
+
+Next CodeIgniter\Database\Exceptions\DatabaseException: SQLite3 error: Unable to open database: unable to open database file in /home/itu/Lessons/S4/SI/FINAL/system/Database/SQLite3/Connection.php:118
+Stack trace:
+#0 /home/itu/Lessons/S4/SI/FINAL/system/Database/BaseConnection.php(555): CodeIgniter\Database\SQLite3\Connection->connect()
+#1 /home/itu/Lessons/S4/SI/FINAL/system/Database/SQLite3/Connection.php(74): CodeIgniter\Database\BaseConnection->initialize()
+#2 /home/itu/Lessons/S4/SI/FINAL/system/Database/BaseConnection.php(795): CodeIgniter\Database\SQLite3\Connection->initialize()
+#3 /home/itu/Lessons/S4/SI/FINAL/system/Database/BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query()
+#4 /home/itu/Lessons/S4/SI/FINAL/system/Model.php(253): CodeIgniter\Database\BaseBuilder->get()
+#5 /home/itu/Lessons/S4/SI/FINAL/system/BaseModel.php(676): CodeIgniter\Model->doFindAll()
+#6 /home/itu/Lessons/S4/SI/FINAL/app/Controllers/AdminController.php(51): CodeIgniter\BaseModel->findAll()
+#7 /home/itu/Lessons/S4/SI/FINAL/system/CodeIgniter.php(951): App\Controllers\AdminController->operators()
+#8 /home/itu/Lessons/S4/SI/FINAL/system/CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController()
+#9 /home/itu/Lessons/S4/SI/FINAL/system/CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest()
+#10 /home/itu/Lessons/S4/SI/FINAL/system/Boot.php(417): CodeIgniter\CodeIgniter->run()
+#11 /home/itu/Lessons/S4/SI/FINAL/system/Boot.php(68): CodeIgniter\Boot::runCodeIgniter()
+#12 /home/itu/Lessons/S4/SI/FINAL/public/index.php(59): CodeIgniter\Boot::bootWeb()
+#13 /home/itu/Lessons/S4/SI/FINAL/system/rewrite.php(44): require_once('...')
+#14 {main}
+CRITICAL - 2026-07-20 08:32:29 --> CodeIgniter\Database\Exceptions\DatabaseException: Unable to connect to the database.
+Main connection [SQLite3]: SQLite3 error: Unable to open database: unable to open database file
+[Method: GET, Route: admin/operators]
+in SYSTEMPATH/Database/BaseConnection.php on line 606.
+ 1 SYSTEMPATH/Database/SQLite3/Connection.php(74): CodeIgniter\Database\BaseConnection->initialize()
+ 2 SYSTEMPATH/Database/BaseConnection.php(795): CodeIgniter\Database\SQLite3\Connection->initialize()
+ 3 SYSTEMPATH/Database/BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query()
+ 4 SYSTEMPATH/Model.php(253): CodeIgniter\Database\BaseBuilder->get()
+ 5 SYSTEMPATH/BaseModel.php(676): CodeIgniter\Model->doFindAll()
+ 6 APPPATH/Controllers/AdminController.php(51): CodeIgniter\BaseModel->findAll()
+ 7 SYSTEMPATH/CodeIgniter.php(951): App\Controllers\AdminController->operators()
+ 8 SYSTEMPATH/CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController()
+ 9 SYSTEMPATH/CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest()
+10 SYSTEMPATH/Boot.php(417): CodeIgniter\CodeIgniter->run()
+11 SYSTEMPATH/Boot.php(68): CodeIgniter\Boot::runCodeIgniter()
+12 FCPATH/index.php(59): CodeIgniter\Boot::bootWeb()
+13 SYSTEMPATH/rewrite.php(44): require_once('/home/itu/Lessons/S4/SI/FINAL/public/index.php')
+DEBUG - 2026-07-20 08:32:33 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+ERROR - 2026-07-20 08:32:33 --> Error connecting to the database: Exception: Unable to open database: unable to open database file in /home/itu/Lessons/S4/SI/FINAL/system/Database/SQLite3/Connection.php:111
+Stack trace:
+#0 /home/itu/Lessons/S4/SI/FINAL/system/Database/SQLite3/Connection.php(111): SQLite3->__construct()
+#1 /home/itu/Lessons/S4/SI/FINAL/system/Database/BaseConnection.php(555): CodeIgniter\Database\SQLite3\Connection->connect()
+#2 /home/itu/Lessons/S4/SI/FINAL/system/Database/SQLite3/Connection.php(74): CodeIgniter\Database\BaseConnection->initialize()
+#3 /home/itu/Lessons/S4/SI/FINAL/system/Database/BaseConnection.php(795): CodeIgniter\Database\SQLite3\Connection->initialize()
+#4 /home/itu/Lessons/S4/SI/FINAL/app/Models/BaremeFraisModel.php(32): CodeIgniter\Database\BaseConnection->query()
+#5 /home/itu/Lessons/S4/SI/FINAL/app/Controllers/AdminController.php(90): App\Models\BaremeFraisModel->getCurrentBaremes()
+#6 /home/itu/Lessons/S4/SI/FINAL/system/CodeIgniter.php(951): App\Controllers\AdminController->feesConfig()
+#7 /home/itu/Lessons/S4/SI/FINAL/system/CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController()
+#8 /home/itu/Lessons/S4/SI/FINAL/system/CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest()
+#9 /home/itu/Lessons/S4/SI/FINAL/system/Boot.php(417): CodeIgniter\CodeIgniter->run()
+#10 /home/itu/Lessons/S4/SI/FINAL/system/Boot.php(68): CodeIgniter\Boot::runCodeIgniter()
+#11 /home/itu/Lessons/S4/SI/FINAL/public/index.php(59): CodeIgniter\Boot::bootWeb()
+#12 /home/itu/Lessons/S4/SI/FINAL/system/rewrite.php(44): require_once('...')
+#13 {main}
+
+Next CodeIgniter\Database\Exceptions\DatabaseException: SQLite3 error: Unable to open database: unable to open database file in /home/itu/Lessons/S4/SI/FINAL/system/Database/SQLite3/Connection.php:118
+Stack trace:
+#0 /home/itu/Lessons/S4/SI/FINAL/system/Database/BaseConnection.php(555): CodeIgniter\Database\SQLite3\Connection->connect()
+#1 /home/itu/Lessons/S4/SI/FINAL/system/Database/SQLite3/Connection.php(74): CodeIgniter\Database\BaseConnection->initialize()
+#2 /home/itu/Lessons/S4/SI/FINAL/system/Database/BaseConnection.php(795): CodeIgniter\Database\SQLite3\Connection->initialize()
+#3 /home/itu/Lessons/S4/SI/FINAL/app/Models/BaremeFraisModel.php(32): CodeIgniter\Database\BaseConnection->query()
+#4 /home/itu/Lessons/S4/SI/FINAL/app/Controllers/AdminController.php(90): App\Models\BaremeFraisModel->getCurrentBaremes()
+#5 /home/itu/Lessons/S4/SI/FINAL/system/CodeIgniter.php(951): App\Controllers\AdminController->feesConfig()
+#6 /home/itu/Lessons/S4/SI/FINAL/system/CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController()
+#7 /home/itu/Lessons/S4/SI/FINAL/system/CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest()
+#8 /home/itu/Lessons/S4/SI/FINAL/system/Boot.php(417): CodeIgniter\CodeIgniter->run()
+#9 /home/itu/Lessons/S4/SI/FINAL/system/Boot.php(68): CodeIgniter\Boot::runCodeIgniter()
+#10 /home/itu/Lessons/S4/SI/FINAL/public/index.php(59): CodeIgniter\Boot::bootWeb()
+#11 /home/itu/Lessons/S4/SI/FINAL/system/rewrite.php(44): require_once('...')
+#12 {main}
+CRITICAL - 2026-07-20 08:32:33 --> CodeIgniter\Database\Exceptions\DatabaseException: Unable to connect to the database.
+Main connection [SQLite3]: SQLite3 error: Unable to open database: unable to open database file
+[Method: GET, Route: admin/fees-config]
+in SYSTEMPATH/Database/BaseConnection.php on line 606.
+ 1 SYSTEMPATH/Database/SQLite3/Connection.php(74): CodeIgniter\Database\BaseConnection->initialize()
+ 2 SYSTEMPATH/Database/BaseConnection.php(795): CodeIgniter\Database\SQLite3\Connection->initialize()
+ 3 APPPATH/Models/BaremeFraisModel.php(32): CodeIgniter\Database\BaseConnection->query()
+ 4 APPPATH/Controllers/AdminController.php(90): App\Models\BaremeFraisModel->getCurrentBaremes()
+ 5 SYSTEMPATH/CodeIgniter.php(951): App\Controllers\AdminController->feesConfig()
+ 6 SYSTEMPATH/CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController()
+ 7 SYSTEMPATH/CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest()
+ 8 SYSTEMPATH/Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 9 SYSTEMPATH/Boot.php(68): CodeIgniter\Boot::runCodeIgniter()
+10 FCPATH/index.php(59): CodeIgniter\Boot::bootWeb()
+11 SYSTEMPATH/rewrite.php(44): require_once('/home/itu/Lessons/S4/SI/FINAL/public/index.php')
+DEBUG - 2026-07-20 08:33:33 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-07-20 08:33:33 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-07-20 08:33:33 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-07-20 08:33:33 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-07-20 08:33:33 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-07-20 08:33:33 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+ERROR - 2026-07-20 08:33:33 --> Error connecting to the database: Exception: Unable to open database: unable to open database file in /home/itu/Lessons/S4/SI/FINAL/system/Database/SQLite3/Connection.php:111
+Stack trace:
+#0 /home/itu/Lessons/S4/SI/FINAL/system/Database/SQLite3/Connection.php(111): SQLite3->__construct()
+#1 /home/itu/Lessons/S4/SI/FINAL/system/Database/BaseConnection.php(555): CodeIgniter\Database\SQLite3\Connection->connect()
+#2 /home/itu/Lessons/S4/SI/FINAL/system/Database/SQLite3/Connection.php(74): CodeIgniter\Database\BaseConnection->initialize()
+#3 /home/itu/Lessons/S4/SI/FINAL/system/Database/BaseConnection.php(795): CodeIgniter\Database\SQLite3\Connection->initialize()
+#4 /home/itu/Lessons/S4/SI/FINAL/system/Database/BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query()
+#5 /home/itu/Lessons/S4/SI/FINAL/system/Model.php(253): CodeIgniter\Database\BaseBuilder->get()
+#6 /home/itu/Lessons/S4/SI/FINAL/system/BaseModel.php(676): CodeIgniter\Model->doFindAll()
+#7 /home/itu/Lessons/S4/SI/FINAL/app/Controllers/AuthController.php(47): CodeIgniter\BaseModel->findAll()
+#8 /home/itu/Lessons/S4/SI/FINAL/system/CodeIgniter.php(951): App\Controllers\AuthController->doLoginClient()
+#9 /home/itu/Lessons/S4/SI/FINAL/system/CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController()
+#10 /home/itu/Lessons/S4/SI/FINAL/system/CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest()
+#11 /home/itu/Lessons/S4/SI/FINAL/system/Boot.php(417): CodeIgniter\CodeIgniter->run()
+#12 /home/itu/Lessons/S4/SI/FINAL/system/Boot.php(68): CodeIgniter\Boot::runCodeIgniter()
+#13 /home/itu/Lessons/S4/SI/FINAL/public/index.php(59): CodeIgniter\Boot::bootWeb()
+#14 /home/itu/Lessons/S4/SI/FINAL/system/rewrite.php(44): require_once('...')
+#15 {main}
+
+Next CodeIgniter\Database\Exceptions\DatabaseException: SQLite3 error: Unable to open database: unable to open database file in /home/itu/Lessons/S4/SI/FINAL/system/Database/SQLite3/Connection.php:118
+Stack trace:
+#0 /home/itu/Lessons/S4/SI/FINAL/system/Database/BaseConnection.php(555): CodeIgniter\Database\SQLite3\Connection->connect()
+#1 /home/itu/Lessons/S4/SI/FINAL/system/Database/SQLite3/Connection.php(74): CodeIgniter\Database\BaseConnection->initialize()
+#2 /home/itu/Lessons/S4/SI/FINAL/system/Database/BaseConnection.php(795): CodeIgniter\Database\SQLite3\Connection->initialize()
+#3 /home/itu/Lessons/S4/SI/FINAL/system/Database/BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query()
+#4 /home/itu/Lessons/S4/SI/FINAL/system/Model.php(253): CodeIgniter\Database\BaseBuilder->get()
+#5 /home/itu/Lessons/S4/SI/FINAL/system/BaseModel.php(676): CodeIgniter\Model->doFindAll()
+#6 /home/itu/Lessons/S4/SI/FINAL/app/Controllers/AuthController.php(47): CodeIgniter\BaseModel->findAll()
+#7 /home/itu/Lessons/S4/SI/FINAL/system/CodeIgniter.php(951): App\Controllers\AuthController->doLoginClient()
+#8 /home/itu/Lessons/S4/SI/FINAL/system/CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController()
+#9 /home/itu/Lessons/S4/SI/FINAL/system/CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest()
+#10 /home/itu/Lessons/S4/SI/FINAL/system/Boot.php(417): CodeIgniter\CodeIgniter->run()
+#11 /home/itu/Lessons/S4/SI/FINAL/system/Boot.php(68): CodeIgniter\Boot::runCodeIgniter()
+#12 /home/itu/Lessons/S4/SI/FINAL/public/index.php(59): CodeIgniter\Boot::bootWeb()
+#13 /home/itu/Lessons/S4/SI/FINAL/system/rewrite.php(44): require_once('...')
+#14 {main}
+CRITICAL - 2026-07-20 08:33:33 --> CodeIgniter\Database\Exceptions\DatabaseException: Unable to connect to the database.
+Main connection [SQLite3]: SQLite3 error: Unable to open database: unable to open database file
+[Method: POST, Route: login/client]
+in SYSTEMPATH/Database/BaseConnection.php on line 606.
+ 1 SYSTEMPATH/Database/SQLite3/Connection.php(74): CodeIgniter\Database\BaseConnection->initialize()
+ 2 SYSTEMPATH/Database/BaseConnection.php(795): CodeIgniter\Database\SQLite3\Connection->initialize()
+ 3 SYSTEMPATH/Database/BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query()
+ 4 SYSTEMPATH/Model.php(253): CodeIgniter\Database\BaseBuilder->get()
+ 5 SYSTEMPATH/BaseModel.php(676): CodeIgniter\Model->doFindAll()
+ 6 APPPATH/Controllers/AuthController.php(47): CodeIgniter\BaseModel->findAll()
+ 7 SYSTEMPATH/CodeIgniter.php(951): App\Controllers\AuthController->doLoginClient()
+ 8 SYSTEMPATH/CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController()
+ 9 SYSTEMPATH/CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest()
+10 SYSTEMPATH/Boot.php(417): CodeIgniter\CodeIgniter->run()
+11 SYSTEMPATH/Boot.php(68): CodeIgniter\Boot::runCodeIgniter()
+12 FCPATH/index.php(59): CodeIgniter\Boot::bootWeb()
+13 SYSTEMPATH/rewrite.php(44): require_once('/home/itu/Lessons/S4/SI/FINAL/public/index.php')
+DEBUG - 2026-07-20 08:33:33 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+ERROR - 2026-07-20 08:33:33 --> Error connecting to the database: Exception: Unable to open database: unable to open database file in /home/itu/Lessons/S4/SI/FINAL/system/Database/SQLite3/Connection.php:111
+Stack trace:
+#0 /home/itu/Lessons/S4/SI/FINAL/system/Database/SQLite3/Connection.php(111): SQLite3->__construct()
+#1 /home/itu/Lessons/S4/SI/FINAL/system/Database/BaseConnection.php(555): CodeIgniter\Database\SQLite3\Connection->connect()
+#2 /home/itu/Lessons/S4/SI/FINAL/system/Database/SQLite3/Connection.php(74): CodeIgniter\Database\BaseConnection->initialize()
+#3 /home/itu/Lessons/S4/SI/FINAL/system/Database/BaseConnection.php(795): CodeIgniter\Database\SQLite3\Connection->initialize()
+#4 /home/itu/Lessons/S4/SI/FINAL/system/Database/BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query()
+#5 /home/itu/Lessons/S4/SI/FINAL/system/Model.php(253): CodeIgniter\Database\BaseBuilder->get()
+#6 /home/itu/Lessons/S4/SI/FINAL/system/BaseModel.php(676): CodeIgniter\Model->doFindAll()
+#7 /home/itu/Lessons/S4/SI/FINAL/app/Controllers/AuthController.php(47): CodeIgniter\BaseModel->findAll()
+#8 /home/itu/Lessons/S4/SI/FINAL/system/CodeIgniter.php(951): App\Controllers\AuthController->doLoginClient()
+#9 /home/itu/Lessons/S4/SI/FINAL/system/CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController()
+#10 /home/itu/Lessons/S4/SI/FINAL/system/CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest()
+#11 /home/itu/Lessons/S4/SI/FINAL/system/Boot.php(417): CodeIgniter\CodeIgniter->run()
+#12 /home/itu/Lessons/S4/SI/FINAL/system/Boot.php(68): CodeIgniter\Boot::runCodeIgniter()
+#13 /home/itu/Lessons/S4/SI/FINAL/public/index.php(59): CodeIgniter\Boot::bootWeb()
+#14 /home/itu/Lessons/S4/SI/FINAL/system/rewrite.php(44): require_once('...')
+#15 {main}
+
+Next CodeIgniter\Database\Exceptions\DatabaseException: SQLite3 error: Unable to open database: unable to open database file in /home/itu/Lessons/S4/SI/FINAL/system/Database/SQLite3/Connection.php:118
+Stack trace:
+#0 /home/itu/Lessons/S4/SI/FINAL/system/Database/BaseConnection.php(555): CodeIgniter\Database\SQLite3\Connection->connect()
+#1 /home/itu/Lessons/S4/SI/FINAL/system/Database/SQLite3/Connection.php(74): CodeIgniter\Database\BaseConnection->initialize()
+#2 /home/itu/Lessons/S4/SI/FINAL/system/Database/BaseConnection.php(795): CodeIgniter\Database\SQLite3\Connection->initialize()
+#3 /home/itu/Lessons/S4/SI/FINAL/system/Database/BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query()
+#4 /home/itu/Lessons/S4/SI/FINAL/system/Model.php(253): CodeIgniter\Database\BaseBuilder->get()
+#5 /home/itu/Lessons/S4/SI/FINAL/system/BaseModel.php(676): CodeIgniter\Model->doFindAll()
+#6 /home/itu/Lessons/S4/SI/FINAL/app/Controllers/AuthController.php(47): CodeIgniter\BaseModel->findAll()
+#7 /home/itu/Lessons/S4/SI/FINAL/system/CodeIgniter.php(951): App\Controllers\AuthController->doLoginClient()
+#8 /home/itu/Lessons/S4/SI/FINAL/system/CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController()
+#9 /home/itu/Lessons/S4/SI/FINAL/system/CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest()
+#10 /home/itu/Lessons/S4/SI/FINAL/system/Boot.php(417): CodeIgniter\CodeIgniter->run()
+#11 /home/itu/Lessons/S4/SI/FINAL/system/Boot.php(68): CodeIgniter\Boot::runCodeIgniter()
+#12 /home/itu/Lessons/S4/SI/FINAL/public/index.php(59): CodeIgniter\Boot::bootWeb()
+#13 /home/itu/Lessons/S4/SI/FINAL/system/rewrite.php(44): require_once('...')
+#14 {main}
+CRITICAL - 2026-07-20 08:33:33 --> CodeIgniter\Database\Exceptions\DatabaseException: Unable to connect to the database.
+Main connection [SQLite3]: SQLite3 error: Unable to open database: unable to open database file
+[Method: POST, Route: login/client]
+in SYSTEMPATH/Database/BaseConnection.php on line 606.
+ 1 SYSTEMPATH/Database/SQLite3/Connection.php(74): CodeIgniter\Database\BaseConnection->initialize()
+ 2 SYSTEMPATH/Database/BaseConnection.php(795): CodeIgniter\Database\SQLite3\Connection->initialize()
+ 3 SYSTEMPATH/Database/BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query()
+ 4 SYSTEMPATH/Model.php(253): CodeIgniter\Database\BaseBuilder->get()
+ 5 SYSTEMPATH/BaseModel.php(676): CodeIgniter\Model->doFindAll()
+ 6 APPPATH/Controllers/AuthController.php(47): CodeIgniter\BaseModel->findAll()
+ 7 SYSTEMPATH/CodeIgniter.php(951): App\Controllers\AuthController->doLoginClient()
+ 8 SYSTEMPATH/CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController()
+ 9 SYSTEMPATH/CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest()
+10 SYSTEMPATH/Boot.php(417): CodeIgniter\CodeIgniter->run()
+11 SYSTEMPATH/Boot.php(68): CodeIgniter\Boot::runCodeIgniter()
+12 FCPATH/index.php(59): CodeIgniter\Boot::bootWeb()
+13 SYSTEMPATH/rewrite.php(44): require_once('/home/itu/Lessons/S4/SI/FINAL/public/index.php')
+DEBUG - 2026-07-20 08:35:04 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-07-20 08:35:04 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-07-20 08:35:04 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-07-20 08:35:04 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-07-20 08:35:04 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-07-20 08:35:04 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-07-20 08:35:46 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-07-20 08:35:46 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-07-20 08:35:46 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-07-20 08:35:46 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-07-20 08:35:46 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-07-20 08:35:46 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-07-20 08:35:46 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-07-20 08:35:46 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-07-20 08:35:46 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-07-20 08:35:46 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-07-20 08:35:46 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-07-20 08:35:46 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-07-20 08:35:46 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-07-20 08:35:46 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-07-20 08:36:29 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+ERROR - 2026-07-20 08:36:29 --> near ")": syntax error
+in SYSTEMPATH/Database/SQLite3/Connection.php on line 163.
+ 1 SYSTEMPATH/Database/SQLite3/Connection.php(163): SQLite3->exec()
+ 2 SYSTEMPATH/Database/BaseConnection.php(910): CodeIgniter\Database\SQLite3\Connection->execute()
+ 3 SYSTEMPATH/Database/BaseConnection.php(827): CodeIgniter\Database\BaseConnection->simpleQuery()
+ 4 SYSTEMPATH/Database/BaseBuilder.php(2345): CodeIgniter\Database\BaseConnection->query()
+ 5 SYSTEMPATH/Model.php(355): CodeIgniter\Database\BaseBuilder->insert()
+ 6 SYSTEMPATH/BaseModel.php(899): CodeIgniter\Model->doInsert()
+ 7 SYSTEMPATH/Model.php(668): CodeIgniter\BaseModel->insert()
+ 8 APPPATH/Models/ClientModel.php(100): CodeIgniter\Model->insert()
+ 9 APPPATH/Controllers/AuthController.php(75): App\Models\ClientModel->createClient()
+10 SYSTEMPATH/CodeIgniter.php(951): App\Controllers\AuthController->doLoginClient()
+11 SYSTEMPATH/CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController()
+12 SYSTEMPATH/CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest()
+13 SYSTEMPATH/Boot.php(417): CodeIgniter\CodeIgniter->run()
+14 SYSTEMPATH/Boot.php(68): CodeIgniter\Boot::runCodeIgniter()
+15 FCPATH/index.php(59): CodeIgniter\Boot::bootWeb()
+16 SYSTEMPATH/rewrite.php(44): require_once('/home/itu/Lessons/S4/SI/FINAL/public/index.php')
+CRITICAL - 2026-07-20 08:36:29 --> CodeIgniter\Database\Exceptions\DatabaseException: near ")": syntax error
+[Method: POST, Route: login/client]
+in SYSTEMPATH/Database/BaseConnection.php on line 865.
+ 1 SYSTEMPATH/Database/BaseBuilder.php(2345): CodeIgniter\Database\BaseConnection->query()
+ 2 SYSTEMPATH/Model.php(355): CodeIgniter\Database\BaseBuilder->insert()
+ 3 SYSTEMPATH/BaseModel.php(899): CodeIgniter\Model->doInsert()
+ 4 SYSTEMPATH/Model.php(668): CodeIgniter\BaseModel->insert()
+ 5 APPPATH/Models/ClientModel.php(100): CodeIgniter\Model->insert()
+ 6 APPPATH/Controllers/AuthController.php(75): App\Models\ClientModel->createClient()
+ 7 SYSTEMPATH/CodeIgniter.php(951): App\Controllers\AuthController->doLoginClient()
+ 8 SYSTEMPATH/CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController()
+ 9 SYSTEMPATH/CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest()
+10 SYSTEMPATH/Boot.php(417): CodeIgniter\CodeIgniter->run()
+11 SYSTEMPATH/Boot.php(68): CodeIgniter\Boot::runCodeIgniter()
+12 FCPATH/index.php(59): CodeIgniter\Boot::bootWeb()
+13 SYSTEMPATH/rewrite.php(44): require_once('/home/itu/Lessons/S4/SI/FINAL/public/index.php')
+CRITICAL - 2026-07-20 08:36:29 --> [Caused by] CodeIgniter\Database\Exceptions\DatabaseException: near ")": syntax error
+in SYSTEMPATH/Database/SQLite3/Connection.php on line 174.
+ 1 SYSTEMPATH/Database/BaseConnection.php(910): CodeIgniter\Database\SQLite3\Connection->execute()
+ 2 SYSTEMPATH/Database/BaseConnection.php(827): CodeIgniter\Database\BaseConnection->simpleQuery()
+ 3 SYSTEMPATH/Database/BaseBuilder.php(2345): CodeIgniter\Database\BaseConnection->query()
+ 4 SYSTEMPATH/Model.php(355): CodeIgniter\Database\BaseBuilder->insert()
+ 5 SYSTEMPATH/BaseModel.php(899): CodeIgniter\Model->doInsert()
+ 6 SYSTEMPATH/Model.php(668): CodeIgniter\BaseModel->insert()
+ 7 APPPATH/Models/ClientModel.php(100): CodeIgniter\Model->insert()
+ 8 APPPATH/Controllers/AuthController.php(75): App\Models\ClientModel->createClient()
+ 9 SYSTEMPATH/CodeIgniter.php(951): App\Controllers\AuthController->doLoginClient()
+10 SYSTEMPATH/CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController()
+11 SYSTEMPATH/CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest()
+12 SYSTEMPATH/Boot.php(417): CodeIgniter\CodeIgniter->run()
+13 SYSTEMPATH/Boot.php(68): CodeIgniter\Boot::runCodeIgniter()
+14 FCPATH/index.php(59): CodeIgniter\Boot::bootWeb()
+15 SYSTEMPATH/rewrite.php(44): require_once('/home/itu/Lessons/S4/SI/FINAL/public/index.php')
+CRITICAL - 2026-07-20 08:36:29 --> [Caused by] Exception: near ")": syntax error
+in SYSTEMPATH/Database/SQLite3/Connection.php on line 163.
+ 1 SYSTEMPATH/Database/SQLite3/Connection.php(163): SQLite3->exec()
+ 2 SYSTEMPATH/Database/BaseConnection.php(910): CodeIgniter\Database\SQLite3\Connection->execute()
+ 3 SYSTEMPATH/Database/BaseConnection.php(827): CodeIgniter\Database\BaseConnection->simpleQuery()
+ 4 SYSTEMPATH/Database/BaseBuilder.php(2345): CodeIgniter\Database\BaseConnection->query()
+ 5 SYSTEMPATH/Model.php(355): CodeIgniter\Database\BaseBuilder->insert()
+ 6 SYSTEMPATH/BaseModel.php(899): CodeIgniter\Model->doInsert()
+ 7 SYSTEMPATH/Model.php(668): CodeIgniter\BaseModel->insert()
+ 8 APPPATH/Models/ClientModel.php(100): CodeIgniter\Model->insert()
+ 9 APPPATH/Controllers/AuthController.php(75): App\Models\ClientModel->createClient()
+10 SYSTEMPATH/CodeIgniter.php(951): App\Controllers\AuthController->doLoginClient()
+11 SYSTEMPATH/CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController()
+12 SYSTEMPATH/CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest()
+13 SYSTEMPATH/Boot.php(417): CodeIgniter\CodeIgniter->run()
+14 SYSTEMPATH/Boot.php(68): CodeIgniter\Boot::runCodeIgniter()
+15 FCPATH/index.php(59): CodeIgniter\Boot::bootWeb()
+16 SYSTEMPATH/rewrite.php(44): require_once('/home/itu/Lessons/S4/SI/FINAL/public/index.php')
+DEBUG - 2026-07-20 08:36:29 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-07-20 08:36:29 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-07-20 08:36:29 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-07-20 08:36:29 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-07-20 08:36:29 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-07-20 08:36:29 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-07-20 08:36:29 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-07-20 08:36:29 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-07-20 08:43:49 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-07-20 08:45:46 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-07-20 08:45:46 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-07-20 08:45:50 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-07-20 08:45:50 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-07-20 08:45:57 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.

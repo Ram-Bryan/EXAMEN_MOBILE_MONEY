@@ -39,7 +39,10 @@
                         </td>
                         <td style="color:#64748b; font-size:14px;"><?= esc($op->created_at ?? '—') ?></td>
                         <td style="text-align: right; padding-right: 24px;">
-                            <button class="btn btn-sm" style="background:#f1f5f9; color:#475569; border:none; border-radius:6px;"
+                            <a href="<?= base_url('admin/operators/detail/' . $op->id) ?>" class="btn btn-sm" style="background:#f0fdf4; color:#16a34a; border:none; border-radius:6px;">
+                                <i class="fas fa-eye"></i> Voir Détail
+                            </a>
+                            <button class="btn btn-sm ms-1" style="background:#f1f5f9; color:#475569; border:none; border-radius:6px;"
                                 onclick="openEdit(<?= $op->id ?>, '<?= esc($op->prefixe) ?>')">
                                 <i class="fas fa-edit"></i> Modifier
                             </button>

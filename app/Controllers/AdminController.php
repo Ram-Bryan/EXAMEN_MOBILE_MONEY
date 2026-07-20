@@ -81,43 +81,47 @@ class AdminController extends BaseController
     }
 
     // ----------------------------------------------------------------
-    // Barèmes de frais
+    // Barèmes de frais par opérateur
     // ----------------------------------------------------------------
 
-    public function feesConfig()
+    public function operatorDetail($id)
     {
-        return view('admin/feesConfig', [
-            'baremes'         => $this->baremeFraisModel->getCurrentBaremes(),
-            'operateurs'      => $this->operateurPrefixeModel->findAll(),
+        $operator = $this->operateurPrefixeModel->find($id);
+        if (!$operator) {
+            return redirect()->to('/admin/operators')->with('error', 'Opérateur introuvable.');
+        }
+
+        return view('admin/operator_detail', [
+            'operator'       => $operator,
+            'baremes'        => $this->baremeFraisModel->getBaremesByOperateur($id),
             'types_operation' => $this->typeOperationModel->findAll(),
         ]);
     }
 
-    public function createFee()
+    public function createFee($operateurId)
     {
         $ok = $this->baremeFraisModel->addTranche(
             $this->request->getPost('type_operation_id'),
-            $this->request->getPost('operateur_id'),
+            $operateurId,
             $this->request->getPost('montant_min'),
             $this->request->getPost('montant_max'),
             $this->request->getPost('frais_fixe')
         );
 
-        return redirect()->to('/admin/fees-config')
+        return redirect()->to('/admin/operators/detail/' . $operateurId)
             ->with($ok ? 'success' : 'error', $ok ? 'Tranche créée.' : 'Erreur lors de la création.');
     }
 
-    public function updateFee($id)
+    public function updateFee($baremeId, $operateurId)
     {
-        // INSERT uniquement dans baremes_frais_historique — historique préservé, jamais d'UPDATE
         $ok = $this->baremeFraisHistoriqueModel->addHistorique(
-            $id,
+            $baremeId,
             $this->request->getPost('montant_min'),
             $this->request->getPost('montant_max'),
             $this->request->getPost('frais_fixe')
         );
 
-        return redirect()->to('/admin/fees-config')
+        return redirect()->to('/admin/operators/detail/' . $operateurId)
             ->with($ok ? 'success' : 'error', $ok ? 'Tranche mise à jour (historique préservé).' : 'Erreur.');
     }
 

@@ -4,16 +4,25 @@
 
 <div class="d-flex justify-content-between align-items-center mb-4">
     <div>
-        <h2 class="fw-bold mb-1" style="color: #0f172a;">Barèmes de Frais</h2>
-        <p class="text-muted mb-0" style="font-size: 14px;">Configuration des tranches de frais par type d'opération et opérateur</p>
+        <h2 class="fw-bold mb-1" style="color: #0f172a;">
+            <span style="background:#eff6ff; color:#2563eb; padding:6px 16px; border-radius:20px; font-weight:700; margin-right:12px; font-size:20px;">
+                <?= esc($operator->prefixe) ?>
+            </span>
+            Barèmes de l'opérateur
+        </h2>
+        <p class="text-muted mb-0" style="font-size: 14px;">Tranches de frais pour l'opérateur <?= esc($operator->prefixe) ?> (ajouté le <?= esc($operator->created_at ?? '') ?>)</p>
     </div>
-    <button class="btn btn-primary-custom" data-bs-toggle="modal" data-bs-target="#addFeeModal">
-        <i class="fas fa-plus me-2"></i>Nouvelle tranche
-    </button>
+    <div>
+        <a href="<?= base_url('admin/operators') ?>" class="btn btn-sm btn-secondary">
+            <i class="fas fa-arrow-left me-1"></i> Retour
+        </a>
+        <button class="btn btn-primary-custom ms-2" data-bs-toggle="modal" data-bs-target="#addFeeModal">
+            <i class="fas fa-plus me-2"></i>Nouvelle tranche
+        </button>
+    </div>
 </div>
 
-<!-- Group by type_operation -->
-<?php 
+<?php
 $grouped = [];
 foreach ($baremes ?? [] as $b) {
     $grouped[$b->type_nom][] = $b;
@@ -41,7 +50,6 @@ foreach ($grouped as $typeNom => $rows):
         <table class="table-custom w-100">
             <thead>
                 <tr>
-                    <th>Opérateur</th>
                     <th>Montant min (Ar)</th>
                     <th>Montant max (Ar)</th>
                     <th>Frais (Ar)</th>
@@ -52,11 +60,6 @@ foreach ($grouped as $typeNom => $rows):
             <tbody>
                 <?php foreach ($rows as $b): ?>
                 <tr>
-                    <td>
-                        <span style="background:#f8fafc; color:#334155; padding:3px 10px; border-radius:6px; font-weight:600; border:1px solid #e2e8f0;">
-                            <?= esc($b->prefixe) ?>
-                        </span>
-                    </td>
                     <td><strong><?= number_format($b->montant_min, 0, ',', ' ') ?></strong></td>
                     <td>
                         <?php if ($b->montant_max === null): ?>
@@ -90,7 +93,7 @@ foreach ($grouped as $typeNom => $rows):
 <div class="premium-card">
     <div class="card-body text-center py-5 text-muted">
         <i class="fas fa-percentage fa-3x mb-3 d-block" style="color:#e2e8f0;"></i>
-        Aucun barème configuré.
+        Aucun barème configuré pour cet opérateur.
     </div>
 </div>
 <?php endif; ?>
@@ -103,21 +106,13 @@ foreach ($grouped as $typeNom => $rows):
                 <h5 class="modal-title fw-bold" style="color: #0f172a;"><i class="fas fa-plus me-2 text-primary"></i>Nouvelle tranche de frais</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
-            <form action="<?= base_url('admin/fees/create') ?>" method="POST">
+            <form action="<?= base_url('admin/operators/' . $operator->id . '/fees/create') ?>" method="POST">
                 <div class="modal-body">
                     <div class="mb-3">
                         <label class="form-label fw-semibold" style="font-size:14px; color:#475569;">Type d'opération</label>
                         <select name="type_operation_id" class="form-select" required>
                             <?php foreach ($types_operation ?? [] as $t): ?>
                             <option value="<?= $t->id ?>"><?= esc($t->nom) ?></option>
-                            <?php endforeach; ?>
-                        </select>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label fw-semibold" style="font-size:14px; color:#475569;">Opérateur (préfixe)</label>
-                        <select name="operateur_id" class="form-select" required>
-                            <?php foreach ($operateurs ?? [] as $o): ?>
-                            <option value="<?= $o->id ?>"><?= esc($o->prefixe) ?></option>
                             <?php endforeach; ?>
                         </select>
                     </div>
@@ -188,7 +183,7 @@ function openEditFee(baremeId, montantMin, montantMax, frais) {
     document.getElementById('editMontantMin').value = montantMin;
     document.getElementById('editMontantMax').value = montantMax !== null ? montantMax : '';
     document.getElementById('editFrais').value = frais;
-    document.getElementById('editFeeForm').action = '<?= base_url('admin/fees/update/') ?>' + baremeId;
+    document.getElementById('editFeeForm').action = '<?= base_url('admin/operators/' . $operator->id . '/fees/update/') ?>' + baremeId;
     new bootstrap.Modal(document.getElementById('editFeeModal')).show();
 }
 </script>

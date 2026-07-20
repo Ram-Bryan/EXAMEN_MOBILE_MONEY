@@ -34,48 +34,59 @@ class AuthController extends BaseController
     public function doLoginClient()
     {
         $phone = $this->request->getPost('phone');
+        $code  = $this->request->getPost('code');
 
-        if (!empty($phone)) {
-            $phone = trim($phone);
-            
-            // Validate prefix against operateur_prefixes
-            $prefixes = $this->prefixModel->findAll();
-            $matchedPrefix = null;
-            
-            foreach ($prefixes as $p) {
-                if (strpos($phone, $p->prefixe) === 0) {
-                    $matchedPrefix = $p;
-                    break;
-                }
-            }
-            
-            if (!$matchedPrefix) {
-                return redirect()->back()->withInput()->with('error', 'Numéro de téléphone invalide (préfixe non supporté).');
-            }
-
-            // Check if client exists
-            $client = $this->clientModel->getByTelephone($phone);
-            
-            if (!$client) {
-                // Auto-create client
-                $clientId = $this->clientModel->createClient($phone, $matchedPrefix->id);
-                $client = $this->clientModel->find($clientId);
-            }
-
-            // Open Client Session
-            $this->session->set([
-                'isLoggedIn'  => true,
-                'client_id'   => $client->id,
-                'phone'       => $client->telephone,
-                'client_code' => $client->code,
-                'name'        => $client->nom,
-                'role'        => 'client'
-            ]);
-
-            return redirect()->to('/client/dashboard');
+        if (empty($phone) || empty($code)) {
+            return redirect()->back()->with('error', 'Veuillez renseigner votre numéro de téléphone et votre code PIN.');
         }
 
-        return redirect()->back()->with('error', 'Veuillez renseigner votre numéro de téléphone.');
+        $phone = trim($phone);
+        $code  = trim($code);
+
+        // Validate prefix against operateur_prefixes
+        $prefixes = $this->prefixModel->findAll();
+        $matchedPrefix = null;
+
+        foreach ($prefixes as $p) {
+            if (strpos($phone, $p->prefixe) === 0) {
+                $matchedPrefix = $p;
+                break;
+            }
+        }
+
+        if (!$matchedPrefix) {
+            return redirect()->back()->withInput()->with('error', 'Numéro de téléphone invalide (préfixe non supporté).');
+        }
+
+        // Check if client already exists
+        $client = $this->clientModel->getByTelephone($phone);
+
+        if ($client) {
+            // Existing client: verify phone + code PIN via model
+            $verified = $this->clientModel->verifyClient($phone, $code);
+
+            if (!$verified) {
+                return redirect()->back()->withInput()->with('error', 'Code PIN incorrect pour ce numéro de téléphone.');
+            }
+
+            $client = $verified;
+        } else {
+            // New client: auto-create with the provided code as PIN
+            $clientId = $this->clientModel->createClient($phone, $matchedPrefix->id, $code);
+            $client = $this->clientModel->find($clientId);
+        }
+
+        // Open Client Session
+        $this->session->set([
+            'isLoggedIn'  => true,
+            'client_id'   => $client->id,
+            'phone'       => $client->telephone,
+            'client_code' => $client->code,
+            'name'        => $client->nom,
+            'role'        => 'client'
+        ]);
+
+        return redirect()->to('/client/dashboard');
     }
 
     public function loginAdmin()

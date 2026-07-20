@@ -250,11 +250,8 @@
             <li class="<?= (url_is('admin/dashboard') || url_is('admin')) ? 'active' : '' ?>">
                 <a href="<?= base_url('admin/dashboard') ?>"><i class="fas fa-home"></i> Dashboard</a>
             </li>
-            <li class="<?= url_is('admin/operators') ? 'active' : '' ?>">
-                <a href="<?= base_url('admin/operators') ?>"><i class="fas fa-network-wired"></i> Préfixes Opérateurs</a>
-            </li>
-            <li class="<?= url_is('admin/fees-config') ? 'active' : '' ?>">
-                <a href="<?= base_url('admin/fees-config') ?>"><i class="fas fa-percentage"></i> Barèmes de Frais</a>
+            <li class="<?= url_is('admin/operators*') ? 'active' : '' ?>">
+                <a href="<?= base_url('admin/operators') ?>"><i class="fas fa-network-wired"></i> Opérateurs & Barèmes</a>
             </li>
             <li class="<?= url_is('admin/clients') ? 'active' : '' ?>">
                 <a href="<?= base_url('admin/clients') ?>"><i class="fas fa-users"></i> Comptes Clients</a>

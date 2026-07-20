@@ -32,6 +32,26 @@ class BaremeFraisModel extends Model
         return $db->query($sql)->getResultObject();
     }
 
+    public function getBaremesByOperateur(int $operateurId)
+    {
+        $db = \Config\Database::connect();
+        $sql = "SELECT b.id AS bareme_id, b.type_operation_id, b.operateur_id,
+                       o.prefixe, t.code AS type_code, t.nom AS type_nom,
+                       h.montant_min, h.montant_max, h.frais_fixe, h.date_modif
+                FROM baremes_frais b
+                JOIN operateur_prefixes o ON b.operateur_id = o.id
+                JOIN types_operation t ON b.type_operation_id = t.id
+                JOIN baremes_frais_historique h ON h.bareme_id = b.id
+                WHERE b.operateur_id = ?
+                  AND h.date_modif = (
+                      SELECT MAX(h2.date_modif)
+                      FROM baremes_frais_historique h2
+                      WHERE h2.bareme_id = h.bareme_id
+                  )
+                ORDER BY t.nom, h.montant_min";
+        return $db->query($sql, [$operateurId])->getResultObject();
+    }
+
     public function addTranche($type_operation_id, $operateur_id, $montant_min, $montant_max, $frais_fixe)
     {
         $db = \Config\Database::connect();
