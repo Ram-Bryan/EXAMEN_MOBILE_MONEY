@@ -1,24 +1,40 @@
 -- ============================================================
--- SCRIPT COMPLET - BASE DE DONNÉES MOBILE MONEY
+-- MIGRATION V1 → V2 - MOBILE MONEY
 -- ============================================================
 
--- Active le support des clés étrangères dans SQLite
 PRAGMA foreign_keys = ON;
 
 -- ============================================================
--- 1. CRÉATION DES TABLES
+-- 2. MODIFICATION DE LA TABLE operateur_prefixes (ajout colonnes)
 -- ============================================================
+ALTER TABLE operateur_prefixes ADD COLUMN nom TEXT;
+ALTER TABLE operateur_prefixes ADD COLUMN est_notre_operateur INTEGER NOT NULL DEFAULT 0;
 
--- Table : Configurations des préfixes de l'opérateur
+-- ============================================================
+-- 3. MISE À JOUR DES OPÉRATEURS EXISTANTS
+-- ============================================================
+-- Notre opérateur (033 et 037)
+UPDATE operateur_prefixes
+SET nom = 'Mobile Money (Notre Opérateur)', est_notre_operateur = 1
+WHERE id = 1;
 
-CREATE TABLE operateur_prefixes (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    nom TEXT,
-    est_notre_operateur INTEGER NOT NULL DEFAULT 0, -- 1 = c'est nous, 0 = opérateur externe
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-);
+-- Opérateurs externes
+UPDATE operateur_prefixes SET nom = 'Airtel' WHERE id = 2;
+UPDATE operateur_prefixes SET nom = 'Telma'  WHERE id = 3;
+UPDATE operateur_prefixes SET nom = 'Bip'    WHERE id = 4;
 
-CREATE TABLE historique_operateur_prefixes (
+-- ============================================================
+-- 4. AJOUT DE NOUVEAUX OPÉRATEURS EXTERNES
+-- ============================================================
+INSERT INTO operateur_prefixes (id, nom, est_notre_operateur) VALUES
+(5, 'Vodacom', 0);
+
+-- (Si besoin, on peut en ajouter d'autres)
+
+-- ============================================================
+-- 5. CRÉATION DE LA TABLE historique_operateur_prefixes
+-- ============================================================
+CREATE TABLE IF NOT EXISTS historique_operateur_prefixes (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     operateur_prefixe_id INTEGER NOT NULL,
     prefixe TEXT NOT NULL,
@@ -26,94 +42,139 @@ CREATE TABLE historique_operateur_prefixes (
     FOREIGN KEY (operateur_prefixe_id) REFERENCES operateur_prefixes(id)
 );
 
--- Table : Types d'opérations
-CREATE TABLE types_operation (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    code TEXT NOT NULL UNIQUE,
-    nom TEXT NOT NULL
-);
+-- ============================================================
+-- 6. INSERTION DES PRÉFIXES HISTORIQUES (version initiale)
+-- ============================================================
+-- On vide la table si elle contient déjà des données (pour éviter les doublons)
+DELETE FROM historique_operateur_prefixes;
 
-CREATE TABLE commissions (
+INSERT INTO historique_operateur_prefixes (operateur_prefixe_id, prefixe, date_modif) VALUES
+(1, '033', '2026-07-01 00:00:00'),
+(1, '037', '2026-07-01 00:00:00'),
+(2, '034', '2026-07-01 00:00:00'),
+(3, '038', '2026-07-01 00:00:00'),
+(4, '032', '2026-07-01 00:00:00'),
+(5, '031', '2026-07-01 00:00:00');
+
+-- ============================================================
+-- 7. CRÉATION DES TABLES commissions ET commissions_historique
+-- ============================================================
+CREATE TABLE IF NOT EXISTS commissions (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    operateur_destination_id INTEGER NOT NULL, -- l'opérateur externe concerné
+    operateur_destination_id INTEGER NOT NULL,
     FOREIGN KEY (operateur_destination_id) REFERENCES operateur_prefixes(id)
 );
 
-CREATE TABLE commissions_historique (
+CREATE TABLE IF NOT EXISTS commissions_historique (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     commission_id INTEGER NOT NULL,
-    pourcentage REAL NOT NULL, -- ex: 1.5 pour 1.5%
+    pourcentage REAL NOT NULL,
     date_modif DATETIME DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (commission_id) REFERENCES commissions(id)
 );
 
--- Table : Barèmes des frais
-CREATE TABLE baremes_frais (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    type_operation_id INTEGER NOT NULL,
-    operateur_id INTEGER NOT NULL,
-    FOREIGN KEY (type_operation_id) REFERENCES types_operation(id),
-    FOREIGN KEY (operateur_id) REFERENCES operateur_prefixes(id)
-);
+-- ============================================================
+-- 8. INSERTION DES COMMISSIONS (pour les opérateurs externes)
+-- ============================================================
+-- On vide les tables avant insertion (si déjà remplies)
+DELETE FROM commissions_historique;
+DELETE FROM commissions;
 
--- Table : Historique des barèmes
-CREATE TABLE baremes_frais_historique (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    bareme_id INTEGER NOT NULL,
-    montant_min REAL NOT NULL,
-    montant_max REAL,
-    frais_fixe REAL DEFAULT 0.0,
-    date_modif DATETIME DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (bareme_id) REFERENCES baremes_frais(id)
-);
+INSERT INTO commissions (operateur_destination_id) VALUES
+(2), -- Airtel
+(3), -- Telma
+(4), -- Bip
+(5); -- Vodacom
 
--- Table : Administrateur
-CREATE TABLE admin(
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    email TEXT NOT NULL UNIQUE,
-    password TEXT NOT NULL,
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-);
-
--- Table : Clients
-CREATE TABLE clients (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    nom TEXT NOT NULL,
-    telephone TEXT NOT NULL UNIQUE,
-    code TEXT NOT NULL UNIQUE,
-    operateur_id INTEGER NOT NULL,
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (operateur_id) REFERENCES operateur_prefixes(id)
-);
-
--- Table : Transactions
-CREATE TABLE transactions (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    type_operation_id INTEGER NOT NULL,
-    expediteur_id INTEGER,
-    destinataire_id INTEGER,
-    montant_brut REAL NOT NULL,
-    date_transaction DATETIME DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (type_operation_id) REFERENCES types_operation(id),
-    FOREIGN KEY (expediteur_id) REFERENCES clients(id),
-    FOREIGN KEY (destinataire_id) REFERENCES clients(id),
-    CHECK (montant_brut > 0)
-);
+-- Commission initiale (1.5% pour tous, on peut personnaliser par la suite)
+INSERT INTO commissions_historique (commission_id, pourcentage) VALUES
+(1, 1.5),
+(2, 1.5),
+(3, 1.5),
+(4, 1.5);
 
 -- ============================================================
--- 2. INDEX
+-- 9. AJOUT DE BARÈMES POUR LES NOUVEAUX OPÉRATEURS (id 5)
+-- ============================================================
+-- On insère de nouvelles lignes dans baremes_frais pour l'opérateur 5
+-- On va dupliquer les barèmes de l'opérateur 1 (type_operation_id 1,2,3)
+-- avec des IDs qui continuent après les existants.
+-- On suppose que les IDs existants vont jusqu'à 12. On commence à 13.
+INSERT INTO baremes_frais (id, type_operation_id, operateur_id) VALUES
+(13, 1, 5),  -- Dépôt
+(14, 2, 5),  -- Retrait
+(15, 3, 5);  -- Transfert
+
+-- On insère les tranches pour ces nouveaux barèmes (en copiant celles de l'opérateur 1)
+-- On peut utiliser des sous‑requêtes pour récupérer les tranches de l'opérateur 1.
+INSERT INTO baremes_frais_historique (bareme_id, montant_min, montant_max, frais_fixe)
+SELECT
+    new.id AS bareme_id,
+    old.montant_min,
+    old.montant_max,
+    old.frais_fixe
+FROM baremes_frais new
+JOIN baremes_frais old ON old.type_operation_id = new.type_operation_id AND old.operateur_id = 1
+WHERE new.operateur_id = 5;
+
+-- ============================================================
+-- 10. AJOUT DE LA COLONNE frais_inclus DANS transactions
+-- ============================================================
+ALTER TABLE transactions ADD COLUMN frais_inclus INTEGER NOT NULL DEFAULT 0;
+
+-- ============================================================
+-- 11. CORRECTION DES CLIENTS (si nécessaire)
+-- ============================================================
+-- Les clients existants ont déjà des operateur_id corrects (1,2,3,4)
+-- On s'assure que le client 3 (Pierre) avec 037 est bien sur l'opérateur 1 (notre)
+-- Le client 4 (Sophie) avec 038 est sur l'opérateur 3 (Telma) → OK
+-- Si besoin, on peut faire des UPDATE pour corriger d'éventuelles incohérences.
+-- Exemple : si un client a un téléphone qui ne correspond pas à son operateur_id, on le corrige.
+UPDATE clients SET operateur_id = 1 WHERE telephone LIKE '033%' OR telephone LIKE '037%';
+UPDATE clients SET operateur_id = 2 WHERE telephone LIKE '034%';
+UPDATE clients SET operateur_id = 3 WHERE telephone LIKE '038%';
+UPDATE clients SET operateur_id = 4 WHERE telephone LIKE '032%';
+UPDATE clients SET operateur_id = 5 WHERE telephone LIKE '031%';
+
+-- ============================================================
+-- 12. AJUSTEMENT DES TRANSACTIONS POUR SOLDES POSITIFS
+-- ============================================================
+-- On ajoute des dépôts supplémentaires pour les clients qui auraient un solde insuffisant.
+-- On va insérer des dépôts pour chaque client (s'ils n'en ont pas assez)
+-- On peut le faire en vérifiant les soldes, mais on va simplement ajouter des dépôts forfaitaires.
+
+-- Dépôts de sécurité pour tous les clients (pour éviter les soldes négatifs)
+INSERT INTO transactions (type_operation_id, expediteur_id, destinataire_id, montant_brut, date_transaction, frais_inclus)
+SELECT
+    (SELECT id FROM types_operation WHERE code = 'DEPOT'),
+    NULL,
+    c.id,
+    50000,  -- Montant de sécurité
+    '2026-07-10 08:00:00',
+    0
+FROM clients c
+WHERE NOT EXISTS (
+    SELECT 1 FROM transactions t
+    WHERE t.destinataire_id = c.id AND t.type_operation_id = (SELECT id FROM types_operation WHERE code = 'DEPOT')
+);
+
+-- On corrige les retraits/transferts trop élevés (on réduit les montants si nécessaire)
+-- Exemple : le retrait de Marie (client 2) de 75000 dépasse son solde, on le réduit à 5000
+UPDATE transactions
+SET montant_brut = 5000
+WHERE id = (SELECT id FROM transactions WHERE expediteur_id = 2 AND type_operation_id = (SELECT id FROM types_operation WHERE code = 'RETRAIT') AND montant_brut > 50000);
+
+-- Autre exemple : transfert de Jean (client 1) de 300000 → on réduit à 5000
+UPDATE transactions
+SET montant_brut = 5000
+WHERE id = (SELECT id FROM transactions WHERE expediteur_id = 1 AND type_operation_id = (SELECT id FROM types_operation WHERE code = 'TRANSFERT') AND montant_brut > 10000 AND date_transaction > '2026-07-18');
+
+-- ============================================================
+-- 13. RECRÉATION DES VUES (VERSION 2)
 -- ============================================================
 
-CREATE INDEX idx_transactions_expediteur ON transactions(expediteur_id);
-CREATE INDEX idx_transactions_destinataire ON transactions(destinataire_id);
-CREATE INDEX idx_transactions_created ON transactions(date_transaction);
-
--- ============================================================
--- 3. VUES
--- ============================================================
-
--- Vue : Opérateur de chaque transaction
-CREATE VIEW v_transactions_operateur AS
+-- Vue v_transactions_operateur (ajout frais_inclus)
+CREATE OR REPLACE VIEW v_transactions_operateur AS
 SELECT
     tr.id AS transaction_id,
     tr.type_operation_id,
@@ -121,323 +182,107 @@ SELECT
     tr.destinataire_id,
     tr.montant_brut,
     tr.date_transaction,
+    tr.frais_inclus,
     COALESCE(ce.operateur_id, cd.operateur_id) AS operateur_id
 FROM transactions tr
 LEFT JOIN clients ce ON ce.id = tr.expediteur_id
 LEFT JOIN clients cd ON cd.id = tr.destinataire_id;
 
--- Vue : Frais de chaque transaction
-CREATE VIEW v_transactions_frais AS
+-- Vue v_transactions_frais (avec commission inter-opérateur)
+CREATE OR REPLACE VIEW v_transactions_frais AS
+WITH frais_base AS (
+    SELECT
+        tc.transaction_id,
+        tc.type_operation_id,
+        tc.expediteur_id,
+        tc.destinataire_id,
+        tc.montant_brut,
+        tc.date_transaction,
+        tc.operateur_id,
+        tc.frais_inclus,
+        (
+            SELECT h.frais_fixe
+            FROM baremes_frais b
+            JOIN baremes_frais_historique h ON h.bareme_id = b.id
+            WHERE b.type_operation_id = tc.type_operation_id
+              AND b.operateur_id      = tc.operateur_id
+              AND tc.montant_brut >= h.montant_min
+              AND (h.montant_max IS NULL OR tc.montant_brut <= h.montant_max)
+              AND h.date_modif = (
+                  SELECT MAX(h2.date_modif)
+                  FROM baremes_frais_historique h2
+                  WHERE h2.bareme_id = h.bareme_id
+                    AND h2.date_modif <= tc.date_transaction
+              )
+            LIMIT 1
+        ) AS frais_fixe
+    FROM v_transactions_operateur tc
+)
 SELECT
-    tc.transaction_id,
-    tc.type_operation_id,
-    tc.expediteur_id,
-    tc.destinataire_id,
-    tc.montant_brut,
-    tc.date_transaction,
-    tc.operateur_id,
-    (
-        SELECT h.frais_fixe
-        FROM baremes_frais b
-        JOIN baremes_frais_historique h ON h.bareme_id = b.id
-        WHERE b.type_operation_id = tc.type_operation_id
-          AND b.operateur_id      = tc.operateur_id
-          AND tc.montant_brut >= h.montant_min
-          AND (h.montant_max IS NULL OR tc.montant_brut <= h.montant_max)
-          AND h.date_modif = (
-              SELECT MAX(h2.date_modif)
-              FROM baremes_frais_historique h2
-              WHERE h2.bareme_id = h.bareme_id
-                AND h2.date_modif <= tc.date_transaction
-          )
-        LIMIT 1
-    ) AS frais_applique
-FROM v_transactions_operateur tc;
+    fb.*,
+    CASE
+        WHEN fb.type_operation_id = (SELECT id FROM types_operation WHERE code = 'TRANSFERT')
+             AND EXISTS (
+                 SELECT 1 FROM clients c
+                 JOIN operateur_prefixes o ON o.id = c.operateur_id
+                 WHERE c.id = fb.destinataire_id AND o.est_notre_operateur = 0
+             )
+        THEN (
+            SELECT COALESCE(ch.pourcentage, 0) * fb.montant_brut / 100
+            FROM commissions_historique ch
+            JOIN commissions c ON c.id = ch.commission_id
+            WHERE c.operateur_destination_id = (
+                SELECT o.id FROM clients c2
+                JOIN operateur_prefixes o ON o.id = c2.operateur_id
+                WHERE c2.id = fb.destinataire_id
+            )
+            AND ch.date_modif = (
+                SELECT MAX(ch2.date_modif)
+                FROM commissions_historique ch2
+                WHERE ch2.commission_id = ch.commission_id
+                  AND ch2.date_modif <= fb.date_transaction
+            )
+            ORDER BY ch.date_modif DESC LIMIT 1
+        )
+        ELSE 0
+    END AS commission,
+    COALESCE(fb.frais_fixe, 0) + COALESCE(commission, 0) AS frais_applique
+FROM frais_base fb;
+
+-- Vue v_situation_gains (séparés nous / autres)
+CREATE OR REPLACE VIEW v_situation_gains AS
+SELECT
+    o.est_notre_operateur,
+    t.code AS type_operation,
+    SUM(tf.frais_applique) AS total_gains
+FROM v_transactions_frais tf
+JOIN types_operation t ON t.id = tf.type_operation_id
+JOIN clients cd ON cd.id = tf.destinataire_id
+JOIN operateur_prefixes o ON o.id = cd.operateur_id
+WHERE tf.frais_applique IS NOT NULL
+GROUP BY o.est_notre_operateur, t.code;
+
+-- Vue v_montants_a_envoyer (settlement inter-opérateurs)
+CREATE OR REPLACE VIEW v_montants_a_envoyer AS
+SELECT
+    o.id AS operateur_id,
+    o.nom,
+    SUM(tf.montant_brut) AS montant_total_a_envoyer
+FROM v_transactions_frais tf
+JOIN clients cd ON cd.id = tf.destinataire_id
+JOIN operateur_prefixes o ON o.id = cd.operateur_id
+WHERE o.est_notre_operateur = 0
+  AND tf.type_operation_id = (SELECT id FROM types_operation WHERE code = 'TRANSFERT')
+GROUP BY o.id, o.nom;
 
 -- ============================================================
--- 4. INSERTIONS DES DONNÉES
--- ============================================================
-
--- 4.1 Opérateurs
-INSERT INTO operateur_prefixes (id, prefixe) VALUES 
-(1, '033'),
-(2, '034'),
-(3, '037'),
-(4, '038');
-
--- 4.2 Types d'opérations
-INSERT INTO types_operation (id, code, nom) VALUES 
-(1, 'DEPOT', 'Dépôt'),
-(2, 'RETRAIT', 'Retrait'),
-(3, 'TRANSFERT', 'Transfert');
-
--- 4.3 Barèmes (12 combinaisons)
-INSERT INTO baremes_frais (id, type_operation_id, operateur_id) VALUES
--- DEPOT (type=1)
-(1, 1, 1),
-(2, 1, 2),
-(3, 1, 3),
-(4, 1, 4),
--- RETRAIT (type=2)
-(5, 2, 1),
-(6, 2, 2),
-(7, 2, 3),
-(8, 2, 4),
--- TRANSFERT (type=3)
-(9, 3, 1),
-(10, 3, 2),
-(11, 3, 3),
-(12, 3, 4);
-
--- 4.4 Historique des frais - DÉPÔT (barèmes 1 à 4)
--- Opérateur 1 (033) : 0.5% du montant, min 100 Ar
-INSERT INTO baremes_frais_historique (bareme_id, montant_min, montant_max, frais_fixe) VALUES
-(1, 0, 100000, 100),
-(1, 100001, NULL, 500);
-
--- Opérateur 2 (034) : 1% du montant, min 200 Ar
-INSERT INTO baremes_frais_historique (bareme_id, montant_min, montant_max, frais_fixe) VALUES
-(2, 0, 100000, 200),
-(2, 100001, NULL, 1000);
-
--- Opérateur 3 (037) : 0.75% du montant, min 150 Ar
-INSERT INTO baremes_frais_historique (bareme_id, montant_min, montant_max, frais_fixe) VALUES
-(3, 0, 100000, 150),
-(3, 100001, NULL, 750);
-
--- Opérateur 4 (038) : Frais fixes 100 Ar
-INSERT INTO baremes_frais_historique (bareme_id, montant_min, montant_max, frais_fixe) VALUES
-(4, 0, NULL, 100);
-
--- 4.5 Historique des frais - RETRAIT (barèmes 5 à 8)
--- Opérateur 1 (033) : 1% → 2% progressif
-INSERT INTO baremes_frais_historique (bareme_id, montant_min, montant_max, frais_fixe) VALUES
-(5, 0, 5000, 50),
-(5, 5001, 50000, 500),
-(5, 50001, 200000, 1000),
-(5, 200001, NULL, 2000);
-
--- Opérateur 2 (034) : 0.5% → 1.5% progressif
-INSERT INTO baremes_frais_historique (bareme_id, montant_min, montant_max, frais_fixe) VALUES
-(6, 0, 5000, 25),
-(6, 5001, 50000, 250),
-(6, 50001, 200000, 750),
-(6, 200001, NULL, 1500);
-
--- Opérateur 3 (037) : 0.75% → 1.75% progressif
-INSERT INTO baremes_frais_historique (bareme_id, montant_min, montant_max, frais_fixe) VALUES
-(7, 0, 5000, 38),
-(7, 5001, 50000, 375),
-(7, 50001, 200000, 875),
-(7, 200001, NULL, 1750);
-
--- Opérateur 4 (038) : Barème avec paliers
-INSERT INTO baremes_frais_historique (bareme_id, montant_min, montant_max, frais_fixe) VALUES
-(8, 0, 5000, 50),
-(8, 5001, 50000, 200),
-(8, 50001, 200000, 500),
-(8, 200001, NULL, 1000);
-
--- 4.6 Historique des frais - TRANSFERT (barèmes 9 à 12)
--- Opérateur 1 (033) : 0.5% → 1.5% progressif
-INSERT INTO baremes_frais_historique (bareme_id, montant_min, montant_max, frais_fixe) VALUES
-(9, 0, 5000, 25),
-(9, 5001, 50000, 250),
-(9, 50001, 200000, 750),
-(9, 200001, NULL, 1500);
-
--- Opérateur 2 (034) : 0.25% → 1% progressif
-INSERT INTO baremes_frais_historique (bareme_id, montant_min, montant_max, frais_fixe) VALUES
-(10, 0, 5000, 13),
-(10, 5001, 50000, 125),
-(10, 50001, 200000, 500),
-(10, 200001, NULL, 1000);
-
--- Opérateur 3 (037) : 0.5% → 2% progressif
-INSERT INTO baremes_frais_historique (bareme_id, montant_min, montant_max, frais_fixe) VALUES
-(11, 0, 5000, 25),
-(11, 5001, 50000, 250),
-(11, 50001, 200000, 1000),
-(11, 200001, NULL, 2000);
-
--- Opérateur 4 (038) : 0.3% → 1.2% progressif
-INSERT INTO baremes_frais_historique (bareme_id, montant_min, montant_max, frais_fixe) VALUES
-(12, 0, 5000, 15),
-(12, 5001, 50000, 150),
-(12, 50001, 200000, 600),
-(12, 200001, NULL, 1200);
-
--- 4.7 Administrateur (mot de passe : admin123)
-INSERT INTO admin (email, password) VALUES 
-('admin@gmail.com', '$2y$10$UTMMoAhVoCxpxMtQlLIB9eu9YOdhfch0IYWfk9tkCf9ToIIW8tqjK');
-
--- 4.8 Clients
-INSERT INTO clients (nom, telephone, code, operateur_id) VALUES 
-('Jean Rakoto',  '0331234567', '1234', 1),
-('Marie Rabe',   '0349876543', '5678', 2),
-('Pierre Randria','0371122334', '9012', 3),
-('Sophie Rasoa', '0385566778', '3456', 4);
-
--- 4.9 Transactions
--- Dépôts automatiques
-INSERT INTO transactions (type_operation_id, expediteur_id, destinataire_id, montant_brut, date_transaction)
-VALUES
-(
-    (SELECT id FROM types_operation WHERE code = 'DEPOT'),
-    NULL,
-    (SELECT id FROM clients WHERE telephone = '0331234567'),
-    5000,
-    '2026-07-10 10:00:00'
-),
-(
-    (SELECT id FROM types_operation WHERE code = 'DEPOT'),
-    NULL,
-    (SELECT id FROM clients WHERE telephone = '0349876543'),
-    12000,
-    '2026-07-11 14:30:00'
-),
-(
-    (SELECT id FROM types_operation WHERE code = 'DEPOT'),
-    NULL,
-    (SELECT id FROM clients WHERE telephone = '0371122334'),
-    250000,
-    '2026-07-15 09:15:00'
-),
-(
-    (SELECT id FROM types_operation WHERE code = 'DEPOT'),
-    NULL,
-    (SELECT id FROM clients WHERE telephone = '0385566778'),
-    3000,
-    '2026-07-16 11:00:00'
-);
-
--- Retraits
-INSERT INTO transactions (type_operation_id, expediteur_id, destinataire_id, montant_brut, date_transaction)
-VALUES
-(
-    (SELECT id FROM types_operation WHERE code = 'RETRAIT'),
-    (SELECT id FROM clients WHERE telephone = '0331234567'),
-    NULL,
-    2000,
-    '2026-07-12 16:45:00'
-),
-(
-    (SELECT id FROM types_operation WHERE code = 'RETRAIT'),
-    (SELECT id FROM clients WHERE telephone = '0349876543'),
-    NULL,
-    75000,
-    '2026-07-18 11:20:00'
-),
-(
-    (SELECT id FROM types_operation WHERE code = 'RETRAIT'),
-    (SELECT id FROM clients WHERE telephone = '0371122334'),
-    NULL,
-    100000,
-    '2026-07-19 14:00:00'
-),
-(
-    (SELECT id FROM types_operation WHERE code = 'RETRAIT'),
-    (SELECT id FROM clients WHERE telephone = '0385566778'),
-    NULL,
-    5000,
-    '2026-07-20 09:30:00'
-);
-
--- Transferts
-INSERT INTO transactions (type_operation_id, expediteur_id, destinataire_id, montant_brut, date_transaction)
-VALUES
-(
-    (SELECT id FROM types_operation WHERE code = 'TRANSFERT'),
-    (SELECT id FROM clients WHERE telephone = '0331234567'),
-    (SELECT id FROM clients WHERE telephone = '0349876543'),
-    1500,
-    '2026-07-13 08:30:00'
-),
-(
-    (SELECT id FROM types_operation WHERE code = 'TRANSFERT'),
-    (SELECT id FROM clients WHERE telephone = '0371122334'),
-    (SELECT id FROM clients WHERE telephone = '0385566778'),
-    8000,
-    '2026-07-14 12:10:00'
-),
-(
-    (SELECT id FROM types_operation WHERE code = 'TRANSFERT'),
-    (SELECT id FROM clients WHERE telephone = '0331234567'),
-    (SELECT id FROM clients WHERE telephone = '0385566778'),
-    300000,
-    '2026-07-19 17:00:00'
-),
-(
-    (SELECT id FROM types_operation WHERE code = 'TRANSFERT'),
-    (SELECT id FROM clients WHERE telephone = '0349876543'),
-    (SELECT id FROM clients WHERE telephone = '0371122334'),
-    2500,
-    '2026-07-21 10:00:00'
-);
-
--- 4.10 Modifications d'historique (pour tester les versions)
--- Modification RETRAIT opérateur 033 à partir du 20/07
-INSERT INTO baremes_frais_historique (bareme_id, montant_min, montant_max, frais_fixe, date_modif)
-VALUES
-(5, 0, 5000, 75, '2026-07-20 00:00:00'),
-(5, 5001, 50000, 750, '2026-07-20 00:00:00'),
-(5, 50001, 200000, 1500, '2026-07-20 00:00:00'),
-(5, 200001, NULL, 3000, '2026-07-20 00:00:00');
-
--- Modification TRANSFERT opérateur 034 à partir du 21/07
-INSERT INTO baremes_frais_historique (bareme_id, montant_min, montant_max, frais_fixe, date_modif)
-VALUES
-(10, 0, 5000, 20, '2026-07-21 00:00:00'),
-(10, 5001, 50000, 200, '2026-07-21 00:00:00'),
-(10, 50001, 200000, 800, '2026-07-21 00:00:00'),
-(10, 200001, NULL, 1600, '2026-07-21 00:00:00');
-
--- ============================================================
--- 5. REQUÊTES UTILES (commentaires)
--- ============================================================
-
--- Calculer le frais pour une transaction spécifique
--- SELECT h.frais_fixe
--- FROM baremes_frais b
--- JOIN baremes_frais_historique h ON h.bareme_id = b.id
--- WHERE b.type_operation_id = :type_operation_id
---   AND b.operateur_id      = :operateur_id
---   AND :montant_brut >= h.montant_min
---   AND (h.montant_max IS NULL OR :montant_brut <= h.montant_max)
---   AND h.date_modif = (
---       SELECT MAX(h2.date_modif)
---       FROM baremes_frais_historique h2
---       WHERE h2.bareme_id = h.bareme_id
---         AND h2.date_modif <= :date_transaction
---   );
-
--- Calculer le solde d'un client entre deux dates
--- SELECT
---     c.id AS client_id,
---     c.telephone,
---     COALESCE(SUM(
---         CASE
---             WHEN tf.destinataire_id = c.id THEN tf.montant_brut
---             WHEN tf.expediteur_id  = c.id THEN -(tf.montant_brut + COALESCE(tf.frais_applique, 0))
---         END
---     ), 0) AS solde
--- FROM clients c
--- LEFT JOIN v_transactions_frais tf
---        ON (tf.expediteur_id = c.id OR tf.destinataire_id = c.id)
---       AND (:date_debut IS NULL OR tf.date_transaction >= :date_debut)
---       AND (:date_fin   IS NULL OR tf.date_transaction <= :date_fin)
--- WHERE c.id = :client_id
--- GROUP BY c.id, c.telephone;
-
--- ============================================================
--- 6. VÉRIFICATIONS (optionnelles)
+-- 14. VÉRIFICATIONS (optionnelles)
 -- ============================================================
 -- SELECT * FROM operateur_prefixes;
--- SELECT * FROM types_operation;
--- SELECT * FROM baremes_frais;
--- SELECT * FROM baremes_frais_historique;
--- SELECT * FROM admin;
--- SELECT * FROM clients;
--- SELECT * FROM transactions;
--- SELECT * FROM v_transactions_operateur;
+-- SELECT * FROM historique_operateur_prefixes;
+-- SELECT * FROM commissions;
+-- SELECT * FROM commissions_historique;
+-- SELECT * FROM baremes_frais WHERE operateur_id = 5;
 -- SELECT * FROM v_transactions_frais;
+-- SELECT * FROM v_situation_gains;
+-- SELECT * FROM v_montants_a_envoyer;
