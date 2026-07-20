@@ -398,11 +398,19 @@ class Client extends BaseController
         }
 
         $clientId = $this->session->get('client_id');
-        $transactions = $this->transactionModel->getClientTransactions($clientId);
+
+        $filters = [
+            'date_from' => $this->request->getGet('date_from'),
+            'date_to'   => $this->request->getGet('date_to'),
+            'type'      => $this->request->getGet('type'),
+        ];
+
+        $transactions = $this->transactionModel->getClientTransactions($clientId, null, $filters);
 
         $data = [
             'page_title'   => 'Historique',
-            'transactions' => $transactions
+            'transactions' => $transactions,
+            'filters'      => $filters,
         ];
 
         return view('client/history', $data);
