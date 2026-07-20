@@ -32,12 +32,23 @@
                         </small>
                     </div>
 
-                    <div class="mb-4">
+                    <div class="mb-3">
                         <label for="amount" class="form-label">Montant à transférer (Ar)</label>
                         <div class="input-group">
                             <span class="input-group-text" style="font-weight: bold;">Ar</span>
-                            <input type="number" class="form-control" id="amount" name="amount" placeholder="Entrez le montant" required min="1" oninput="previewTransferFee(this.value)">
+                            <input type="number" class="form-control" id="amount" name="amount" placeholder="Entrez le montant" required min="1" oninput="previewTransferFee()">
                         </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="include_fees" class="form-label">Options de transfert</label>
+                        <select class="form-select" id="include_fees" name="include_fees" onchange="previewTransferFee()">
+                            <option value="1">1. Transférer uniquement le montant (sans frais fixes)</option>
+                            <option value="2">2. Transférer le montant + les frais fixes</option>
+                        </select>
+                        <small class="text-muted mt-1 d-block">
+                            Choisissez si vous souhaitez inclure ou non les frais de transfert.
+                        </small>
                     </div>
 
                     <!-- Transfer Fee Preview -->
@@ -118,12 +129,27 @@ function validatePhone(phone) {
     return validPrefixes.includes(phone.substring(0, 3));
 }
 
-function previewTransferFee(amount) {
-    amount = parseFloat(amount);
+function previewTransferFee() {
+    const amount = parseFloat($('#amount').val());
+    const includeFees = $('#include_fees').val();
     const balance = parseFloat($('#clientBalance').data('balance'));
 
     if (isNaN(amount) || amount <= 0) {
         $('#feePreviewBox').addClass('d-none');
+        return;
+    }
+
+    if (includeFees === '1') {
+        $('#feePreviewBox').removeClass('d-none');
+        $('#amountShow').text(new Intl.NumberFormat('fr-MG').format(amount) + ' Ar');
+        $('#feeShow').text('0 Ar (sans frais)');
+        $('#totalShow').text(new Intl.NumberFormat('fr-MG').format(amount) + ' Ar');
+
+        if (amount > balance) {
+            $('#balanceAlert').removeClass('d-none');
+        } else {
+            $('#balanceAlert').addClass('d-none');
+        }
         return;
     }
 

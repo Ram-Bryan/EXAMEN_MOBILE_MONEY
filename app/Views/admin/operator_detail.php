@@ -91,7 +91,72 @@ $typeColors = [
     'Retrait' => ['bg' => '#fef2f2', 'color' => '#dc2626', 'badge' => '#fee2e2'],
     'Transfert' => ['bg' => '#eff6ff', 'color' => '#2563eb', 'badge' => '#dbeafe'],
 ];
-foreach ($grouped as $typeNom => $rows):
+?>
+
+<!-- Table SELECT * FROM baremes_frais_historique -->
+<div class="card mb-4">
+    <div class="card-header">
+        <h5 class="fw-bold mb-0"><i class="fas fa-database me-2 text-info"></i> Situation des gains (<?= esc($operator->prefixe) ?>) — Tous les barèmes</h5>
+        <p class="text-muted small mb-0">SELECT * FROM baremes_frais_historique pour cet opérateur</p>
+    </div>
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table-custom w-100">
+                <thead>
+                    <tr>
+                        <th>bareme_id</th>
+                        <th>Type d'opération</th>
+                        <th>historique_id</th>
+                        <th>Montant min (Ar)</th>
+                        <th>Montant max (Ar)</th>
+                        <th style="text-align:right; padding-right:24px;">Frais (Ar)</th>
+                        <th>Date modif</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php if (empty($allBaremes)): ?>
+                        <tr>
+                            <td colspan="7" class="text-center text-muted py-4">
+                                <i class="fas fa-info-circle me-1"></i> Aucun barème enregistré pour cet opérateur.
+                            </td>
+                        </tr>
+                    <?php else: ?>
+                        <?php foreach ($allBaremes as $ab): ?>
+                        <tr>
+                            <td><span class="badge bg-secondary"><?= $ab->bareme_id ?></span></td>
+                            <td>
+                                <?php
+                                $tc = $typeColors[$ab->type_nom] ?? ['badge' => '#e2e8f0', 'color' => '#475569'];
+                                ?>
+                                <span style="background:<?= $tc['badge'] ?>; color:<?= $tc['color'] ?>; padding:4px 12px; border-radius:20px; font-weight:600; font-size:12px;">
+                                    <?= esc($ab->type_nom) ?>
+                                </span>
+                            </td>
+                            <td><span class="badge bg-light text-dark"><?= $ab->historique_id ?></span></td>
+                            <td><strong><?= number_format($ab->montant_min, 0, ',', ' ') ?></strong></td>
+                            <td>
+                                <?php if ($ab->montant_max === null): ?>
+                                    <span class="text-muted fst-italic">Illimité</span>
+                                <?php else: ?>
+                                    <strong><?= number_format($ab->montant_max, 0, ',', ' ') ?></strong>
+                                <?php endif; ?>
+                            </td>
+                            <td style="text-align:right; padding-right:24px;">
+                                <span style="background:<?= $tc['badge'] ?>; color:<?= $tc['color'] ?>; padding:4px 12px; border-radius:20px; font-weight:700;">
+                                    <?= number_format($ab->frais_fixe, 0, ',', ' ') ?> Ar
+                                </span>
+                            </td>
+                            <td style="color: var(--text-muted); font-size:13px;"><?= esc($ab->date_modif) ?></td>
+                        </tr>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<?php foreach ($grouped as $typeNom => $rows):
     $colors = $typeColors[$typeNom] ?? ['bg' => '#f8fafc', 'color' => '#475569', 'badge' => '#e2e8f0'];
 ?>
 

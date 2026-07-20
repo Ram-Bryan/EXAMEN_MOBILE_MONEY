@@ -293,15 +293,20 @@ class Client extends BaseController
             return redirect()->back()->withInput()->with('error', 'Type d\'opération de transfert inexistant.');
         }
 
-        $fee = $this->baremeFraisModel->getFrais($typeOp->id, $sender->operateur_id, $amount);
-        if ($fee === null) {
-            return redirect()->back()->withInput()->with('error', 'Aucun barème de frais ne couvre ce montant.');
+        $includeFees = $this->request->getPost('include_fees');
+        $fee = 0;
+
+        if ($includeFees == '2') {
+            $fee = $this->baremeFraisModel->getFrais($typeOp->id, $sender->operateur_id, $amount);
+            if ($fee === null) {
+                return redirect()->back()->withInput()->with('error', 'Aucun barème de frais ne couvre ce montant.');
+            }
         }
 
         $totalTransfer = $amount + $fee;
 
         if ($totalTransfer > $balance) {
-            return redirect()->back()->withInput()->with('error', 'Solde insuffisant. Le transfert avec frais (' . number_format($totalTransfer, 0, ',', ' ') . ' Ar) dépasse votre solde disponible (' . number_format($balance, 0, ',', ' ') . ' Ar).');
+            return redirect()->back()->withInput()->with('error', 'Solde insuffisant. Le transfert' . ($fee > 0 ? ' avec frais' : '') . ' (' . number_format($totalTransfer, 0, ',', ' ') . ' Ar) dépasse votre solde disponible (' . number_format($balance, 0, ',', ' ') . ' Ar).');
         }
 
         $inserted = $this->transactionModel->createTransaction($typeOp->id, $senderId, $recipient->id, $amount);
