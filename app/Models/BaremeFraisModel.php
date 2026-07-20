@@ -157,6 +157,37 @@ class BaremeFraisModel extends Model
         return $row ? (float)$row->frais_fixe : null;
     }
 
+    public function getCommission(int $destinationOperateurId, float $montant): float
+    {
+        $db = $this->db;
+        $sql = "
+            SELECT ch.pourcentage
+            FROM commissions_historique ch
+            JOIN commissions c ON c.id = ch.commission_id
+            WHERE c.operateur_destination_id = ?
+              AND ch.date_modif = (
+                  SELECT MAX(ch2.date_modif)
+                  FROM commissions_historique ch2
+                  WHERE ch2.commission_id = ch.commission_id
+              )
+            LIMIT 1
+        ";
+        $query = $db->query($sql, [$destinationOperateurId]);
+        $row = $query->getRow();
+        return $row ? (float)$row->pourcentage * $montant / 100 : 0.0;
+    }
+
+    public function isInterOperator(int $senderOperateurId, int $recipientOperateurId): bool
+    {
+        $db = $this->db;
+        $sql = "SELECT est_notre_operateur FROM operateur_prefixes WHERE id = ?";
+        $senderOp = $db->query($sql, [$senderOperateurId])->getRow();
+        $recipientOp = $db->query($sql, [$recipientOperateurId])->getRow();
+
+        if (!$senderOp || !$recipientOp) return false;
+        return $senderOp->est_notre_operateur == 1 && $recipientOp->est_notre_operateur == 0;
+    }
+
     /**
      * Get the active fee schedules/slabs for a type of operation and operator.
      */
