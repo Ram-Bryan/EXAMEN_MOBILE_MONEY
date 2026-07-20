@@ -102,3 +102,37 @@
 - [x] Créer le tag `v1`
 - [x] Pousser le tag
 - [x] Livrer le projet
+
+
+
+
+## Livraison v2 — [DATE], 17h10
+
+**Binôme :** [Nom Dev A] / [Nom Dev B]
+
+### Dev A — Back-office opérateur
+
+- [ ] Migration : nouvelle table `operateurs` (nous / opérateurs externes)
+- [ ] Migration : `operateur_prefixes` avec `date_debut` / `date_fin` (plusieurs préfixes actifs simultanément)
+- [ ] Mise à jour des FK existantes (`clients`, `baremes_frais`) vers `operateurs(id)`
+- [ ] CRUD : configuration des préfixes des autres opérateurs
+- [ ] Table `commissions` / `commissions_historique` (% commission transferts inter-opérateurs)
+- [ ] Formulaire admin : configurer/modifier le % de commission
+- [ ] Écran "situation des gains" : séparation notre opérateur / autres opérateurs
+- [ ] Écran "situation des montants à envoyer" à chaque opérateur externe
+
+### Dev B — Espace client
+
+- [ ] Option "inclure le frais de retrait" au moment de l'envoi (`transactions.frais_inclus`)
+- [ ] Adaptation du calcul de solde selon `frais_inclus`
+- [ ] Formulaire d'envoi multiple (plusieurs numéros, montant divisé)
+- [ ] Calcul du frais + commission pour un transfert vers un autre opérateur
+
+### Commun
+
+- [ ] `base.sql` mis à jour avec le schéma v2 complet
+- [ ] Vues mises à jour : gains séparés, montants à envoyer
+- [ ] Tests croisés (chacun teste le module de l'autre)
+- [ ] Tag `v2` pushé sur `main`
+
+---
