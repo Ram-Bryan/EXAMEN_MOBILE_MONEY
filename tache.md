@@ -15,7 +15,7 @@
 ## Configuration
 - [x] Gérer les préfixes opérateurs (CRUD)
 - [x] Gérer les types d'opérations
-- [x] Gérer les barèmes de frais
+- [x] Gérer les barèmes de frais par opérateur
 - [x] Ajouter une tranche de frais
 - [x] Modifier une tranche de frais (historique uniquement)
 - [x] Afficher les barèmes actuels
@@ -31,6 +31,17 @@
 ## Finalisation
 - [x] Vérifier les contraintes
 - [x] Mettre à jour `Taches.md`
+
+## function 
+    - function dashboard() 
+    - function crud operateor 
+    - function createFee($operateurId) 
+    - function function gains()
+    - function client 
+    -function doLoginClient()
+    -function loginAdmin()
+    -function doLoginAdmin()
+    -function logout()
 
 # Dev B — Espace client
 
@@ -63,6 +74,24 @@
 
 ## Historique
 - [x] Afficher les transactions
+
+## function 
+    - function home()
+    - function doLoginClient()
+    -function logout()
+    -function solde()
+    -function depot()
+    -function retrait()
+    -function transfert()
+    -function historique()
+    -function getBalance()
+    -function dashboard()
+    -function balance()
+    -function deposit()
+    -function doDeposit()
+    -function withdraw()
+    -function transfer()
+    
 
 # Intégration finale (Ensemble)
 
