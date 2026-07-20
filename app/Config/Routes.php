@@ -7,11 +7,19 @@ use CodeIgniter\Router\RouteCollection;
  */
 
 // ==================== ACCUEIL → Redirige vers login ====================
-$routes->get('/', 'AuthController::login');
+$routes->get('/', 'AuthController::loginClient');
 
 // ==================== AUTH ROUTES ====================
-$routes->get('login', 'AuthController::login');
-$routes->post('login', 'AuthController::doLogin');
+$routes->get('login', function() {
+    return redirect()->to('login/client');
+});
+
+$routes->get('login/client', 'AuthController::loginClient');
+$routes->post('login/client', 'AuthController::doLoginClient');
+
+$routes->get('login/admin', 'AuthController::loginAdmin');
+$routes->post('login/admin', 'AuthController::doLoginAdmin');
+
 $routes->get('logout', 'AuthController::logout');
 
 // ==================== ADMIN ROUTES (protégées par AdminFilter) ====================
