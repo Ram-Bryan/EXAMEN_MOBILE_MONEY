@@ -1,0 +1,229 @@
+ERROR - 2026-07-20 07:05:22 --> Error connecting to the database: mysqli_sql_exception: No such file or directory in /home/itu/Lessons/S4/SI/FINAL/system/Database/MySQLi/Connection.php:201
+Stack trace:
+#0 /home/itu/Lessons/S4/SI/FINAL/system/Database/MySQLi/Connection.php(201): mysqli->real_connect()
+#1 /home/itu/Lessons/S4/SI/FINAL/system/Database/BaseConnection.php(555): CodeIgniter\Database\MySQLi\Connection->connect()
+#2 /home/itu/Lessons/S4/SI/FINAL/system/Database/Database.php(74): CodeIgniter\Database\BaseConnection->initialize()
+#3 /home/itu/Lessons/S4/SI/FINAL/system/Database/Config.php(111): CodeIgniter\Database\Database->loadForge()
+#4 /home/itu/Lessons/S4/SI/FINAL/system/Database/Seeder.php(103): CodeIgniter\Database\Config::forge()
+#5 /home/itu/Lessons/S4/SI/FINAL/system/Commands/Database/Seed.php(71): CodeIgniter\Database\Seeder->__construct()
+#6 /home/itu/Lessons/S4/SI/FINAL/system/CLI/Commands.php(74): CodeIgniter\Commands\Database\Seed->run()
+#7 /home/itu/Lessons/S4/SI/FINAL/system/CLI/Console.php(47): CodeIgniter\CLI\Commands->run()
+#8 /home/itu/Lessons/S4/SI/FINAL/system/Boot.php(442): CodeIgniter\CLI\Console->run()
+#9 /home/itu/Lessons/S4/SI/FINAL/system/Boot.php(166): CodeIgniter\Boot::runCommand()
+#10 /home/itu/Lessons/S4/SI/FINAL/spark(87): CodeIgniter\Boot::bootSpark()
+#11 {main}
+
+Next CodeIgniter\Database\Exceptions\DatabaseException: No such file or directory in /home/itu/Lessons/S4/SI/FINAL/system/Database/MySQLi/Connection.php:231
+Stack trace:
+#0 /home/itu/Lessons/S4/SI/FINAL/system/Database/BaseConnection.php(555): CodeIgniter\Database\MySQLi\Connection->connect()
+#1 /home/itu/Lessons/S4/SI/FINAL/system/Database/Database.php(74): CodeIgniter\Database\BaseConnection->initialize()
+#2 /home/itu/Lessons/S4/SI/FINAL/system/Database/Config.php(111): CodeIgniter\Database\Database->loadForge()
+#3 /home/itu/Lessons/S4/SI/FINAL/system/Database/Seeder.php(103): CodeIgniter\Database\Config::forge()
+#4 /home/itu/Lessons/S4/SI/FINAL/system/Commands/Database/Seed.php(71): CodeIgniter\Database\Seeder->__construct()
+#5 /home/itu/Lessons/S4/SI/FINAL/system/CLI/Commands.php(74): CodeIgniter\Commands\Database\Seed->run()
+#6 /home/itu/Lessons/S4/SI/FINAL/system/CLI/Console.php(47): CodeIgniter\CLI\Commands->run()
+#7 /home/itu/Lessons/S4/SI/FINAL/system/Boot.php(442): CodeIgniter\CLI\Console->run()
+#8 /home/itu/Lessons/S4/SI/FINAL/system/Boot.php(166): CodeIgniter\Boot::runCommand()
+#9 /home/itu/Lessons/S4/SI/FINAL/spark(87): CodeIgniter\Boot::bootSpark()
+#10 {main}
+CRITICAL - 2026-07-20 07:05:22 --> CodeIgniter\Database\Exceptions\DatabaseException: Unable to connect to the database.
+Main connection [MySQLi]: No such file or directory
+[Method: CLI, Route: db:seed/DatabaseSeeder]
+in SYSTEMPATH/Database/BaseConnection.php on line 606.
+ 1 SYSTEMPATH/Database/Database.php(74): CodeIgniter\Database\BaseConnection->initialize()
+ 2 SYSTEMPATH/Database/Config.php(111): CodeIgniter\Database\Database->loadForge()
+ 3 SYSTEMPATH/Database/Seeder.php(103): CodeIgniter\Database\Config::forge()
+ 4 SYSTEMPATH/Commands/Database/Seed.php(71): CodeIgniter\Database\Seeder->__construct()
+ 5 SYSTEMPATH/CLI/Commands.php(74): CodeIgniter\Commands\Database\Seed->run()
+ 6 SYSTEMPATH/CLI/Console.php(47): CodeIgniter\CLI\Commands->run()
+ 7 SYSTEMPATH/Boot.php(442): CodeIgniter\CLI\Console->run()
+ 8 SYSTEMPATH/Boot.php(166): CodeIgniter\Boot::runCommand()
+ 9 ROOTPATH/spark(87): CodeIgniter\Boot::bootSpark()
+ERROR - 2026-07-20 07:08:30 --> Error connecting to the database: mysqli_sql_exception: No such file or directory in /home/itu/Lessons/S4/SI/FINAL/system/Database/MySQLi/Connection.php:201
+Stack trace:
+#0 /home/itu/Lessons/S4/SI/FINAL/system/Database/MySQLi/Connection.php(201): mysqli->real_connect()
+#1 /home/itu/Lessons/S4/SI/FINAL/system/Database/BaseConnection.php(555): CodeIgniter\Database\MySQLi\Connection->connect()
+#2 /home/itu/Lessons/S4/SI/FINAL/system/Database/BaseConnection.php(795): CodeIgniter\Database\BaseConnection->initialize()
+#3 /home/itu/Lessons/S4/SI/FINAL/system/Database/BaseConnection.php(1706): CodeIgniter\Database\BaseConnection->query()
+#4 /home/itu/Lessons/S4/SI/FINAL/system/Database/BaseConnection.php(1726): CodeIgniter\Database\BaseConnection->listTables()
+#5 /home/itu/Lessons/S4/SI/FINAL/system/Database/MigrationRunner.php(821): CodeIgniter\Database\BaseConnection->tableExists()
+#6 /home/itu/Lessons/S4/SI/FINAL/system/Database/MigrationRunner.php(173): CodeIgniter\Database\MigrationRunner->ensureTable()
+#7 /home/itu/Lessons/S4/SI/FINAL/system/Commands/Database/Migrate.php(89): CodeIgniter\Database\MigrationRunner->latest()
+#8 /home/itu/Lessons/S4/SI/FINAL/system/CLI/SignalTrait.php(245): CodeIgniter\Commands\Database\Migrate::CodeIgniter\Commands\Database\{closure}()
+#9 /home/itu/Lessons/S4/SI/FINAL/system/Commands/Database/Migrate.php(88): CodeIgniter\Commands\Database\Migrate->withSignalsBlocked()
+#10 /home/itu/Lessons/S4/SI/FINAL/system/CLI/Commands.php(74): CodeIgniter\Commands\Database\Migrate->run()
+#11 /home/itu/Lessons/S4/SI/FINAL/system/CLI/Console.php(47): CodeIgniter\CLI\Commands->run()
+#12 /home/itu/Lessons/S4/SI/FINAL/system/Boot.php(442): CodeIgniter\CLI\Console->run()
+#13 /home/itu/Lessons/S4/SI/FINAL/system/Boot.php(166): CodeIgniter\Boot::runCommand()
+#14 /home/itu/Lessons/S4/SI/FINAL/spark(87): CodeIgniter\Boot::bootSpark()
+#15 {main}
+
+Next CodeIgniter\Database\Exceptions\DatabaseException: No such file or directory in /home/itu/Lessons/S4/SI/FINAL/system/Database/MySQLi/Connection.php:231
+Stack trace:
+#0 /home/itu/Lessons/S4/SI/FINAL/system/Database/BaseConnection.php(555): CodeIgniter\Database\MySQLi\Connection->connect()
+#1 /home/itu/Lessons/S4/SI/FINAL/system/Database/BaseConnection.php(795): CodeIgniter\Database\BaseConnection->initialize()
+#2 /home/itu/Lessons/S4/SI/FINAL/system/Database/BaseConnection.php(1706): CodeIgniter\Database\BaseConnection->query()
+#3 /home/itu/Lessons/S4/SI/FINAL/system/Database/BaseConnection.php(1726): CodeIgniter\Database\BaseConnection->listTables()
+#4 /home/itu/Lessons/S4/SI/FINAL/system/Database/MigrationRunner.php(821): CodeIgniter\Database\BaseConnection->tableExists()
+#5 /home/itu/Lessons/S4/SI/FINAL/system/Database/MigrationRunner.php(173): CodeIgniter\Database\MigrationRunner->ensureTable()
+#6 /home/itu/Lessons/S4/SI/FINAL/system/Commands/Database/Migrate.php(89): CodeIgniter\Database\MigrationRunner->latest()
+#7 /home/itu/Lessons/S4/SI/FINAL/system/CLI/SignalTrait.php(245): CodeIgniter\Commands\Database\Migrate::CodeIgniter\Commands\Database\{closure}()
+#8 /home/itu/Lessons/S4/SI/FINAL/system/Commands/Database/Migrate.php(88): CodeIgniter\Commands\Database\Migrate->withSignalsBlocked()
+#9 /home/itu/Lessons/S4/SI/FINAL/system/CLI/Commands.php(74): CodeIgniter\Commands\Database\Migrate->run()
+#10 /home/itu/Lessons/S4/SI/FINAL/system/CLI/Console.php(47): CodeIgniter\CLI\Commands->run()
+#11 /home/itu/Lessons/S4/SI/FINAL/system/Boot.php(442): CodeIgniter\CLI\Console->run()
+#12 /home/itu/Lessons/S4/SI/FINAL/system/Boot.php(166): CodeIgniter\Boot::runCommand()
+#13 /home/itu/Lessons/S4/SI/FINAL/spark(87): CodeIgniter\Boot::bootSpark()
+#14 {main}
+ERROR - 2026-07-20 07:11:09 --> Error connecting to the database: Exception: Unable to open database: unable to open database file in /home/itu/Lessons/S4/SI/FINAL/system/Database/SQLite3/Connection.php:111
+Stack trace:
+#0 /home/itu/Lessons/S4/SI/FINAL/system/Database/SQLite3/Connection.php(111): SQLite3->__construct()
+#1 /home/itu/Lessons/S4/SI/FINAL/system/Database/BaseConnection.php(555): CodeIgniter\Database\SQLite3\Connection->connect()
+#2 /home/itu/Lessons/S4/SI/FINAL/system/Database/SQLite3/Connection.php(74): CodeIgniter\Database\BaseConnection->initialize()
+#3 /home/itu/Lessons/S4/SI/FINAL/system/Database/BaseConnection.php(795): CodeIgniter\Database\SQLite3\Connection->initialize()
+#4 /home/itu/Lessons/S4/SI/FINAL/system/Database/BaseConnection.php(1706): CodeIgniter\Database\BaseConnection->query()
+#5 /home/itu/Lessons/S4/SI/FINAL/system/Database/BaseConnection.php(1726): CodeIgniter\Database\BaseConnection->listTables()
+#6 /home/itu/Lessons/S4/SI/FINAL/system/Database/MigrationRunner.php(821): CodeIgniter\Database\BaseConnection->tableExists()
+#7 /home/itu/Lessons/S4/SI/FINAL/system/Database/MigrationRunner.php(173): CodeIgniter\Database\MigrationRunner->ensureTable()
+#8 /home/itu/Lessons/S4/SI/FINAL/system/Commands/Database/Migrate.php(89): CodeIgniter\Database\MigrationRunner->latest()
+#9 /home/itu/Lessons/S4/SI/FINAL/system/CLI/SignalTrait.php(245): CodeIgniter\Commands\Database\Migrate::CodeIgniter\Commands\Database\{closure}()
+#10 /home/itu/Lessons/S4/SI/FINAL/system/Commands/Database/Migrate.php(88): CodeIgniter\Commands\Database\Migrate->withSignalsBlocked()
+#11 /home/itu/Lessons/S4/SI/FINAL/system/CLI/Commands.php(74): CodeIgniter\Commands\Database\Migrate->run()
+#12 /home/itu/Lessons/S4/SI/FINAL/system/CLI/Console.php(47): CodeIgniter\CLI\Commands->run()
+#13 /home/itu/Lessons/S4/SI/FINAL/system/Boot.php(442): CodeIgniter\CLI\Console->run()
+#14 /home/itu/Lessons/S4/SI/FINAL/system/Boot.php(166): CodeIgniter\Boot::runCommand()
+#15 /home/itu/Lessons/S4/SI/FINAL/spark(87): CodeIgniter\Boot::bootSpark()
+#16 {main}
+
+Next CodeIgniter\Database\Exceptions\DatabaseException: SQLite3 error: Unable to open database: unable to open database file in /home/itu/Lessons/S4/SI/FINAL/system/Database/SQLite3/Connection.php:118
+Stack trace:
+#0 /home/itu/Lessons/S4/SI/FINAL/system/Database/BaseConnection.php(555): CodeIgniter\Database\SQLite3\Connection->connect()
+#1 /home/itu/Lessons/S4/SI/FINAL/system/Database/SQLite3/Connection.php(74): CodeIgniter\Database\BaseConnection->initialize()
+#2 /home/itu/Lessons/S4/SI/FINAL/system/Database/BaseConnection.php(795): CodeIgniter\Database\SQLite3\Connection->initialize()
+#3 /home/itu/Lessons/S4/SI/FINAL/system/Database/BaseConnection.php(1706): CodeIgniter\Database\BaseConnection->query()
+#4 /home/itu/Lessons/S4/SI/FINAL/system/Database/BaseConnection.php(1726): CodeIgniter\Database\BaseConnection->listTables()
+#5 /home/itu/Lessons/S4/SI/FINAL/system/Database/MigrationRunner.php(821): CodeIgniter\Database\BaseConnection->tableExists()
+#6 /home/itu/Lessons/S4/SI/FINAL/system/Database/MigrationRunner.php(173): CodeIgniter\Database\MigrationRunner->ensureTable()
+#7 /home/itu/Lessons/S4/SI/FINAL/system/Commands/Database/Migrate.php(89): CodeIgniter\Database\MigrationRunner->latest()
+#8 /home/itu/Lessons/S4/SI/FINAL/system/CLI/SignalTrait.php(245): CodeIgniter\Commands\Database\Migrate::CodeIgniter\Commands\Database\{closure}()
+#9 /home/itu/Lessons/S4/SI/FINAL/system/Commands/Database/Migrate.php(88): CodeIgniter\Commands\Database\Migrate->withSignalsBlocked()
+#10 /home/itu/Lessons/S4/SI/FINAL/system/CLI/Commands.php(74): CodeIgniter\Commands\Database\Migrate->run()
+#11 /home/itu/Lessons/S4/SI/FINAL/system/CLI/Console.php(47): CodeIgniter\CLI\Commands->run()
+#12 /home/itu/Lessons/S4/SI/FINAL/system/Boot.php(442): CodeIgniter\CLI\Console->run()
+#13 /home/itu/Lessons/S4/SI/FINAL/system/Boot.php(166): CodeIgniter\Boot::runCommand()
+#14 /home/itu/Lessons/S4/SI/FINAL/spark(87): CodeIgniter\Boot::bootSpark()
+#15 {main}
+ERROR - 2026-07-20 07:11:23 --> Error connecting to the database: Exception: Unable to open database: unable to open database file in /home/itu/Lessons/S4/SI/FINAL/system/Database/SQLite3/Connection.php:111
+Stack trace:
+#0 /home/itu/Lessons/S4/SI/FINAL/system/Database/SQLite3/Connection.php(111): SQLite3->__construct()
+#1 /home/itu/Lessons/S4/SI/FINAL/system/Database/BaseConnection.php(555): CodeIgniter\Database\SQLite3\Connection->connect()
+#2 /home/itu/Lessons/S4/SI/FINAL/system/Database/SQLite3/Connection.php(74): CodeIgniter\Database\BaseConnection->initialize()
+#3 /home/itu/Lessons/S4/SI/FINAL/system/Database/BaseConnection.php(795): CodeIgniter\Database\SQLite3\Connection->initialize()
+#4 /home/itu/Lessons/S4/SI/FINAL/system/Database/BaseConnection.php(1706): CodeIgniter\Database\BaseConnection->query()
+#5 /home/itu/Lessons/S4/SI/FINAL/system/Database/BaseConnection.php(1726): CodeIgniter\Database\BaseConnection->listTables()
+#6 /home/itu/Lessons/S4/SI/FINAL/system/Database/MigrationRunner.php(821): CodeIgniter\Database\BaseConnection->tableExists()
+#7 /home/itu/Lessons/S4/SI/FINAL/system/Database/MigrationRunner.php(173): CodeIgniter\Database\MigrationRunner->ensureTable()
+#8 /home/itu/Lessons/S4/SI/FINAL/system/Commands/Database/Migrate.php(89): CodeIgniter\Database\MigrationRunner->latest()
+#9 /home/itu/Lessons/S4/SI/FINAL/system/CLI/SignalTrait.php(245): CodeIgniter\Commands\Database\Migrate::CodeIgniter\Commands\Database\{closure}()
+#10 /home/itu/Lessons/S4/SI/FINAL/system/Commands/Database/Migrate.php(88): CodeIgniter\Commands\Database\Migrate->withSignalsBlocked()
+#11 /home/itu/Lessons/S4/SI/FINAL/system/CLI/Commands.php(74): CodeIgniter\Commands\Database\Migrate->run()
+#12 /home/itu/Lessons/S4/SI/FINAL/system/CLI/Console.php(47): CodeIgniter\CLI\Commands->run()
+#13 /home/itu/Lessons/S4/SI/FINAL/system/Boot.php(442): CodeIgniter\CLI\Console->run()
+#14 /home/itu/Lessons/S4/SI/FINAL/system/Boot.php(166): CodeIgniter\Boot::runCommand()
+#15 /home/itu/Lessons/S4/SI/FINAL/spark(87): CodeIgniter\Boot::bootSpark()
+#16 {main}
+
+Next CodeIgniter\Database\Exceptions\DatabaseException: SQLite3 error: Unable to open database: unable to open database file in /home/itu/Lessons/S4/SI/FINAL/system/Database/SQLite3/Connection.php:118
+Stack trace:
+#0 /home/itu/Lessons/S4/SI/FINAL/system/Database/BaseConnection.php(555): CodeIgniter\Database\SQLite3\Connection->connect()
+#1 /home/itu/Lessons/S4/SI/FINAL/system/Database/SQLite3/Connection.php(74): CodeIgniter\Database\BaseConnection->initialize()
+#2 /home/itu/Lessons/S4/SI/FINAL/system/Database/BaseConnection.php(795): CodeIgniter\Database\SQLite3\Connection->initialize()
+#3 /home/itu/Lessons/S4/SI/FINAL/system/Database/BaseConnection.php(1706): CodeIgniter\Database\BaseConnection->query()
+#4 /home/itu/Lessons/S4/SI/FINAL/system/Database/BaseConnection.php(1726): CodeIgniter\Database\BaseConnection->listTables()
+#5 /home/itu/Lessons/S4/SI/FINAL/system/Database/MigrationRunner.php(821): CodeIgniter\Database\BaseConnection->tableExists()
+#6 /home/itu/Lessons/S4/SI/FINAL/system/Database/MigrationRunner.php(173): CodeIgniter\Database\MigrationRunner->ensureTable()
+#7 /home/itu/Lessons/S4/SI/FINAL/system/Commands/Database/Migrate.php(89): CodeIgniter\Database\MigrationRunner->latest()
+#8 /home/itu/Lessons/S4/SI/FINAL/system/CLI/SignalTrait.php(245): CodeIgniter\Commands\Database\Migrate::CodeIgniter\Commands\Database\{closure}()
+#9 /home/itu/Lessons/S4/SI/FINAL/system/Commands/Database/Migrate.php(88): CodeIgniter\Commands\Database\Migrate->withSignalsBlocked()
+#10 /home/itu/Lessons/S4/SI/FINAL/system/CLI/Commands.php(74): CodeIgniter\Commands\Database\Migrate->run()
+#11 /home/itu/Lessons/S4/SI/FINAL/system/CLI/Console.php(47): CodeIgniter\CLI\Commands->run()
+#12 /home/itu/Lessons/S4/SI/FINAL/system/Boot.php(442): CodeIgniter\CLI\Console->run()
+#13 /home/itu/Lessons/S4/SI/FINAL/system/Boot.php(166): CodeIgniter\Boot::runCommand()
+#14 /home/itu/Lessons/S4/SI/FINAL/spark(87): CodeIgniter\Boot::bootSpark()
+#15 {main}
+ERROR - 2026-07-20 07:12:09 --> Error connecting to the database: Exception: Unable to open database: unable to open database file in /home/itu/Lessons/S4/SI/FINAL/system/Database/SQLite3/Connection.php:111
+Stack trace:
+#0 /home/itu/Lessons/S4/SI/FINAL/system/Database/SQLite3/Connection.php(111): SQLite3->__construct()
+#1 /home/itu/Lessons/S4/SI/FINAL/system/Database/BaseConnection.php(555): CodeIgniter\Database\SQLite3\Connection->connect()
+#2 /home/itu/Lessons/S4/SI/FINAL/system/Database/SQLite3/Connection.php(74): CodeIgniter\Database\BaseConnection->initialize()
+#3 /home/itu/Lessons/S4/SI/FINAL/system/Database/BaseConnection.php(795): CodeIgniter\Database\SQLite3\Connection->initialize()
+#4 /home/itu/Lessons/S4/SI/FINAL/system/Database/BaseConnection.php(1706): CodeIgniter\Database\BaseConnection->query()
+#5 /home/itu/Lessons/S4/SI/FINAL/system/Database/BaseConnection.php(1726): CodeIgniter\Database\BaseConnection->listTables()
+#6 /home/itu/Lessons/S4/SI/FINAL/system/Database/MigrationRunner.php(821): CodeIgniter\Database\BaseConnection->tableExists()
+#7 /home/itu/Lessons/S4/SI/FINAL/system/Database/MigrationRunner.php(173): CodeIgniter\Database\MigrationRunner->ensureTable()
+#8 /home/itu/Lessons/S4/SI/FINAL/system/Commands/Database/Migrate.php(89): CodeIgniter\Database\MigrationRunner->latest()
+#9 /home/itu/Lessons/S4/SI/FINAL/system/CLI/SignalTrait.php(245): CodeIgniter\Commands\Database\Migrate::CodeIgniter\Commands\Database\{closure}()
+#10 /home/itu/Lessons/S4/SI/FINAL/system/Commands/Database/Migrate.php(88): CodeIgniter\Commands\Database\Migrate->withSignalsBlocked()
+#11 /home/itu/Lessons/S4/SI/FINAL/system/CLI/Commands.php(74): CodeIgniter\Commands\Database\Migrate->run()
+#12 /home/itu/Lessons/S4/SI/FINAL/system/CLI/Console.php(47): CodeIgniter\CLI\Commands->run()
+#13 /home/itu/Lessons/S4/SI/FINAL/system/Boot.php(442): CodeIgniter\CLI\Console->run()
+#14 /home/itu/Lessons/S4/SI/FINAL/system/Boot.php(166): CodeIgniter\Boot::runCommand()
+#15 /home/itu/Lessons/S4/SI/FINAL/spark(87): CodeIgniter\Boot::bootSpark()
+#16 {main}
+
+Next CodeIgniter\Database\Exceptions\DatabaseException: SQLite3 error: Unable to open database: unable to open database file in /home/itu/Lessons/S4/SI/FINAL/system/Database/SQLite3/Connection.php:118
+Stack trace:
+#0 /home/itu/Lessons/S4/SI/FINAL/system/Database/BaseConnection.php(555): CodeIgniter\Database\SQLite3\Connection->connect()
+#1 /home/itu/Lessons/S4/SI/FINAL/system/Database/SQLite3/Connection.php(74): CodeIgniter\Database\BaseConnection->initialize()
+#2 /home/itu/Lessons/S4/SI/FINAL/system/Database/BaseConnection.php(795): CodeIgniter\Database\SQLite3\Connection->initialize()
+#3 /home/itu/Lessons/S4/SI/FINAL/system/Database/BaseConnection.php(1706): CodeIgniter\Database\BaseConnection->query()
+#4 /home/itu/Lessons/S4/SI/FINAL/system/Database/BaseConnection.php(1726): CodeIgniter\Database\BaseConnection->listTables()
+#5 /home/itu/Lessons/S4/SI/FINAL/system/Database/MigrationRunner.php(821): CodeIgniter\Database\BaseConnection->tableExists()
+#6 /home/itu/Lessons/S4/SI/FINAL/system/Database/MigrationRunner.php(173): CodeIgniter\Database\MigrationRunner->ensureTable()
+#7 /home/itu/Lessons/S4/SI/FINAL/system/Commands/Database/Migrate.php(89): CodeIgniter\Database\MigrationRunner->latest()
+#8 /home/itu/Lessons/S4/SI/FINAL/system/CLI/SignalTrait.php(245): CodeIgniter\Commands\Database\Migrate::CodeIgniter\Commands\Database\{closure}()
+#9 /home/itu/Lessons/S4/SI/FINAL/system/Commands/Database/Migrate.php(88): CodeIgniter\Commands\Database\Migrate->withSignalsBlocked()
+#10 /home/itu/Lessons/S4/SI/FINAL/system/CLI/Commands.php(74): CodeIgniter\Commands\Database\Migrate->run()
+#11 /home/itu/Lessons/S4/SI/FINAL/system/CLI/Console.php(47): CodeIgniter\CLI\Commands->run()
+#12 /home/itu/Lessons/S4/SI/FINAL/system/Boot.php(442): CodeIgniter\CLI\Console->run()
+#13 /home/itu/Lessons/S4/SI/FINAL/system/Boot.php(166): CodeIgniter\Boot::runCommand()
+#14 /home/itu/Lessons/S4/SI/FINAL/spark(87): CodeIgniter\Boot::bootSpark()
+#15 {main}
+ERROR - 2026-07-20 07:12:52 --> Error connecting to the database: Exception: Unable to open database: unable to open database file in /home/itu/Lessons/S4/SI/FINAL/system/Database/SQLite3/Connection.php:111
+Stack trace:
+#0 /home/itu/Lessons/S4/SI/FINAL/system/Database/SQLite3/Connection.php(111): SQLite3->__construct()
+#1 /home/itu/Lessons/S4/SI/FINAL/system/Database/BaseConnection.php(555): CodeIgniter\Database\SQLite3\Connection->connect()
+#2 /home/itu/Lessons/S4/SI/FINAL/system/Database/SQLite3/Connection.php(74): CodeIgniter\Database\BaseConnection->initialize()
+#3 /home/itu/Lessons/S4/SI/FINAL/system/Database/BaseConnection.php(795): CodeIgniter\Database\SQLite3\Connection->initialize()
+#4 /home/itu/Lessons/S4/SI/FINAL/system/Database/BaseConnection.php(1706): CodeIgniter\Database\BaseConnection->query()
+#5 /home/itu/Lessons/S4/SI/FINAL/system/Database/BaseConnection.php(1726): CodeIgniter\Database\BaseConnection->listTables()
+#6 /home/itu/Lessons/S4/SI/FINAL/system/Database/MigrationRunner.php(821): CodeIgniter\Database\BaseConnection->tableExists()
+#7 /home/itu/Lessons/S4/SI/FINAL/system/Database/MigrationRunner.php(173): CodeIgniter\Database\MigrationRunner->ensureTable()
+#8 /home/itu/Lessons/S4/SI/FINAL/system/Commands/Database/Migrate.php(89): CodeIgniter\Database\MigrationRunner->latest()
+#9 /home/itu/Lessons/S4/SI/FINAL/system/CLI/SignalTrait.php(245): CodeIgniter\Commands\Database\Migrate::CodeIgniter\Commands\Database\{closure}()
+#10 /home/itu/Lessons/S4/SI/FINAL/system/Commands/Database/Migrate.php(88): CodeIgniter\Commands\Database\Migrate->withSignalsBlocked()
+#11 /home/itu/Lessons/S4/SI/FINAL/system/CLI/Commands.php(74): CodeIgniter\Commands\Database\Migrate->run()
+#12 /home/itu/Lessons/S4/SI/FINAL/system/CLI/Console.php(47): CodeIgniter\CLI\Commands->run()
+#13 /home/itu/Lessons/S4/SI/FINAL/system/Boot.php(442): CodeIgniter\CLI\Console->run()
+#14 /home/itu/Lessons/S4/SI/FINAL/system/Boot.php(166): CodeIgniter\Boot::runCommand()
+#15 /home/itu/Lessons/S4/SI/FINAL/spark(87): CodeIgniter\Boot::bootSpark()
+#16 {main}
+
+Next CodeIgniter\Database\Exceptions\DatabaseException: SQLite3 error: Unable to open database: unable to open database file in /home/itu/Lessons/S4/SI/FINAL/system/Database/SQLite3/Connection.php:118
+Stack trace:
+#0 /home/itu/Lessons/S4/SI/FINAL/system/Database/BaseConnection.php(555): CodeIgniter\Database\SQLite3\Connection->connect()
+#1 /home/itu/Lessons/S4/SI/FINAL/system/Database/SQLite3/Connection.php(74): CodeIgniter\Database\BaseConnection->initialize()
+#2 /home/itu/Lessons/S4/SI/FINAL/system/Database/BaseConnection.php(795): CodeIgniter\Database\SQLite3\Connection->initialize()
+#3 /home/itu/Lessons/S4/SI/FINAL/system/Database/BaseConnection.php(1706): CodeIgniter\Database\BaseConnection->query()
+#4 /home/itu/Lessons/S4/SI/FINAL/system/Database/BaseConnection.php(1726): CodeIgniter\Database\BaseConnection->listTables()
+#5 /home/itu/Lessons/S4/SI/FINAL/system/Database/MigrationRunner.php(821): CodeIgniter\Database\BaseConnection->tableExists()
+#6 /home/itu/Lessons/S4/SI/FINAL/system/Database/MigrationRunner.php(173): CodeIgniter\Database\MigrationRunner->ensureTable()
+#7 /home/itu/Lessons/S4/SI/FINAL/system/Commands/Database/Migrate.php(89): CodeIgniter\Database\MigrationRunner->latest()
+#8 /home/itu/Lessons/S4/SI/FINAL/system/CLI/SignalTrait.php(245): CodeIgniter\Commands\Database\Migrate::CodeIgniter\Commands\Database\{closure}()
+#9 /home/itu/Lessons/S4/SI/FINAL/system/Commands/Database/Migrate.php(88): CodeIgniter\Commands\Database\Migrate->withSignalsBlocked()
+#10 /home/itu/Lessons/S4/SI/FINAL/system/CLI/Commands.php(74): CodeIgniter\Commands\Database\Migrate->run()
+#11 /home/itu/Lessons/S4/SI/FINAL/system/CLI/Console.php(47): CodeIgniter\CLI\Commands->run()
+#12 /home/itu/Lessons/S4/SI/FINAL/system/Boot.php(442): CodeIgniter\CLI\Console->run()
+#13 /home/itu/Lessons/S4/SI/FINAL/system/Boot.php(166): CodeIgniter\Boot::runCommand()
+#14 /home/itu/Lessons/S4/SI/FINAL/spark(87): CodeIgniter\Boot::bootSpark()
+#15 {main}
