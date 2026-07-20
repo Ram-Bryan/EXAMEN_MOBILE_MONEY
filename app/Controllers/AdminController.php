@@ -94,6 +94,7 @@ class AdminController extends BaseController
         return view('admin/operator_detail', [
             'operator'       => $operator,
             'baremes'        => $this->baremeFraisModel->getBaremesByOperateur($id),
+            'allBaremes'     => $this->baremeFraisModel->getAllBaremesByOperateur($id),
             'types_operation' => $this->typeOperationModel->findAll(),
             'gains'          => $this->transactionModel->getGainsParOperateur($id),
         ]);

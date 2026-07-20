@@ -52,6 +52,22 @@ class BaremeFraisModel extends Model
         return $db->query($sql, [$operateurId])->getResultObject();
     }
 
+    public function getAllBaremesByOperateur(int $operateurId)
+    {
+        $db = \Config\Database::connect();
+        $sql = "SELECT b.id AS bareme_id, b.type_operation_id, b.operateur_id,
+                       o.prefixe, t.code AS type_code, t.nom AS type_nom,
+                       h.id AS historique_id,
+                       h.montant_min, h.montant_max, h.frais_fixe, h.date_modif
+                FROM baremes_frais b
+                JOIN operateur_prefixes o ON b.operateur_id = o.id
+                JOIN types_operation t ON b.type_operation_id = t.id
+                JOIN baremes_frais_historique h ON h.bareme_id = b.id
+                WHERE b.operateur_id = ?
+                ORDER BY t.nom, h.date_modif DESC, h.montant_min";
+        return $db->query($sql, [$operateurId])->getResultObject();
+    }
+
     public function addTranche($type_operation_id, $operateur_id, $montant_min, $montant_max, $frais_fixe)
     {
         $db = \Config\Database::connect();
@@ -69,11 +85,35 @@ class BaremeFraisModel extends Model
         }
 
         $historiqueModel = new \App\Models\BaremeFraisHistoriqueModel();
+        $now = date('Y-m-d H:i:s');
+
+        $latestDate = $historiqueModel->select('MAX(date_modif) AS max_date')
+            ->where('bareme_id', $baremeId)
+            ->first();
+
+        if ($latestDate && $latestDate->max_date) {
+            $currentTranches = $historiqueModel
+                ->where('bareme_id', $baremeId)
+                ->where('date_modif', $latestDate->max_date)
+                ->findAll();
+
+            foreach ($currentTranches as $t) {
+                $historiqueModel->insert([
+                    'bareme_id'   => $baremeId,
+                    'montant_min' => $t->montant_min,
+                    'montant_max' => $t->montant_max,
+                    'frais_fixe'  => $t->frais_fixe,
+                    'date_modif'  => $now
+                ]);
+            }
+        }
+
         $historiqueModel->insert([
-            'bareme_id' => $baremeId,
+            'bareme_id'   => $baremeId,
             'montant_min' => $montant_min,
             'montant_max' => $montant_max === '' ? null : $montant_max,
-            'frais_fixe' => $frais_fixe
+            'frais_fixe'  => $frais_fixe,
+            'date_modif'  => $now
         ]);
 
         $db->transComplete();
