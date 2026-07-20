@@ -2,16 +2,22 @@
 
 namespace App\Controllers;
 
-use App\Models\UserModel;
+use App\Models\ClientModel;
+use App\Models\OperateurPrefixeModel;
+use App\Models\AdminModel;
 
 class Auth extends BaseController
 {
-    protected $userModel;
+    protected $clientModel;
+    protected $prefixModel;
+    protected $adminModel;
     protected $session;
 
     public function __construct()
     {
-        $this->userModel = new UserModel();
+        $this->clientModel = new ClientModel();
+        $this->prefixModel = new OperateurPrefixeModel();
+        $this->adminModel = new AdminModel();
         $this->session = session();
     }
 
@@ -22,8 +28,6 @@ class Auth extends BaseController
             $role = $this->session->get('role');
             if ($role === 'admin') {
                 return redirect()->to('/admin/dashboard');
-            } elseif ($role === 'operator') {
-                return redirect()->to('/operator/dashboard');
             } else {
                 return redirect()->to('/client/dashboard');
             }
@@ -34,32 +38,71 @@ class Auth extends BaseController
 
     public function doLogin()
     {
-        $username = $this->request->getPost('username');
+        $phone = $this->request->getPost('phone');
+        $email = $this->request->getPost('email') ?? $this->request->getPost('username');
         $password = $this->request->getPost('password');
-        
-        $user = $this->userModel->findByUsername($username);
-        
-        if ($user && password_verify($password, $user['password'])) {
-            $this->session->set([
-                'isLoggedIn' => true,
-                'user_id' => $user['id'],
-                'username' => $user['username'],
-                'name' => $user['name'],
-                'role' => $user['role'],
-                'phone' => $user['phone'] ?? null
-            ]);
+
+        // Flow 1: Client Auto-login by Phone Number
+        if (!empty($phone)) {
+            $phone = trim($phone);
             
-            // Redirect based on role
-            if ($user['role'] === 'admin') {
-                return redirect()->to('/admin/dashboard');
-            } elseif ($user['role'] === 'operator') {
-                return redirect()->to('/operator/dashboard');
-            } else {
-                return redirect()->to('/client/dashboard');
+            // Validate prefix against operateur_prefixes
+            $prefixes = $this->prefixModel->findAll();
+            $matchedPrefix = null;
+            
+            foreach ($prefixes as $p) {
+                if (strpos($phone, $p->prefixe) === 0) {
+                    $matchedPrefix = $p;
+                    break;
+                }
             }
+            
+            if (!$matchedPrefix) {
+                return redirect()->back()->withInput()->with('error', 'Numéro de téléphone invalide (préfixe non supporté).');
+            }
+
+            // Check if client exists
+            $client = $this->clientModel->getByTelephone($phone);
+            
+            if (!$client) {
+                // Auto-create client
+                $clientId = $this->clientModel->createClient($phone, $matchedPrefix->id);
+                $client = $this->clientModel->find($clientId);
+            }
+
+            // Open Client Session
+            $this->session->set([
+                'isLoggedIn'  => true,
+                'client_id'   => $client->id,
+                'phone'       => $client->telephone,
+                'client_code' => $client->code,
+                'name'        => $client->nom,
+                'role'        => 'client'
+            ]);
+
+            return redirect()->to('/client/dashboard');
         }
-        
-        return redirect()->back()->with('error', 'Identifiants incorrects');
+
+        // Flow 2: Admin Login by Email and Password
+        if (!empty($email) && !empty($password)) {
+            $admin = $this->adminModel->where('email', $email)->first();
+            
+            if ($admin && password_verify($password, $admin->password)) {
+                $this->session->set([
+                    'isLoggedIn' => true,
+                    'admin_id'   => $admin->id,
+                    'email'      => $admin->email,
+                    'name'       => 'Administrateur',
+                    'role'       => 'admin'
+                ]);
+                
+                return redirect()->to('/admin/dashboard');
+            }
+            
+            return redirect()->back()->withInput()->with('error', 'Identifiants administrateur incorrects.');
+        }
+
+        return redirect()->back()->with('error', 'Veuillez remplir les informations de connexion.');
     }
 
     public function logout()

@@ -2,264 +2,414 @@
 
 namespace App\Controllers;
 
-use App\Models\TransactionModel;
 use App\Models\ClientModel;
-use App\Models\FeeModel;
+use App\Models\TransactionModel;
+use App\Models\BaremeFraisModel;
+use App\Models\TypeOperationModel;
+use App\Models\OperateurPrefixeModel;
 
 class Client extends BaseController
 {
-    protected $transactionModel;
     protected $clientModel;
-    protected $feeModel;
+    protected $transactionModel;
+    protected $baremeFraisModel;
+    protected $typeOperationModel;
+    protected $prefixModel;
     protected $session;
 
     public function __construct()
     {
-        $this->transactionModel = new TransactionModel();
         $this->clientModel = new ClientModel();
-        $this->feeModel = new FeeModel();
+        $this->transactionModel = new TransactionModel();
+        $this->baremeFraisModel = new BaremeFraisModel();
+        $this->typeOperationModel = new TypeOperationModel();
+        $this->prefixModel = new OperateurPrefixeModel();
         $this->session = session();
-        
-        // Auto-login with phone number
-        $phone = $this->request->getGet('phone') ?? $this->session->get('phone');
-        if ($phone) {
-            $this->session->set('phone', $phone);
-            $this->session->set('isLoggedIn', true);
-            $this->session->set('role', 'client');
-        }
-        
-        if (!$this->session->get('isLoggedIn')) {
-            return redirect()->to('/login');
-        }
     }
 
+    /**
+     * Helper to verify client authentication.
+     */
+    private function checkAuth(): bool
+    {
+        return $this->session->get('isLoggedIn') === true && $this->session->get('role') === 'client';
+    }
+
+    /**
+     * Dashboard: Solde + 5 dernières transactions.
+     */
     public function dashboard()
     {
+        if (!$this->checkAuth()) {
+            return redirect()->to('/login');
+        }
+
+        $clientId = $this->session->get('client_id');
         $phone = $this->session->get('phone');
-        $data = [
-            'page_title' => 'Mon Compte',
-            'phone' => $phone,
-            'balance' => $this->clientModel->getBalance($phone),
-            'recentTransactions' => $this->transactionModel->getClientTransactions($phone, 5)
-        ];
         
+        $balance = $this->clientModel->getBalance($clientId);
+        $recentTransactions = $this->transactionModel->getClientTransactions($clientId, 5);
+
+        $data = [
+            'page_title'         => 'Mon Compte',
+            'phone'              => $phone,
+            'balance'            => $balance,
+            'recentTransactions' => $recentTransactions
+        ];
+
         return view('client/dashboard', $data);
     }
 
+    /**
+     * Voir le solde (page dédiée).
+     */
+    public function balance()
+    {
+        if (!$this->checkAuth()) {
+            return redirect()->to('/login');
+        }
+
+        $clientId = $this->session->get('client_id');
+        $phone = $this->session->get('phone');
+        
+        $client = $this->clientModel->find($clientId);
+        $prefix = $this->prefixModel->find($client->operateur_id);
+        
+        $balance = $this->clientModel->getBalance($clientId);
+
+        // If AJAX request, return JSON
+        if ($this->request->isAJAX()) {
+            return $this->response->setJSON([
+                'success' => true,
+                'balance' => $balance
+            ]);
+        }
+
+        $data = [
+            'page_title'      => 'Mon Solde',
+            'phone'           => $phone,
+            'balance'         => $balance,
+            'operator_prefix' => $prefix ? $prefix->prefixe : 'Inconnu'
+        ];
+
+        return view('client/balance', $data);
+    }
+
+    /**
+     * Afficher le formulaire de Dépôt.
+     */
     public function deposit()
     {
+        if (!$this->checkAuth()) {
+            return redirect()->to('/login');
+        }
+
+        $clientId = $this->session->get('client_id');
+        $client = $this->clientModel->find($clientId);
+        
+        $fees = $this->baremeFraisModel->getFeesSchedules('DEPOT', $client->operateur_id);
+
         $data = [
             'page_title' => 'Dépôt',
-            'fees' => $this->feeModel->getFeesByType('deposit')
+            'phone'      => $this->session->get('phone'),
+            'fees'       => $fees
         ];
-        
+
         return view('client/deposit', $data);
     }
 
+    /**
+     * Exécuter le Dépôt.
+     */
     public function doDeposit()
     {
+        if (!$this->checkAuth()) {
+            return $this->response->setJSON([
+                'success' => false,
+                'message' => 'Non authentifié'
+            ])->setStatusCode(401);
+        }
+
         $amount = (float)$this->request->getPost('amount');
-        $phone = $this->session->get('phone');
-        
+        $clientId = $this->session->get('client_id');
+
         if ($amount <= 0) {
             return $this->response->setJSON([
                 'success' => false,
-                'message' => 'Montant invalide'
+                'message' => 'Montant invalide.'
             ]);
         }
-        
-        // Calculate fees
-        $fee = $this->feeModel->calculateFee('deposit', $amount);
-        
+
+        // Fetch type operation DEPOT
+        $typeOp = $this->typeOperationModel->where('code', 'DEPOT')->first();
+        if (!$typeOp) {
+            return $this->response->setJSON([
+                'success' => false,
+                'message' => 'Type d\'opération de dépôt inexistant.'
+            ]);
+        }
+
         // Create transaction
-        $transactionData = [
-            'client_phone' => $phone,
-            'type' => 'deposit',
-            'amount' => $amount,
-            'fee' => $fee,
-            'status' => 'completed',
-            'created_at' => date('Y-m-d H:i:s')
-        ];
-        
-        if ($this->transactionModel->save($transactionData)) {
-            // Update client balance
-            $this->clientModel->addBalance($phone, $amount);
-            
+        $inserted = $this->transactionModel->createTransaction($typeOp->id, null, $clientId, $amount);
+
+        if ($inserted) {
             return $this->response->setJSON([
                 'success' => true,
-                'message' => 'Dépôt effectué avec succès'
+                'message' => 'Dépôt de ' . number_format($amount, 0, ',', ' ') . ' Ar effectué avec succès.'
             ]);
         }
-        
+
         return $this->response->setJSON([
             'success' => false,
-            'message' => 'Erreur lors du dépôt'
+            'message' => 'Erreur lors de l\'enregistrement de la transaction.'
         ]);
     }
 
+    /**
+     * Afficher le formulaire de Retrait.
+     */
     public function withdraw()
     {
+        if (!$this->checkAuth()) {
+            return redirect()->to('/login');
+        }
+
+        $clientId = $this->session->get('client_id');
+        $client = $this->clientModel->find($clientId);
+        
+        $balance = $this->clientModel->getBalance($clientId);
+        $fees = $this->baremeFraisModel->getFeesSchedules('RETRAIT', $client->operateur_id);
+
         $data = [
             'page_title' => 'Retrait',
-            'fees' => $this->feeModel->getFeesByType('withdraw')
+            'balance'    => $balance,
+            'fees'       => $fees
         ];
-        
+
         return view('client/withdraw', $data);
     }
 
+    /**
+     * Exécuter le Retrait.
+     */
     public function doWithdraw()
     {
+        if (!$this->checkAuth()) {
+            return $this->response->setJSON([
+                'success' => false,
+                'message' => 'Non authentifié'
+            ])->setStatusCode(401);
+        }
+
         $amount = (float)$this->request->getPost('amount');
-        $phone = $this->session->get('phone');
-        
+        $clientId = $this->session->get('client_id');
+
         if ($amount <= 0) {
             return $this->response->setJSON([
                 'success' => false,
-                'message' => 'Montant invalide'
+                'message' => 'Montant invalide.'
             ]);
         }
-        
-        // Check balance
-        $balance = $this->clientModel->getBalance($phone);
-        if ($amount > $balance) {
+
+        $client = $this->clientModel->find($clientId);
+        if (!$client) {
             return $this->response->setJSON([
                 'success' => false,
-                'message' => 'Solde insuffisant'
+                'message' => 'Client introuvable.'
             ]);
         }
-        
-        // Calculate fees
-        $fee = $this->feeModel->calculateFee('withdraw', $amount);
+
+        // Fetch type operation RETRAIT
+        $typeOp = $this->typeOperationModel->where('code', 'RETRAIT')->first();
+        if (!$typeOp) {
+            return $this->response->setJSON([
+                'success' => false,
+                'message' => 'Type d\'opération de retrait inexistant.'
+            ]);
+        }
+
+        // Calculate fee
+        $fee = $this->baremeFraisModel->getFrais($typeOp->id, $client->operateur_id, $amount);
+        if ($fee === null) {
+            return $this->response->setJSON([
+                'success' => false,
+                'message' => 'Aucun barème de frais ne couvre ce montant.'
+            ]);
+        }
+
         $totalWithdraw = $amount + $fee;
         
+        // Verify balance
+        $balance = $this->clientModel->getBalance($clientId);
         if ($totalWithdraw > $balance) {
             return $this->response->setJSON([
                 'success' => false,
-                'message' => 'Solde insuffisant incluant les frais'
+                'message' => 'Solde insuffisant. Le montant avec frais (' . number_format($totalWithdraw, 0, ',', ' ') . ' Ar) dépasse votre solde disponible (' . number_format($balance, 0, ',', ' ') . ' Ar).'
             ]);
         }
-        
-        // Create transaction
-        $transactionData = [
-            'client_phone' => $phone,
-            'type' => 'withdraw',
-            'amount' => $amount,
-            'fee' => $fee,
-            'status' => 'completed',
-            'created_at' => date('Y-m-d H:i:s')
-        ];
-        
-        if ($this->transactionModel->save($transactionData)) {
-            // Update client balance
-            $this->clientModel->subtractBalance($phone, $totalWithdraw);
-            
+
+        // Insert transaction
+        $inserted = $this->transactionModel->createTransaction($typeOp->id, $clientId, null, $amount);
+
+        if ($inserted) {
             return $this->response->setJSON([
                 'success' => true,
-                'message' => 'Retrait effectué avec succès'
+                'message' => 'Retrait de ' . number_format($amount, 0, ',', ' ') . ' Ar (frais: ' . number_format($fee, 0, ',', ' ') . ' Ar) effectué avec succès.'
             ]);
         }
-        
+
         return $this->response->setJSON([
             'success' => false,
-            'message' => 'Erreur lors du retrait'
+            'message' => 'Erreur lors du retrait.'
         ]);
     }
 
+    /**
+     * Afficher le formulaire de Transfert.
+     */
     public function transfer()
     {
+        if (!$this->checkAuth()) {
+            return redirect()->to('/login');
+        }
+
+        $clientId = $this->session->get('client_id');
+        $client = $this->clientModel->find($clientId);
+        
+        $balance = $this->clientModel->getBalance($clientId);
+        $fees = $this->baremeFraisModel->getFeesSchedules('TRANSFERT', $client->operateur_id);
+
         $data = [
             'page_title' => 'Transfert',
-            'fees' => $this->feeModel->getFeesByType('transfer')
+            'phone'      => $this->session->get('phone'),
+            'balance'    => $balance,
+            'fees'       => $fees
         ];
-        
+
         return view('client/transfer', $data);
     }
 
+    /**
+     * Exécuter le Transfert.
+     */
     public function doTransfer()
     {
+        if (!$this->checkAuth()) {
+            return $this->response->setJSON([
+                'success' => false,
+                'message' => 'Non authentifié'
+            ])->setStatusCode(401);
+        }
+
         $amount = (float)$this->request->getPost('amount');
-        $recipient = $this->request->getPost('recipient_phone');
-        $phone = $this->session->get('phone');
-        
+        $recipientPhone = trim($this->request->getPost('recipient_phone'));
+        $senderId = $this->session->get('client_id');
+        $senderPhone = $this->session->get('phone');
+
         if ($amount <= 0) {
             return $this->response->setJSON([
                 'success' => false,
-                'message' => 'Montant invalide'
+                'message' => 'Montant invalide.'
             ]);
         }
-        
-        if ($recipient === $phone) {
+
+        if ($recipientPhone === $senderPhone) {
             return $this->response->setJSON([
                 'success' => false,
-                'message' => 'Vous ne pouvez pas transférer à vous-même'
+                'message' => 'Vous ne pouvez pas effectuer un transfert vers votre propre numéro.'
             ]);
         }
-        
-        // Check if recipient exists
-        if (!$this->clientModel->exists($recipient)) {
+
+        // Find or auto-create recipient
+        $recipient = $this->clientModel->getByTelephone($recipientPhone);
+        if (!$recipient) {
+            // Validate prefix for auto-registration
+            $prefixes = $this->prefixModel->findAll();
+            $matchedPrefix = null;
+            
+            foreach ($prefixes as $p) {
+                if (strpos($recipientPhone, $p->prefixe) === 0) {
+                    $matchedPrefix = $p;
+                    break;
+                }
+            }
+            
+            if (!$matchedPrefix) {
+                return $this->response->setJSON([
+                    'success' => false,
+                    'message' => 'Numéro destinataire invalide (opérateur non supporté).'
+                ]);
+            }
+
+            // Auto-create recipient client
+            $recipientId = $this->clientModel->createClient($recipientPhone, $matchedPrefix->id);
+            $recipient = $this->clientModel->find($recipientId);
+        }
+
+        $sender = $this->clientModel->find($senderId);
+
+        // Fetch type operation TRANSFERT
+        $typeOp = $this->typeOperationModel->where('code', 'TRANSFERT')->first();
+        if (!$typeOp) {
             return $this->response->setJSON([
                 'success' => false,
-                'message' => 'Destinataire non trouvé'
+                'message' => 'Type d\'opération de transfert inexistant.'
             ]);
         }
-        
-        // Check balance
-        $balance = $this->clientModel->getBalance($phone);
-        $fee = $this->feeModel->calculateFee('transfer', $amount);
+
+        // Calculate fee
+        $fee = $this->baremeFraisModel->getFrais($typeOp->id, $sender->operateur_id, $amount);
+        if ($fee === null) {
+            return $this->response->setJSON([
+                'success' => false,
+                'message' => 'Aucun barème de frais ne couvre ce montant.'
+            ]);
+        }
+
         $totalTransfer = $amount + $fee;
-        
+
+        // Verify balance
+        $balance = $this->clientModel->getBalance($senderId);
         if ($totalTransfer > $balance) {
             return $this->response->setJSON([
                 'success' => false,
-                'message' => 'Solde insuffisant'
+                'message' => 'Solde insuffisant. Le transfert avec frais (' . number_format($totalTransfer, 0, ',', ' ') . ' Ar) dépasse votre solde disponible (' . number_format($balance, 0, ',', ' ') . ' Ar).'
             ]);
         }
-        
-        // Create transaction
-        $transactionData = [
-            'client_phone' => $phone,
-            'recipient_phone' => $recipient,
-            'type' => 'transfer',
-            'amount' => $amount,
-            'fee' => $fee,
-            'status' => 'completed',
-            'created_at' => date('Y-m-d H:i:s')
-        ];
-        
-        if ($this->transactionModel->save($transactionData)) {
-            // Update balances
-            $this->clientModel->subtractBalance($phone, $totalTransfer);
-            $this->clientModel->addBalance($recipient, $amount);
-            
+
+        // Insert transaction
+        $inserted = $this->transactionModel->createTransaction($typeOp->id, $senderId, $recipient->id, $amount);
+
+        if ($inserted) {
             return $this->response->setJSON([
                 'success' => true,
-                'message' => 'Transfert effectué avec succès'
+                'message' => 'Transfert de ' . number_format($amount, 0, ',', ' ') . ' Ar vers ' . $recipientPhone . ' effectué avec succès.'
             ]);
         }
-        
+
         return $this->response->setJSON([
             'success' => false,
-            'message' => 'Erreur lors du transfert'
+            'message' => 'Erreur lors du transfert.'
         ]);
     }
 
+    /**
+     * Historique des transactions du client.
+     */
     public function history()
     {
-        $data = [
-            'page_title' => 'Historique',
-            'transactions' => $this->transactionModel->getClientTransactions(
-                $this->session->get('phone')
-            )
-        ];
-        
-        return view('client/history', $data);
-    }
+        if (!$this->checkAuth()) {
+            return redirect()->to('/login');
+        }
 
-    public function balance()
-    {
-        $balance = $this->clientModel->getBalance($this->session->get('phone'));
-        return $this->response->setJSON([
-            'balance' => $balance
-        ]);
+        $clientId = $this->session->get('client_id');
+        $transactions = $this->transactionModel->getClientTransactions($clientId);
+
+        $data = [
+            'page_title'   => 'Historique',
+            'transactions' => $transactions
+        ];
+
+        return view('client/history', $data);
     }
 }

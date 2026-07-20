@@ -49,30 +49,56 @@ Après ça, chacun travaille sur ses propres fichiers/routes/contrôleurs jusqu'
 ## Dev B — Espace client (auto-login + opérations)
 
 ### Login automatique (1h)
-- [ ] Formulaire "entrer son numéro de téléphone"
-- [ ] Contrôleur : valider le préfixe contre `operateur_prefixes` (rejeter si préfixe inconnu)
-- [ ] Si le numéro existe déjà dans `clients` → connexion directe (session)
-- [ ] Si le numéro n'existe pas → création automatique du client (résoudre et stocker `operateur_id` à partir du préfixe), puis connexion
-- [ ] Session client (CodeIgniter session) pour garder l'utilisateur connecté entre les pages
+- [x] Formulaire "entrer son numéro de téléphone" (`app/Views/auth/login.php`)
+- [x] Contrôleur : valider le préfixe contre `operateur_prefixes` (rejeter si préfixe inconnu) — `Auth::doLogin()`
+- [x] Si le numéro existe déjà dans `clients` → connexion directe (session)
+- [x] Si le numéro n'existe pas → création automatique du client (`ClientModel::createClient()`), puis connexion
+- [x] Session client (CodeIgniter session) : `client_id`, `phone`, `name`, `client_code`, `role='client'`
 
 ### Voir le solde (30 min)
-- [ ] Contrôleur qui appelle la requête solde paramétrée (sans dates = solde total actuel)
-- [ ] Vue simple affichant le solde
+- [x] Contrôleur qui appelle la requête solde paramétrée via `ClientModel::getBalance()` (sans dates = solde total actuel)
+- [x] Vue dédiée `app/Views/client/balance.php` affichant solde + infos compte
+- [x] Endpoint AJAX `GET /api/client/balance` via `Api::getBalance()` pour actualiser le solde sans rechargement
 
 ### Dépôt / Retrait (1h)
-- [ ] Formulaire dépôt : montant → `INSERT` dans `transactions` avec `destinataire_id = client_id`, `expediteur_id = NULL`
-- [ ] Formulaire retrait : montant → `INSERT` dans `transactions` avec `expediteur_id = client_id`, `destinataire_id = NULL`
-- [ ] **Validation avant retrait** : calculer solde + frais prévu (via la requête "comment avoir le frais" déjà écrite) et vérifier que le client a assez de solde pour couvrir montant + frais
-- [ ] Gérer le cas où aucune tranche de frais ne matche (barème manquant) → message d'erreur clair, pas de crash
+- [x] Formulaire dépôt (`app/Views/client/deposit.php`) : montant → `INSERT` dans `transactions` avec `destinataire_id = client_id`, `expediteur_id = NULL`
+- [x] Formulaire retrait (`app/Views/client/withdraw.php`) : montant → `INSERT` dans `transactions` avec `expediteur_id = client_id`, `destinataire_id = NULL`
+- [x] **Validation avant retrait** : calcul du frais via `BaremeFraisModel::getFrais()` + vérification solde suffisant (montant + frais)
+- [x] Gérer le cas où aucune tranche de frais ne matche → message d'erreur JSON clair, pas de crash
+- [x] Prévisualisation dynamique AJAX des frais via `POST /api/fees/calculate`
 
 ### Transfert (1h)
-- [ ] Formulaire transfert : numéro destinataire + montant
-- [ ] Vérifier que le numéro destinataire existe (ou le créer automatiquement si "pas d'inscription préalable" s'applique aussi côté réception — à clarifier ensemble si besoin)
-- [ ] `INSERT` dans `transactions` avec `expediteur_id` et `destinataire_id` remplis
-- [ ] Même validation de solde suffisant (montant + frais) que pour le retrait
+- [x] Formulaire transfert (`app/Views/client/transfer.php`) : numéro destinataire + montant
+- [x] Vérification et création automatique du destinataire si préfixe valide et numéro inconnu
+- [x] `INSERT` dans `transactions` avec `expediteur_id` et `destinataire_id` remplis
+- [x] Même validation de solde suffisant (montant + frais) que pour le retrait
 
 ### Historique (30 min)
-- [ ] Vue listant les transactions du client connecté (`v_transactions_frais`, filtré sur son `client_id`), avec montant, frais, date, type
+- [x] Vue `app/Views/client/history.php` listant les transactions du client connecté depuis `v_transactions_frais`, avec montant, frais, date, type, direction (envoi/réception)
+
+---
+
+## Récapitulatif Dev B — Travail effectué (v1)
+
+**Fichiers créés / modifiés :**
+
+| Fichier | Type | Description |
+|---|---|---|
+| `app/Models/ClientModel.php` | Modifié | Ajout : `getByTelephone()`, `getBalance()`, `createClient()` |
+| `app/Models/BaremeFraisModel.php` | Modifié | Ajout : `getFrais()`, `getFeesSchedules()` |
+| `app/Models/TransactionModel.php` | Modifié | Ajout : `getClientTransactions()`, `createTransaction()` |
+| `app/Controllers/Auth.php` | Modifié | Login client auto par téléphone + login admin par email/MDP |
+| `app/Controllers/Client.php` | Modifié | Actions : `dashboard`, `balance`, `deposit/doDeposit`, `withdraw/doWithdraw`, `transfer/doTransfer`, `history` |
+| `app/Controllers/Api.php` | Créé | API AJAX : `getBalance`, `calculateFees` |
+| `app/Controllers/Home.php` | Modifié | Redirection racine `/` vers `client/dashboard` |
+| `app/Views/auth/login.php` | Créé | Page de connexion par numéro de téléphone |
+| `app/Views/client/dashboard.php` | Modifié | Tableau de bord : solde + 5 dernières transactions |
+| `app/Views/client/balance.php` | Créé | Page solde détaillé + infos compte |
+| `app/Views/client/deposit.php` | Créé | Formulaire dépôt + barème des frais |
+| `app/Views/client/withdraw.php` | Créé | Formulaire retrait + calcul frais dynamique + blocage si solde insuffisant |
+| `app/Views/client/transfer.php` | Créé | Formulaire transfert + calcul frais dynamique + auto-création destinataire |
+| `app/Views/client/history.php` | Créé | Historique complet avec badges colorés par type d'opération |
+| `app/Views/layout/client.php` | Modifié | Layout modernisé avec sidebar active link + scripts en fin de body |
 
 ---
 
