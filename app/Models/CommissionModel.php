@@ -48,6 +48,7 @@ class CommissionModel extends Model
                 o.prefixe,
                 o.nom,
                 o.id AS operateur_id,
+                o.est_notre_operateur,
                 COALESCE(ch.pourcentage, 0) AS pourcentage,
                 ch.date_modif
             FROM commissions c

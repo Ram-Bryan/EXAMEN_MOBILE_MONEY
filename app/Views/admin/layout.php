@@ -28,6 +28,9 @@
             <li class="<?= url_is('admin/clients') ? 'active' : '' ?>">
                 <a href="<?= base_url('admin/clients') ?>"><i class="fas fa-users"></i> Comptes Clients</a>
             </li>
+            <li class="<?= url_is('admin/commissions') ? 'active' : '' ?>">
+                <a href="<?= base_url('admin/commissions') ?>"><i class="fas fa-percent"></i> Commissions</a>
+            </li>
             <li class="<?= url_is('admin/gains') ? 'active' : '' ?>">
                 <a href="<?= base_url('admin/gains') ?>"><i class="fas fa-chart-pie"></i> Situation des Gains</a>
             </li>

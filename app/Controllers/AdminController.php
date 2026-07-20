@@ -173,22 +173,41 @@ class AdminController extends BaseController
     // Commissions inter-opérateurs
     // ----------------------------------------------------------------
 
+    public function commissions()
+    {
+        $commissions = $this->commissionModel->getAllCommissions();
+
+        $db = \Config\Database::connect();
+        $historiques = $db->query("
+            SELECT ch.*, c.operateur_destination_id,
+                   o.prefixe, o.nom
+            FROM commissions_historique ch
+            JOIN commissions c ON c.id = ch.commission_id
+            JOIN operateur_prefixes o ON o.id = c.operateur_destination_id
+            ORDER BY o.nom, ch.date_modif DESC
+        ")->getResult();
+
+        return view('admin/commissions', [
+            'commissions'  => $commissions,
+            'historiques'  => $historiques,
+        ]);
+    }
+
     public function updateCommission($operateurId)
     {
         $pourcentage = (float)$this->request->getPost('pourcentage');
+        $redirectBack = $this->request->getPost('redirect_to') ?: '/admin/commissions';
 
         if ($pourcentage < 0 || $pourcentage > 100) {
-            return redirect()->to('/admin/operators/detail/' . $operateurId)
+            return redirect()->to($redirectBack)
                 ->with('error', 'Le pourcentage doit être entre 0 et 100.');
         }
 
-        // Récupère ou crée l'entrée dans commissions
         $commissionId = $this->commissionModel->getOrCreate($operateurId);
 
-        // INSERT dans commissions_historique (jamais d'UPDATE)
         $ok = $this->commissionHistoriqueModel->addPourcentage($commissionId, $pourcentage);
 
-        return redirect()->to('/admin/operators/detail/' . $operateurId)
+        return redirect()->to($redirectBack)
             ->with($ok ? 'success' : 'error', $ok ? 'Commission mise à jour (' . $pourcentage . '%).' : 'Erreur.');
     }
 

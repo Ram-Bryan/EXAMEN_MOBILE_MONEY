@@ -47,6 +47,10 @@ $routes->group('admin', function($routes) {
     // Comptes Clients
     $routes->get('clients', 'AdminController::clients');
 
+    // Commissions inter-opérateurs
+    $routes->get('commissions', 'AdminController::commissions');
+    $routes->post('commissions/update/(:num)', 'AdminController::updateCommission/$1');
+
     // Situation des Gains
     $routes->get('gains', 'AdminController::gains');
 });

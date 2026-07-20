@@ -294,6 +294,7 @@ $typeColors = [
             </div>
             <div class="col-md-6">
                 <form action="<?= base_url('admin/operators/' . $operator->id . '/commission/update') ?>" method="POST" class="d-flex align-items-center gap-2">
+                    <input type="hidden" name="redirect_to" value="<?= base_url('admin/operators/detail/' . $operator->id) ?>">
                     <div class="input-group" style="max-width:220px;">
                         <input type="number" name="pourcentage" class="form-control" min="0" max="100" step="0.01"
                                value="<?= $commission ? $commission->pourcentage : 0 ?>" required>
