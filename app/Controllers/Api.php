@@ -54,8 +54,8 @@ class Api extends BaseController
             ])->setStatusCode(401);
         }
 
-        $typeCode = $this->request->getPost('type_code');
-        $amount = (float)$this->request->getPost('amount');
+        $typeCode = $this->request->getGet('type_code') ?? $this->request->getPost('type_code');
+        $amount = (float)($this->request->getGet('amount') ?? $this->request->getPost('amount'));
         $clientId = $this->session->get('client_id');
 
         if (!$typeCode || $amount <= 0 || !$clientId) {

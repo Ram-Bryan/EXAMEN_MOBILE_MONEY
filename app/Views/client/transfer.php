@@ -121,7 +121,7 @@ function previewTransferFee(amount) {
 
     $.ajax({
         url: '<?= base_url('api/fees/calculate') ?>',
-        method: 'POST',
+        method: 'GET',
         data: {
             type_code: 'TRANSFERT',
             amount: amount
@@ -136,7 +136,6 @@ function previewTransferFee(amount) {
                     $('#totalShow').text('N/A');
                     $('#balanceAlert').addClass('d-none');
                     $('#submitBtn').prop('disabled', true);
-                    notify.show('Aucun barème de frais ne correspond à ce montant', 'error');
                 } else {
                     const fee = parseFloat(response.fee);
                     const total = amount + fee;
@@ -165,21 +164,12 @@ function previewTransferFee(amount) {
 }
 
 $('#transferForm').on('submit', function(e) {
-    e.preventDefault();
-    
     const recipient = $('#recipient_phone').val().trim();
     if (recipient === '<?= esc($phone) ?>') {
-        notify.show('Vous ne pouvez pas effectuer un transfert vers votre propre numéro', 'error');
-        return;
+        e.preventDefault();
+        alert('Vous ne pouvez pas effectuer un transfert vers votre propre numéro');
+        return false;
     }
-
-    submitForm('transferForm', function(response) {
-        if (response.success) {
-            setTimeout(function() {
-                window.location.href = '<?= base_url('client/dashboard') ?>';
-            }, 1000);
-        }
-    });
 });
 </script>
 <?= $this->endSection() ?>
