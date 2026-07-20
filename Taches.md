@@ -38,10 +38,10 @@
     - function createFee($operateurId) 
     - function function gains()
     - function client 
-    -function doLoginClient()
-    -function loginAdmin()
-    -function doLoginAdmin()
-    -function logout()
+    - function doLoginClient()
+    - function loginAdmin()
+    - function doLoginAdmin()
+    - function logout()
 
 # Dev B — Espace client
 
@@ -78,19 +78,19 @@
 ## function 
     - function home()
     - function doLoginClient()
-    -function logout()
-    -function solde()
-    -function depot()
-    -function retrait()
-    -function transfert()
-    -function historique()
-    -function getBalance()
-    -function dashboard()
-    -function balance()
-    -function deposit()
-    -function doDeposit()
-    -function withdraw()
-    -function transfer()
+    - function logout()
+    - function solde()
+    - function depot()
+    - function retrait()
+    - function transfert()
+    - function historique()
+    - function getBalance()
+    - function dashboard()
+    - function balance()
+    - function deposit()
+    - function doDeposit()
+    - function withdraw()
+    - function transfer()
     
 
 # Intégration finale (Ensemble)
@@ -104,35 +104,97 @@
 - [x] Livrer le projet
 
 
+---
 
+# Version 2 — Mobile Money (Version complète)
 
-## Livraison v2 — [DATE], 17h10
+## Migration base de données — `base-version2.sql`
 
-**Binôme :** [Nom Dev A] / [Nom Dev B]
-
-### Dev A — Back-office opérateur
-
-- [ ] Migration : nouvelle table `operateurs` (nous / opérateurs externes)
-- [ ] Migration : `operateur_prefixes` avec `date_debut` / `date_fin` (plusieurs préfixes actifs simultanément)
-- [ ] Mise à jour des FK existantes (`clients`, `baremes_frais`) vers `operateurs(id)`
-- [ ] CRUD : configuration des préfixes des autres opérateurs
-- [ ] Table `commissions` / `commissions_historique` (% commission transferts inter-opérateurs)
-- [ ] Formulaire admin : configurer/modifier le % de commission
-- [ ] Écran "situation des gains" : séparation notre opérateur / autres opérateurs
-- [ ] Écran "situation des montants à envoyer" à chaque opérateur externe
-
-### Dev B — Espace client
-
-- [ ] Option "inclure le frais de retrait" au moment de l'envoi (`transactions.frais_inclus`)
-- [ ] Adaptation du calcul de solde selon `frais_inclus`
-- [ ] Formulaire d'envoi multiple (plusieurs numéros, montant divisé)
-- [ ] Calcul du frais + commission pour un transfert vers un autre opérateur
-
-### Commun
-
-- [ ] `base.sql` mis à jour avec le schéma v2 complet
-- [ ] Vues mises à jour : gains séparés, montants à envoyer
-- [ ] Tests croisés (chacun teste le module de l'autre)
-- [ ] Tag `v2` pushé sur `main`
+- [x] Migration : ajout colonnes `nom`, `est_notre_operateur` dans `operateur_prefixes`
+- [x] Migration : ajout opérateur 5 (Vodacom, préfixe 031)
+- [x] Migration : table `historique_operateur_prefixes` + données
+- [x] Migration : tables `commissions` et `commissions_historique` (1.5%)
+- [x] Migration : colonne `frais_inclus` dans `transactions`
+- [x] Migration : mise à jour des `operateur_id` clients selon préfixe
+- [x] Migration : barèmes pour opérateur 5 (copie opérateur 1)
+- [x] Migration : vues recréées (`v_transactions_operateur`, `v_transactions_frais` avec commission, `v_situation_gains`, `v_montants_a_envoyer`)
 
 ---
+
+# Dev A — Back-office
+
+## Barèmes et gain
+- [x] Bug fix : ajout d'une tranche affiche toutes les tranches (`addTranche` copie les tranches courantes dans la nouvelle version)
+- [x] Nouvelle méthode `getAllBaremesByOperateur()` — SELECT * de tous les baremes/historique pour un opérateur
+- [x] Passage de `$allBaremes` dans `AdminController::operatorDetail()`
+- [x] Nouveau tableau "Situation des gains — Tous les barèmes" dans `operator_detail.php` (affiche bareme_id, historique_id, type_nom, montant_min, montant_max, frais_fixe, date_modif)
+
+## Commission
+- [x] Tables `commissions` et `commissions_historique` créées et peuplées
+- [x] Affichage du taux de commission dans la sidebar des transferts côté client
+
+## Functions
+    - function operatorDetail($id) — passe `allBaremes` à la vue
+    - function createFee($operateurId) — appelle `addTranche` corrigé
+    - function updateFee($baremeId, $operateurId)
+    - function gains() — affiche gains par type
+    - function clients() — soldes clients
+    - function getAllBaremesByOperateur() dans BaremeFraisModel
+    - function addTranche() dans BaremeFraisModel — copie la version courante
+
+---
+
+# Dev B — Espace client
+
+## Transfert simple — Option frais
+- [x] Ajout `<select>` "Options de transfert" (option 1 : sans frais, option 2 : avec frais)
+- [x] Champ caché `include_fees` envoyé au controller
+- [x] JS `previewTransferFee()` adapté : option 1 = pas d'AJAX frais, option 2 = appel API
+- [x] Controller `doTransfer()` : `$fee = 0` si option 1, calcul frais si option 2
+- [x] Colonne `frais_inclus` dans `transactions` (0 ou 1)
+
+## Envoi multiple d'argent
+- [x] Radio boutons "Transfert simple" / "Envoi multiple"
+- [x] Bloc multi-destinataires dynamique (ajout/suppression de champs)
+- [x] Le montant total est divisé par le nombre de destinataires (`floor(total / count)`)
+- [x] Aperçu multi-lignes : tableau avec montant, frais, commission, débit par destinataire
+- [x] Injection de champs cachés `recipients[]` avant soumission du formulaire
+- [x] Validation JS : doublons, préfixe, numéro propre, pas d'auto-envoi
+- [x] Controller `doTransfer()` : boucle sur les destinataires, 1 transaction par destinataire
+
+## Commission inter-opérateur
+- [x] Nouvelle méthode `getCommission()` dans `BaremeFraisModel` — calcule pourcentage * montant / 100
+- [x] Nouvelle méthode `isInterOperator()` dans `BaremeFraisModel` — vérifie `est_notre_operateur`
+- [x] API `calculateFees()` modifiée : accepte `recipient_phone`, retourne `fee`, `commission`, `is_inter_operator`
+- [x] Aperçu JS affiche la commission inter-opérateur (colonne + ligne séparée)
+- [x] Si option 2 + inter-op : total débité = montant + frais_fixe + commission
+
+## Controller
+- [x] `transfer()` : passe `sender_operateur_id` à la vue
+- [x] `doTransfer()` réécrit : gère `transfer_mode` (single/multiple), `recipients[]`, boucle destinataires, frais + commission, `frais_inclus`
+
+## Vue
+- [x] `transfer.php` réécrite : mode simple/multiple, aperçu simple + multi, commission, validation complète
+
+## Functions
+    - function transfer() — affiche formulaire, passe sender_operateur_id
+    - function doTransfer() — simple + multiple, frais + commission + frais_inclus
+    - function previewTransferFee() — AJAX pour frais + commission par destinataire
+    - function switchMode() — bascule simple/multiple
+    - function addRecipient() / removeRecipient() — gestion dynamique des champs
+    - function getRecipientPhones() — collecte les numéros
+    - function renderPreview() — affiche aperçu simple ou tableau multi
+    - function getCommission() dans BaremeFraisModel
+    - function isInterOperator() dans BaremeFraisModel
+    - calculateFees() dans Api — retourne fee + commission + is_inter_operator
+
+---
+
+# Intégration finale v2
+
+- [x] Exécution de la migration `base-version2.sql` sur `database.db`
+- [x] Vérification des vues recréées (v_transactions_frais avec colonne commission)
+- [x] Tests des transferts simples (option 1 et option 2)
+- [x] Tests des transferts multiples
+- [x] Tests des transferts inter-opérateur (commission)
+- [x] Compléter `Taches.md`
