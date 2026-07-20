@@ -37,7 +37,8 @@ class MigrationV2 extends Migration
         // ============================================================
         // 3. AJOUT DE NOUVEAUX OPÉRATEURS (avec OR IGNORE)
         // ============================================================
-        $this->db->query("INSERT OR IGNORE INTO operateur_prefixes (id, prefixe, nom, est_notre_operateur) VALUES (5, '031', 'Vodacom', 0)");
+        // Operator 5 (Vodacom) is now inserted by the seeder
+        // $this->db->query("INSERT OR IGNORE INTO operateur_prefixes (id, prefixe, nom, est_notre_operateur) VALUES (5, '031', 'Vodacom', 0)");
 
         // ============================================================
         // 4. TABLE historique_operateur_prefixes
@@ -108,8 +109,8 @@ class MigrationV2 extends Migration
             SELECT id FROM operateur_prefixes WHERE est_notre_operateur = 0
         ");
         $this->db->query("
-            INSERT INTO commissions_historique (commission_id, pourcentage)
-            SELECT id, 1.5 FROM commissions
+            INSERT INTO commissions_historique (commission_id, pourcentage, date_modif)
+            SELECT id, 1.5, '2026-01-01 00:00:00' FROM commissions
         ");
 
         // ============================================================

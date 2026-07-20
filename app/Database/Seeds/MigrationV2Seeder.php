@@ -11,21 +11,9 @@ class MigrationV2Seeder extends Seeder
         $db = \Config\Database::connect();
 
         // ============================================================
-        // 1. MISE À JOUR DES OPÉRATEURS EXISTANTS
+        // 1. MISE À JOUR DES OPÉRATEURS EXISTANTS (déjà fait par le seeder principal)
         // ============================================================
-        $db->query("UPDATE operateur_prefixes SET nom = 'Mobile Money (Notre Opérateur)', est_notre_operateur = 1 WHERE id = 1");
-        $db->query("UPDATE operateur_prefixes SET nom = 'Airtel' WHERE id = 2");
-        $db->query("UPDATE operateur_prefixes SET nom = 'Telma' WHERE id = 3");
-        $db->query("UPDATE operateur_prefixes SET nom = 'Bip' WHERE id = 4");
-
-        // ============================================================
-        // 2. AJOUT DE NOUVEAUX OPÉRATEURS (si pas déjà présents)
-        // ============================================================
-        // Vérifier si l'opérateur 5 existe déjà
-        $exists = $db->query("SELECT id FROM operateur_prefixes WHERE id = 5")->getRow();
-        if (!$exists) {
-            $db->query("INSERT INTO operateur_prefixes (id, prefixe, nom, est_notre_operateur) VALUES (5, '031', 'Vodacom', 0)");
-        }
+        // Les opérateurs sont déjà mis à jour avec nom et est_notre_operateur par OperateurPrefixesSeeder
 
         // ============================================================
         // 3. INSERTION DES PRÉFIXES HISTORIQUES
@@ -61,8 +49,8 @@ class MigrationV2Seeder extends Seeder
         
         // Insérer l'historique des commissions (1.5% pour chaque commission)
         $db->query("
-            INSERT INTO commissions_historique (commission_id, pourcentage)
-            SELECT id, 1.5 FROM commissions
+            INSERT INTO commissions_historique (commission_id, pourcentage, date_modif)
+            SELECT id, 1.5, '2026-01-01 00:00:00' FROM commissions
         ");
 
         // ============================================================

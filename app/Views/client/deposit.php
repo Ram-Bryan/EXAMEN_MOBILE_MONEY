@@ -117,8 +117,10 @@ function previewFee(amount) {
             if (response.success) {
                 $('#feePreviewBox').removeClass('d-none');
                 $('#amountShow').text(new Intl.NumberFormat('fr-MG').format(amount) + ' Ar');
-                $('#feeShow').text('0 Ar (Pris en charge)');
-                $('#totalShow').text(new Intl.NumberFormat('fr-MG').format(amount) + ' Ar');
+                var fee = response.fee ? new Intl.NumberFormat('fr-MG').format(response.fee) + ' Ar' : '0 Ar';
+                $('#feeShow').text(fee);
+                var total = amount + (response.fee || 0);
+                $('#totalShow').text(new Intl.NumberFormat('fr-MG').format(total) + ' Ar');
             } else {
                 $('#feePreviewBox').addClass('d-none');
             }

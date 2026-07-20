@@ -86,23 +86,23 @@ DELETE FROM commissions;
 INSERT INTO commissions (operateur_destination_id) VALUES
 (2), (3), (4), (5);
 
-INSERT INTO commissions_historique (commission_id, pourcentage) VALUES
-(1, 1.5),
-(2, 1.5),
-(3, 1.5),
-(4, 1.5);
+INSERT INTO commissions_historique (commission_id, pourcentage, date_modif) VALUES
+(1, 1.5, '2026-01-01 00:00:00'),
+(2, 1.5, '2026-01-01 00:00:00'),
+(3, 1.5, '2026-01-01 00:00:00'),
+(4, 1.5, '2026-01-01 00:00:00');
 
 -- ============================================================
 -- 9. AJOUT DES BARÈMES POUR L'OPÉRATEUR 5
---    (Copie des tranches de l'opérateur 1)
+--    (Copie des tranches de l'opérateur 1 pour les 3 types)
 -- ============================================================
--- Insérer les barèmes (lignes maîtresses)
+-- Insérer les barèmes (lignes maîtresses) pour l'opérateur 5
 INSERT INTO baremes_frais (id, type_operation_id, operateur_id) VALUES
 (13, 1, 5),
 (14, 2, 5),
 (15, 3, 5);
 
--- Copier les tranches depuis l'historique de l'opérateur 1
+-- Copier les tranches depuis l'historique de l'opérateur 1 (pour les 3 types)
 INSERT INTO baremes_frais_historique (bareme_id, montant_min, montant_max, frais_fixe)
 SELECT
     new.id,
