@@ -244,14 +244,15 @@ class Client extends BaseController
             'page_title' => 'Transfert',
             'phone'      => $this->session->get('phone'),
             'balance'    => $balance,
-            'fees'       => $fees
+            'fees'       => $fees,
+            'sender_operateur_id' => $client->operateur_id,
         ];
 
         return view('client/transfer', $data);
     }
 
     /**
-     * Exécuter le Transfert.
+     * Exécuter le Transfert (simple ou multiple).
      */
     public function doTransfer()
     {
@@ -260,32 +261,35 @@ class Client extends BaseController
         }
 
         $amount = (float)$this->request->getPost('amount');
-        $recipientPhone = trim($this->request->getPost('recipient_phone'));
         $senderId = $this->session->get('client_id');
         $senderPhone = $this->session->get('phone');
+        $includeFees = $this->request->getPost('include_fees');
+        $transferMode = $this->request->getPost('transfer_mode') ?? 'single';
+        $recipientsRaw = $this->request->getPost('recipients');
+        $recipientPhone = trim($this->request->getPost('recipient_phone') ?? '');
+
+        if ($transferMode === 'multiple' && is_array($recipientsRaw)) {
+            $recipients = array_filter(array_map('trim', $recipientsRaw), fn($p) => $p !== '');
+        } else {
+            $recipients = $recipientPhone !== '' ? [$recipientPhone] : [];
+        }
 
         if ($amount <= 0) {
             return redirect()->back()->withInput()->with('error', 'Montant invalide.');
         }
 
-        if (!preg_match('/^0(33|34|37|38)\d{7}$/', $recipientPhone)) {
-            return redirect()->back()->withInput()->with('error', 'Numéro de téléphone invalide. Le numéro doit faire 10 chiffres et commencer par 033, 034, 037 ou 038.');
-        }
-
-        if ($recipientPhone === $senderPhone) {
-            return redirect()->back()->withInput()->with('error', 'Vous ne pouvez pas effectuer un transfert vers votre propre numéro.');
-        }
-
-        $recipient = $this->clientModel->getByTelephone($recipientPhone);
-        if (!$recipient) {
-            return redirect()->back()->withInput()->with('error', 'Numéro destinataire introuvable. Le destinataire doit être un client existant.');
+        if (empty($recipients)) {
+            return redirect()->back()->withInput()->with('error', 'Veuillez saisir au moins un numéro de destinataire.');
         }
 
         $sender = $this->clientModel->find($senderId);
+        if (!$sender) {
+            return redirect()->back()->withInput()->with('error', 'Client introuvable.');
+        }
 
         $balance = $this->clientModel->getBalance($senderId);
         if ($balance <= 0) {
-            return redirect()->back()->withInput()->with('error', 'Solde insuffisant ou inexistant. Veuillez effectuer un dépôt d\'abord.');
+            return redirect()->back()->withInput()->with('error', 'Solde insuffisant. Veuillez effectuer un dépôt d\'abord.');
         }
 
         $typeOp = $this->typeOperationModel->where('code', 'TRANSFERT')->first();
@@ -293,29 +297,95 @@ class Client extends BaseController
             return redirect()->back()->withInput()->with('error', 'Type d\'opération de transfert inexistant.');
         }
 
-        $includeFees = $this->request->getPost('include_fees');
-        $fee = 0;
+        $validPrefixes = ['031', '032', '033', '034', '037', '038'];
+        $resolvedRecipients = [];
 
-        if ($includeFees == '2') {
-            $fee = $this->baremeFraisModel->getFrais($typeOp->id, $sender->operateur_id, $amount);
-            if ($fee === null) {
-                return redirect()->back()->withInput()->with('error', 'Aucun barème de frais ne couvre ce montant.');
+        foreach ($recipients as $phone) {
+            if (!preg_match('/^0\d{9}$/', $phone)) {
+                return redirect()->back()->withInput()->with('error', 'Numéro invalide : ' . $phone . '. Le numéro doit faire 10 chiffres.');
+            }
+            if (!in_array(substr($phone, 0, 3), $validPrefixes)) {
+                return redirect()->back()->withInput()->with('error', 'Préfixe invalide pour le numéro : ' . $phone);
+            }
+            if ($phone === $senderPhone) {
+                return redirect()->back()->withInput()->with('error', 'Vous ne pouvez pas envoyer à votre propre numéro (' . $phone . ').');
+            }
+            $recipient = $this->clientModel->getByTelephone($phone);
+            if (!$recipient) {
+                return redirect()->back()->withInput()->with('error', 'Le numéro ' . $phone . ' n\'est pas un client existant.');
+            }
+            $resolvedRecipients[] = ['phone' => $phone, 'client' => $recipient];
+        }
+
+        $count = count($resolvedRecipients);
+        $amountPerRecipient = ($transferMode === 'multiple' && $count > 1)
+            ? floor($amount / $count)
+            : $amount;
+
+        if ($amountPerRecipient <= 0) {
+            return redirect()->back()->withInput()->with('error', 'Le montant par destinataire est trop faible.');
+        }
+
+        $totalDebit = 0;
+        $transactionsData = [];
+
+        foreach ($resolvedRecipients as $entry) {
+            $recipientClient = $entry['client'];
+            $fee = 0;
+            $commission = 0;
+
+            if ($includeFees == '2') {
+                $fee = $this->baremeFraisModel->getFrais($typeOp->id, $sender->operateur_id, $amountPerRecipient);
+                if ($fee === null) {
+                    return redirect()->back()->withInput()->with('error', 'Aucun barème de frais ne couvre le montant de ' . number_format($amountPerRecipient, 0, ',', ' ') . ' Ar.');
+                }
+
+                if ($this->baremeFraisModel->isInterOperator($sender->operateur_id, $recipientClient->operateur_id)) {
+                    $commission = $this->baremeFraisModel->getCommission($recipientClient->operateur_id, $amountPerRecipient);
+                }
+            }
+
+            $debitPerRecipient = $amountPerRecipient + $fee + $commission;
+            $totalDebit += $debitPerRecipient;
+
+            $transactionsData[] = [
+                'recipient'     => $recipientClient,
+                'phone'         => $entry['phone'],
+                'amount'        => $amountPerRecipient,
+                'fee'           => $fee,
+                'commission'    => $commission,
+                'debit'         => $debitPerRecipient,
+            ];
+        }
+
+        if ($totalDebit > $balance) {
+            return redirect()->back()->withInput()->with('error', 'Solde insuffisant. Le total débité (' . number_format($totalDebit, 0, ',', ' ') . ' Ar) dépasse votre solde (' . number_format($balance, 0, ',', ' ') . ' Ar).');
+        }
+
+        $fraisInclus = ($includeFees == '2') ? 1 : 0;
+        $insertedCount = 0;
+
+        foreach ($transactionsData as $txData) {
+            $ok = $this->transactionModel->createTransaction(
+                $typeOp->id,
+                $senderId,
+                $txData['recipient']->id,
+                $txData['amount'],
+                $fraisInclus
+            );
+            if ($ok) {
+                $insertedCount++;
             }
         }
 
-        $totalTransfer = $amount + $fee;
-
-        if ($totalTransfer > $balance) {
-            return redirect()->back()->withInput()->with('error', 'Solde insuffisant. Le transfert' . ($fee > 0 ? ' avec frais' : '') . ' (' . number_format($totalTransfer, 0, ',', ' ') . ' Ar) dépasse votre solde disponible (' . number_format($balance, 0, ',', ' ') . ' Ar).');
+        if ($insertedCount === $count) {
+            $msg = $count === 1
+                ? 'Transfert de ' . number_format($amountPerRecipient, 0, ',', ' ') . ' Ar vers ' . $resolvedRecipients[0]['phone'] . ' effectué avec succès.'
+                : 'Transfert multiple de ' . number_format($amount, 0, ',', ' ') . ' Ar vers ' . $count . ' destinataires effectué avec succès.';
+            return redirect()->to('/client/dashboard')->with('success', $msg);
         }
 
-        $inserted = $this->transactionModel->createTransaction($typeOp->id, $senderId, $recipient->id, $amount);
-
-        if ($inserted) {
-            return redirect()->to('/client/dashboard')->with('success', 'Transfert de ' . number_format($amount, 0, ',', ' ') . ' Ar vers ' . $recipientPhone . ' effectué avec succès.');
-        }
-
-        return redirect()->back()->withInput()->with('error', 'Erreur lors du transfert.');
+        return redirect()->back()->withInput()->with('error', 'Erreur lors du transfert. Seulement ' . $insertedCount . '/' . $count . ' transactions effectuées.');
     }
 
     /**

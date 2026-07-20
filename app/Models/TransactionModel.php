@@ -11,7 +11,7 @@ class TransactionModel extends Model
     protected $useAutoIncrement = true;
     protected $returnType       = 'object';
     protected $useSoftDeletes   = false;
-    protected $allowedFields    = ['type_operation_id', 'expediteur_id', 'destinataire_id', 'montant_brut', 'date_transaction'];
+    protected $allowedFields    = ['type_operation_id', 'expediteur_id', 'destinataire_id', 'montant_brut', 'date_transaction', 'frais_inclus'];
     protected $useTimestamps    = false;
     protected $createdField     = 'date_transaction';
     protected $updatedField     = '';
@@ -81,11 +81,12 @@ class TransactionModel extends Model
         return $results;
     }
 
-    public function createTransaction(int $typeOperationId, ?int $expediteurId, ?int $destinataireId, float $montantBrut)
+    public function createTransaction(int $typeOperationId, ?int $expediteurId, ?int $destinataireId, float $montantBrut, int $fraisInclus = 0)
     {
         $data = [
             'type_operation_id' => $typeOperationId,
             'montant_brut'      => $montantBrut,
+            'frais_inclus'      => $fraisInclus,
             'date_transaction'  => date('Y-m-d H:i:s')
         ];
         

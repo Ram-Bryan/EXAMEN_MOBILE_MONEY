@@ -56,6 +56,7 @@ class Api extends BaseController
 
         $typeCode = $this->request->getGet('type_code') ?? $this->request->getPost('type_code');
         $amount = (float)($this->request->getGet('amount') ?? $this->request->getPost('amount'));
+        $recipientPhone = $this->request->getGet('recipient_phone') ?? $this->request->getPost('recipient_phone');
         $clientId = $this->session->get('client_id');
 
         if (!$typeCode || $amount <= 0 || !$clientId) {
@@ -65,7 +66,6 @@ class Api extends BaseController
             ]);
         }
 
-        // Fetch client details
         $client = $this->clientModel->find($clientId);
         if (!$client) {
             return $this->response->setJSON([
@@ -74,7 +74,6 @@ class Api extends BaseController
             ]);
         }
 
-        // Fetch operation type
         $typeOp = $this->typeOperationModel->where('code', $typeCode)->first();
         if (!$typeOp) {
             return $this->response->setJSON([
@@ -83,12 +82,25 @@ class Api extends BaseController
             ]);
         }
 
-        // Calculate fee via model
         $fee = $this->baremeFraisModel->getFrais($typeOp->id, $client->operateur_id, $amount);
 
+        $commission = 0;
+        $isInterOperator = false;
+        if ($recipientPhone && $typeCode === 'TRANSFERT') {
+            $recipient = $this->clientModel->getByTelephone($recipientPhone);
+            if ($recipient) {
+                $isInterOperator = $this->baremeFraisModel->isInterOperator($client->operateur_id, $recipient->operateur_id);
+                if ($isInterOperator) {
+                    $commission = $this->baremeFraisModel->getCommission($recipient->operateur_id, $amount);
+                }
+            }
+        }
+
         return $this->response->setJSON([
-            'success' => true,
-            'fee'     => $fee
+            'success'          => true,
+            'fee'              => $fee,
+            'commission'       => $commission,
+            'is_inter_operator' => $isInterOperator
         ]);
     }
 }
