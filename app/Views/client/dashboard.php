@@ -156,17 +156,7 @@
 
 <script>
 function refreshBalance() {
-    $.ajax({
-        url: '<?= base_url('api/client/balance') ?>',
-        method: 'GET',
-        success: function(data) {
-            $('.stats-card .number').text(new Intl.NumberFormat('fr-MG').format(data.balance) + ' Ar');
-            notify.show('Solde actualisé avec succès', 'success');
-        },
-        error: function() {
-            notify.show('Erreur lors de l\'actualisation du solde', 'error');
-        }
-    });
+    window.location.reload();
 }
 </script>
 <?= $this->endSection() ?>

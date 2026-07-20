@@ -113,7 +113,7 @@ function previewWithdrawFee(amount) {
 
     $.ajax({
         url: '<?= base_url('api/fees/calculate') ?>',
-        method: 'POST',
+        method: 'GET',
         data: {
             type_code: 'RETRAIT',
             amount: amount
@@ -128,7 +128,6 @@ function previewWithdrawFee(amount) {
                     $('#totalShow').text('N/A');
                     $('#balanceAlert').addClass('d-none');
                     $('#submitBtn').prop('disabled', true);
-                    notify.show('Aucun barème de frais ne correspond à ce montant', 'error');
                 } else {
                     const fee = parseFloat(response.fee);
                     const total = amount + fee;
@@ -155,16 +154,5 @@ function previewWithdrawFee(amount) {
         }
     });
 }
-
-$('#withdrawForm').on('submit', function(e) {
-    e.preventDefault();
-    submitForm('withdrawForm', function(response) {
-        if (response.success) {
-            setTimeout(function() {
-                window.location.href = '<?= base_url('client/dashboard') ?>';
-            }, 1000);
-        }
-    });
-});
 </script>
 <?= $this->endSection() ?>

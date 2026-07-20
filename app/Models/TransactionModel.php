@@ -52,19 +52,34 @@ class TransactionModel extends Model
             $sql .= " LIMIT " . (int)$limit;
         }
         
-        $query = $db->query($sql, [$clientId, $clientId]);
-        return $query->getResult();
+        $results = $db->query($sql, [$clientId, $clientId])->getResult();
+        
+        // Fallback pour les frais manquants (dus aux dates)
+        $baremeModel = new \App\Models\BaremeFraisModel();
+        foreach ($results as $tx) {
+            if ($tx->frais_applique === null && $tx->type_code !== 'DEPOT') {
+                $tx->frais_applique = (float)$baremeModel->getFrais($tx->type_operation_id, $tx->operateur_id, $tx->montant_brut);
+            }
+        }
+        
+        return $results;
     }
 
     public function createTransaction(int $typeOperationId, ?int $expediteurId, ?int $destinataireId, float $montantBrut)
     {
         $data = [
             'type_operation_id' => $typeOperationId,
-            'expediteur_id'     => $expediteurId,
-            'destinataire_id'   => $destinataireId,
             'montant_brut'      => $montantBrut,
             'date_transaction'  => date('Y-m-d H:i:s')
         ];
+        
+        if ($expediteurId !== null) {
+            $data['expediteur_id'] = $expediteurId;
+        }
+        if ($destinataireId !== null) {
+            $data['destinataire_id'] = $destinataireId;
+        }
+        
         return $this->insert($data, true);
     }
 }

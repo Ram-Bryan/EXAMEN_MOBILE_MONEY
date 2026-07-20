@@ -124,45 +124,30 @@ class Client extends BaseController
     public function doDeposit()
     {
         if (!$this->checkAuth()) {
-            return $this->response->setJSON([
-                'success' => false,
-                'message' => 'Non authentifié'
-            ])->setStatusCode(401);
+            return redirect()->to('/login/client')->with('error', 'Non authentifié');
         }
 
         $amount = (float)$this->request->getPost('amount');
         $clientId = $this->session->get('client_id');
 
         if ($amount <= 0) {
-            return $this->response->setJSON([
-                'success' => false,
-                'message' => 'Montant invalide.'
-            ]);
+            return redirect()->back()->withInput()->with('error', 'Montant invalide.');
         }
 
         // Fetch type operation DEPOT
         $typeOp = $this->typeOperationModel->where('code', 'DEPOT')->first();
         if (!$typeOp) {
-            return $this->response->setJSON([
-                'success' => false,
-                'message' => 'Type d\'opération de dépôt inexistant.'
-            ]);
+            return redirect()->back()->withInput()->with('error', 'Type d\'opération de dépôt inexistant.');
         }
 
         // Create transaction
         $inserted = $this->transactionModel->createTransaction($typeOp->id, null, $clientId, $amount);
 
         if ($inserted) {
-            return $this->response->setJSON([
-                'success' => true,
-                'message' => 'Dépôt de ' . number_format($amount, 0, ',', ' ') . ' Ar effectué avec succès.'
-            ]);
+            return redirect()->to('/client/dashboard')->with('success', 'Dépôt de ' . number_format($amount, 0, ',', ' ') . ' Ar effectué avec succès.');
         }
 
-        return $this->response->setJSON([
-            'success' => false,
-            'message' => 'Erreur lors de l\'enregistrement de la transaction.'
-        ]);
+        return redirect()->back()->withInput()->with('error', 'Erreur lors de l\'enregistrement de la transaction.');
     }
 
     /**
@@ -195,46 +180,31 @@ class Client extends BaseController
     public function doWithdraw()
     {
         if (!$this->checkAuth()) {
-            return $this->response->setJSON([
-                'success' => false,
-                'message' => 'Non authentifié'
-            ])->setStatusCode(401);
+            return redirect()->to('/login/client')->with('error', 'Non authentifié');
         }
 
         $amount = (float)$this->request->getPost('amount');
         $clientId = $this->session->get('client_id');
 
         if ($amount <= 0) {
-            return $this->response->setJSON([
-                'success' => false,
-                'message' => 'Montant invalide.'
-            ]);
+            return redirect()->back()->withInput()->with('error', 'Montant invalide.');
         }
 
         $client = $this->clientModel->find($clientId);
         if (!$client) {
-            return $this->response->setJSON([
-                'success' => false,
-                'message' => 'Client introuvable.'
-            ]);
+            return redirect()->back()->withInput()->with('error', 'Client introuvable.');
         }
 
         // Fetch type operation RETRAIT
         $typeOp = $this->typeOperationModel->where('code', 'RETRAIT')->first();
         if (!$typeOp) {
-            return $this->response->setJSON([
-                'success' => false,
-                'message' => 'Type d\'opération de retrait inexistant.'
-            ]);
+            return redirect()->back()->withInput()->with('error', 'Type d\'opération de retrait inexistant.');
         }
 
         // Calculate fee
         $fee = $this->baremeFraisModel->getFrais($typeOp->id, $client->operateur_id, $amount);
         if ($fee === null) {
-            return $this->response->setJSON([
-                'success' => false,
-                'message' => 'Aucun barème de frais ne couvre ce montant.'
-            ]);
+            return redirect()->back()->withInput()->with('error', 'Aucun barème de frais ne couvre ce montant.');
         }
 
         $totalWithdraw = $amount + $fee;
@@ -242,26 +212,17 @@ class Client extends BaseController
         // Verify balance
         $balance = $this->clientModel->getBalance($clientId);
         if ($totalWithdraw > $balance) {
-            return $this->response->setJSON([
-                'success' => false,
-                'message' => 'Solde insuffisant. Le montant avec frais (' . number_format($totalWithdraw, 0, ',', ' ') . ' Ar) dépasse votre solde disponible (' . number_format($balance, 0, ',', ' ') . ' Ar).'
-            ]);
+            return redirect()->back()->withInput()->with('error', 'Solde insuffisant. Le montant avec frais (' . number_format($totalWithdraw, 0, ',', ' ') . ' Ar) dépasse votre solde disponible (' . number_format($balance, 0, ',', ' ') . ' Ar).');
         }
 
         // Insert transaction
         $inserted = $this->transactionModel->createTransaction($typeOp->id, $clientId, null, $amount);
 
         if ($inserted) {
-            return $this->response->setJSON([
-                'success' => true,
-                'message' => 'Retrait de ' . number_format($amount, 0, ',', ' ') . ' Ar (frais: ' . number_format($fee, 0, ',', ' ') . ' Ar) effectué avec succès.'
-            ]);
+            return redirect()->to('/client/dashboard')->with('success', 'Retrait de ' . number_format($amount, 0, ',', ' ') . ' Ar (frais: ' . number_format($fee, 0, ',', ' ') . ' Ar) effectué avec succès.');
         }
 
-        return $this->response->setJSON([
-            'success' => false,
-            'message' => 'Erreur lors du retrait.'
-        ]);
+        return redirect()->back()->withInput()->with('error', 'Erreur lors du retrait.');
     }
 
     /**
@@ -295,10 +256,7 @@ class Client extends BaseController
     public function doTransfer()
     {
         if (!$this->checkAuth()) {
-            return $this->response->setJSON([
-                'success' => false,
-                'message' => 'Non authentifié'
-            ])->setStatusCode(401);
+            return redirect()->to('/login/client')->with('error', 'Non authentifié');
         }
 
         $amount = (float)$this->request->getPost('amount');
@@ -307,43 +265,17 @@ class Client extends BaseController
         $senderPhone = $this->session->get('phone');
 
         if ($amount <= 0) {
-            return $this->response->setJSON([
-                'success' => false,
-                'message' => 'Montant invalide.'
-            ]);
+            return redirect()->back()->withInput()->with('error', 'Montant invalide.');
         }
 
         if ($recipientPhone === $senderPhone) {
-            return $this->response->setJSON([
-                'success' => false,
-                'message' => 'Vous ne pouvez pas effectuer un transfert vers votre propre numéro.'
-            ]);
+            return redirect()->back()->withInput()->with('error', 'Vous ne pouvez pas effectuer un transfert vers votre propre numéro.');
         }
 
         // Find or auto-create recipient
         $recipient = $this->clientModel->getByTelephone($recipientPhone);
         if (!$recipient) {
-            // Validate prefix for auto-registration
-            $prefixes = $this->prefixModel->findAll();
-            $matchedPrefix = null;
-            
-            foreach ($prefixes as $p) {
-                if (strpos($recipientPhone, $p->prefixe) === 0) {
-                    $matchedPrefix = $p;
-                    break;
-                }
-            }
-            
-            if (!$matchedPrefix) {
-                return $this->response->setJSON([
-                    'success' => false,
-                    'message' => 'Numéro destinataire invalide (opérateur non supporté).'
-                ]);
-            }
-
-            // Auto-create recipient client
-            $recipientId = $this->clientModel->createClient($recipientPhone, $matchedPrefix->id);
-            $recipient = $this->clientModel->find($recipientId);
+            return redirect()->back()->withInput()->with('error', 'Numéro destinataire introuvable. Le destinataire doit être un client existant.');
         }
 
         $sender = $this->clientModel->find($senderId);
@@ -351,19 +283,13 @@ class Client extends BaseController
         // Fetch type operation TRANSFERT
         $typeOp = $this->typeOperationModel->where('code', 'TRANSFERT')->first();
         if (!$typeOp) {
-            return $this->response->setJSON([
-                'success' => false,
-                'message' => 'Type d\'opération de transfert inexistant.'
-            ]);
+            return redirect()->back()->withInput()->with('error', 'Type d\'opération de transfert inexistant.');
         }
 
         // Calculate fee
         $fee = $this->baremeFraisModel->getFrais($typeOp->id, $sender->operateur_id, $amount);
         if ($fee === null) {
-            return $this->response->setJSON([
-                'success' => false,
-                'message' => 'Aucun barème de frais ne couvre ce montant.'
-            ]);
+            return redirect()->back()->withInput()->with('error', 'Aucun barème de frais ne couvre ce montant.');
         }
 
         $totalTransfer = $amount + $fee;
@@ -371,26 +297,17 @@ class Client extends BaseController
         // Verify balance
         $balance = $this->clientModel->getBalance($senderId);
         if ($totalTransfer > $balance) {
-            return $this->response->setJSON([
-                'success' => false,
-                'message' => 'Solde insuffisant. Le transfert avec frais (' . number_format($totalTransfer, 0, ',', ' ') . ' Ar) dépasse votre solde disponible (' . number_format($balance, 0, ',', ' ') . ' Ar).'
-            ]);
+            return redirect()->back()->withInput()->with('error', 'Solde insuffisant. Le transfert avec frais (' . number_format($totalTransfer, 0, ',', ' ') . ' Ar) dépasse votre solde disponible (' . number_format($balance, 0, ',', ' ') . ' Ar).');
         }
 
         // Insert transaction
         $inserted = $this->transactionModel->createTransaction($typeOp->id, $senderId, $recipient->id, $amount);
 
         if ($inserted) {
-            return $this->response->setJSON([
-                'success' => true,
-                'message' => 'Transfert de ' . number_format($amount, 0, ',', ' ') . ' Ar vers ' . $recipientPhone . ' effectué avec succès.'
-            ]);
+            return redirect()->to('/client/dashboard')->with('success', 'Transfert de ' . number_format($amount, 0, ',', ' ') . ' Ar vers ' . $recipientPhone . ' effectué avec succès.');
         }
 
-        return $this->response->setJSON([
-            'success' => false,
-            'message' => 'Erreur lors du transfert.'
-        ]);
+        return redirect()->back()->withInput()->with('error', 'Erreur lors du transfert.');
     }
 
     /**

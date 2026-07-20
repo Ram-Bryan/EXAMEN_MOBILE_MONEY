@@ -61,5 +61,5 @@ $routes->group('client', function($routes) {
 // ==================== API ROUTES (protégées par ClientFilter) ====================
 $routes->group('api', function($routes) {
     $routes->get('client/balance', 'Api::getBalance');
-    $routes->post('fees/calculate', 'Api::calculateFees');
+    $routes->get('fees/calculate', 'Api::calculateFees');
 });

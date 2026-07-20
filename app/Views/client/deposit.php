@@ -108,7 +108,7 @@ function previewFee(amount) {
 
     $.ajax({
         url: '<?= base_url('api/fees/calculate') ?>',
-        method: 'POST',
+        method: 'GET',
         data: {
             type_code: 'DEPOT',
             amount: amount
@@ -117,31 +117,6 @@ function previewFee(amount) {
             if (response.success) {
                 $('#feePreviewBox').removeClass('d-none');
                 $('#amountShow').text(new Intl.NumberFormat('fr-MG').format(amount) + ' Ar');
-                $('#feeShow').text(new Intl.NumberFormat('fr-MG').format(response.fee) + ' Ar');
-                
-                // For deposit, check if fee is applied
-                // In Mobile Money, does deposit subtract fee or add fee?
-                // Let's assume deposit adds the amount to the user's account, and the fee is applied.
-                // Wait! "Dépôt : destinataire_id = client_id, expediteur_id = NULL".
-                // Since expediteur_id is NULL, the client is NOT the sender. The client is the recipient.
-                // The recipient does NOT pay the fee! In Mobile Money, the sender pays the fee. 
-                // Since expediteur_id is NULL (external deposit / cash-in), there is no expediteur client to pay the fee!
-                // So the client receives the exact amount (montant_brut), and the operator records the fee as gains (paid by operator or from cash-in).
-                // Or if there is a fee, the receiver gets montant_brut - fee?
-                // Let's see: in v_transactions_frais, the fee is applied.
-                // In balance calculation:
-                // `WHEN tf.destinataire_id = c.id THEN tf.montant_brut`
-                // So when destinataire_id = c.id, the client's balance increases by `montant_brut` (frais is NOT subtracted!).
-                // `WHEN tf.expediteur_id = c.id THEN -(tf.montant_brut + COALESCE(tf.frais_applique, 0))`
-                // So when expediteur_id = c.id, the client's balance decreases by `montant_brut + frais_applique`.
-                // This means the recipient receives the FULL `montant_brut`, and the sender pays the fee!
-                // Since expediteur_id is NULL, the sender is external, so the client receives exactly `montant_brut`.
-                // Let's reflect this in the deposit form: fee = 0 Ar for the recipient client!
-                // But wait! If the operator applies a fee, who pays it?
-                // Since expediteur_id is NULL, it doesn't affect any client's balance! It only generates gains for the operator.
-                // Therefore, for the client, the deposit is indeed free (net credit = amount).
-                // Let's display this clearly to the user.
-                
                 $('#feeShow').text('0 Ar (Pris en charge)');
                 $('#totalShow').text(new Intl.NumberFormat('fr-MG').format(amount) + ' Ar');
             } else {
@@ -153,16 +128,5 @@ function previewFee(amount) {
         }
     });
 }
-
-$('#depositForm').on('submit', function(e) {
-    e.preventDefault();
-    submitForm('depositForm', function(response) {
-        if (response.success) {
-            setTimeout(function() {
-                window.location.href = '<?= base_url('client/dashboard') ?>';
-            }, 1000);
-        }
-    });
-});
 </script>
 <?= $this->endSection() ?>
