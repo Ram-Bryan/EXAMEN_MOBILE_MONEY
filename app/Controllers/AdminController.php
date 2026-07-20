@@ -228,7 +228,6 @@ class AdminController extends BaseController
 
     public function gains()
     {
-        // Vérifier si les vues v2 existent
         $gainsSepaRes = [];
         $montantsAEnvoyer = [];
 
@@ -236,7 +235,6 @@ class AdminController extends BaseController
             $gainsSepaRes = $this->transactionModel->getGainsSepares();
             $montantsAEnvoyer = $this->transactionModel->getMontantsAEnvoyer();
         } catch (\Exception $e) {
-            // Fallback si les vues v2 ne sont pas encore créées
             $gainsSepaRes = [];
             $montantsAEnvoyer = [];
         }
@@ -245,6 +243,27 @@ class AdminController extends BaseController
             'gains'            => $this->transactionModel->getGainsParType(),
             'gainsSepares'     => $gainsSepaRes,
             'montantsAEnvoyer' => $montantsAEnvoyer,
+        ]);
+    }
+
+    // ----------------------------------------------------------------
+    // Historique des transactions
+    // ----------------------------------------------------------------
+
+    public function transactionsHistory()
+    {
+        $filters = [
+            'date_from' => $this->request->getGet('date_from'),
+            'date_to'   => $this->request->getGet('date_to'),
+            'type'      => $this->request->getGet('type'),
+            'client'    => $this->request->getGet('client'),
+        ];
+
+        $transactions = $this->transactionModel->getAllTransactions($filters);
+
+        return view('admin/transactions_history', [
+            'transactions' => $transactions,
+            'filters'      => $filters,
         ]);
     }
 }

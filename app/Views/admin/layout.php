@@ -31,6 +31,9 @@
             <li class="<?= url_is('admin/commissions') ? 'active' : '' ?>">
                 <a href="<?= base_url('admin/commissions') ?>"><i class="fas fa-percent"></i> Commissions</a>
             </li>
+            <li class="<?= url_is('admin/transactions') ? 'active' : '' ?>">
+                <a href="<?= base_url('admin/transactions') ?>"><i class="fas fa-exchange-alt"></i> Historique</a>
+            </li>
             <li class="<?= url_is('admin/gains') ? 'active' : '' ?>">
                 <a href="<?= base_url('admin/gains') ?>"><i class="fas fa-chart-pie"></i> Situation des Gains</a>
             </li>

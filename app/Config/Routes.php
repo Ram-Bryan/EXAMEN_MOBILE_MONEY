@@ -51,6 +51,9 @@ $routes->group('admin', function($routes) {
     $routes->get('commissions', 'AdminController::commissions');
     $routes->post('commissions/update/(:num)', 'AdminController::updateCommission/$1');
 
+    // Historique des transactions
+    $routes->get('transactions', 'AdminController::transactionsHistory');
+
     // Situation des Gains
     $routes->get('gains', 'AdminController::gains');
 });
