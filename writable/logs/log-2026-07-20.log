@@ -753,3 +753,369 @@ DEBUG - 2026-07-20 08:51:12 --> Session: Class initialized using 'CodeIgniter\Se
 DEBUG - 2026-07-20 08:52:00 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
 DEBUG - 2026-07-20 08:52:02 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
 DEBUG - 2026-07-20 08:52:02 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-07-20 09:59:05 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-07-20 09:59:08 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-07-20 09:59:15 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+ERROR - 2026-07-20 09:59:15 --> Error connecting to the database: Exception: Unable to open database: unable to open database file in G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\Database\SQLite3\Connection.php:111
+Stack trace:
+#0 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\Database\SQLite3\Connection.php(111): SQLite3->__construct('G:\\L2-S4\\EXAMEN...')
+#1 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\Database\BaseConnection.php(555): CodeIgniter\Database\SQLite3\Connection->connect(false)
+#2 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\Database\SQLite3\Connection.php(74): CodeIgniter\Database\BaseConnection->initialize()
+#3 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\Database\BaseConnection.php(795): CodeIgniter\Database\SQLite3\Connection->initialize()
+#4 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT *\nFROM `...', Array, false)
+#5 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\Model.php(253): CodeIgniter\Database\BaseBuilder->get()
+#6 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\BaseModel.php(676): CodeIgniter\Model->doFindAll(0, 0)
+#7 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\app\Controllers\AuthController.php(47): CodeIgniter\BaseModel->findAll()
+#8 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\CodeIgniter.php(951): App\Controllers\AuthController->doLoginClient()
+#9 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\AuthController))
+#10 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#11 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\Boot.php(417): CodeIgniter\CodeIgniter->run()
+#12 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#13 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\public\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#14 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\rewrite.php(44): require_once('G:\\L2-S4\\EXAMEN...')
+#15 {main}
+
+Next CodeIgniter\Database\Exceptions\DatabaseException: SQLite3 error: Unable to open database: unable to open database file in G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\Database\SQLite3\Connection.php:118
+Stack trace:
+#0 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\Database\BaseConnection.php(555): CodeIgniter\Database\SQLite3\Connection->connect(false)
+#1 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\Database\SQLite3\Connection.php(74): CodeIgniter\Database\BaseConnection->initialize()
+#2 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\Database\BaseConnection.php(795): CodeIgniter\Database\SQLite3\Connection->initialize()
+#3 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT *\nFROM `...', Array, false)
+#4 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\Model.php(253): CodeIgniter\Database\BaseBuilder->get()
+#5 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\BaseModel.php(676): CodeIgniter\Model->doFindAll(0, 0)
+#6 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\app\Controllers\AuthController.php(47): CodeIgniter\BaseModel->findAll()
+#7 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\CodeIgniter.php(951): App\Controllers\AuthController->doLoginClient()
+#8 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\AuthController))
+#9 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#10 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\Boot.php(417): CodeIgniter\CodeIgniter->run()
+#11 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#12 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\public\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#13 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\rewrite.php(44): require_once('G:\\L2-S4\\EXAMEN...')
+#14 {main}
+CRITICAL - 2026-07-20 09:59:15 --> CodeIgniter\Database\Exceptions\DatabaseException: Unable to connect to the database.
+Main connection [SQLite3]: SQLite3 error: Unable to open database: unable to open database file
+[Method: POST, Route: login/client]
+in SYSTEMPATH\Database\BaseConnection.php on line 606.
+ 1 SYSTEMPATH\Database\SQLite3\Connection.php(74): CodeIgniter\Database\BaseConnection->initialize()
+ 2 SYSTEMPATH\Database\BaseConnection.php(795): CodeIgniter\Database\SQLite3\Connection->initialize()
+ 3 SYSTEMPATH\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT *
+FROM `operateur_prefixes`', [], false)
+ 4 SYSTEMPATH\Model.php(253): CodeIgniter\Database\BaseBuilder->get()
+ 5 SYSTEMPATH\BaseModel.php(676): CodeIgniter\Model->doFindAll(0, 0)
+ 6 APPPATH\Controllers\AuthController.php(47): CodeIgniter\BaseModel->findAll()
+ 7 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\AuthController->doLoginClient()
+ 8 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\AuthController))
+ 9 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+10 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+11 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+12 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+13 SYSTEMPATH\rewrite.php(44): require_once('G:\\L2-S4\\EXAMEN-SI\\EXAMEN_MOBILE_MONEY\\public\\index.php')
+DEBUG - 2026-07-20 10:02:40 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-07-20 10:02:44 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-07-20 10:02:50 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+ERROR - 2026-07-20 10:02:50 --> Error connecting to the database: Exception: Unable to open database: unable to open database file in G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\Database\SQLite3\Connection.php:111
+Stack trace:
+#0 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\Database\SQLite3\Connection.php(111): SQLite3->__construct('G:\\L2-S4\\EXAMEN...')
+#1 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\Database\BaseConnection.php(555): CodeIgniter\Database\SQLite3\Connection->connect(false)
+#2 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\Database\SQLite3\Connection.php(74): CodeIgniter\Database\BaseConnection->initialize()
+#3 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\Database\BaseConnection.php(795): CodeIgniter\Database\SQLite3\Connection->initialize()
+#4 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT *\nFROM `...', Array, false)
+#5 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\Model.php(295): CodeIgniter\Database\BaseBuilder->get()
+#6 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\BaseModel.php(714): CodeIgniter\Model->doFirst()
+#7 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\app\Controllers\AuthController.php(108): CodeIgniter\BaseModel->first()
+#8 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\CodeIgniter.php(951): App\Controllers\AuthController->doLoginAdmin()
+#9 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\AuthController))
+#10 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#11 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\Boot.php(417): CodeIgniter\CodeIgniter->run()
+#12 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#13 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\public\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#14 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\rewrite.php(44): require_once('G:\\L2-S4\\EXAMEN...')
+#15 {main}
+
+Next CodeIgniter\Database\Exceptions\DatabaseException: SQLite3 error: Unable to open database: unable to open database file in G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\Database\SQLite3\Connection.php:118
+Stack trace:
+#0 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\Database\BaseConnection.php(555): CodeIgniter\Database\SQLite3\Connection->connect(false)
+#1 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\Database\SQLite3\Connection.php(74): CodeIgniter\Database\BaseConnection->initialize()
+#2 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\Database\BaseConnection.php(795): CodeIgniter\Database\SQLite3\Connection->initialize()
+#3 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT *\nFROM `...', Array, false)
+#4 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\Model.php(295): CodeIgniter\Database\BaseBuilder->get()
+#5 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\BaseModel.php(714): CodeIgniter\Model->doFirst()
+#6 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\app\Controllers\AuthController.php(108): CodeIgniter\BaseModel->first()
+#7 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\CodeIgniter.php(951): App\Controllers\AuthController->doLoginAdmin()
+#8 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\AuthController))
+#9 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#10 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\Boot.php(417): CodeIgniter\CodeIgniter->run()
+#11 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#12 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\public\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#13 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\rewrite.php(44): require_once('G:\\L2-S4\\EXAMEN...')
+#14 {main}
+CRITICAL - 2026-07-20 10:02:50 --> CodeIgniter\Database\Exceptions\DatabaseException: Unable to connect to the database.
+Main connection [SQLite3]: SQLite3 error: Unable to open database: unable to open database file
+[Method: POST, Route: login/admin]
+in SYSTEMPATH\Database\BaseConnection.php on line 606.
+ 1 SYSTEMPATH\Database\SQLite3\Connection.php(74): CodeIgniter\Database\BaseConnection->initialize()
+ 2 SYSTEMPATH\Database\BaseConnection.php(795): CodeIgniter\Database\SQLite3\Connection->initialize()
+ 3 SYSTEMPATH\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT *
+FROM `admin`
+WHERE `email` = :email:
+ LIMIT 1', [...], false)
+ 4 SYSTEMPATH\Model.php(295): CodeIgniter\Database\BaseBuilder->get()
+ 5 SYSTEMPATH\BaseModel.php(714): CodeIgniter\Model->doFirst()
+ 6 APPPATH\Controllers\AuthController.php(108): CodeIgniter\BaseModel->first()
+ 7 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\AuthController->doLoginAdmin()
+ 8 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\AuthController))
+ 9 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+10 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+11 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+12 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+13 SYSTEMPATH\rewrite.php(44): require_once('G:\\L2-S4\\EXAMEN-SI\\EXAMEN_MOBILE_MONEY\\public\\index.php')
+DEBUG - 2026-07-20 10:03:55 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-07-20 10:05:13 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-07-20 10:05:21 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-07-20 10:06:21 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+ERROR - 2026-07-20 10:06:21 --> Error connecting to the database: Exception: Unable to open database: unable to open database file in G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\Database\SQLite3\Connection.php:111
+Stack trace:
+#0 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\Database\SQLite3\Connection.php(111): SQLite3->__construct('G:\\L2-S4\\EXAMEN...')
+#1 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\Database\BaseConnection.php(555): CodeIgniter\Database\SQLite3\Connection->connect(false)
+#2 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\Database\SQLite3\Connection.php(74): CodeIgniter\Database\BaseConnection->initialize()
+#3 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\Database\BaseConnection.php(795): CodeIgniter\Database\SQLite3\Connection->initialize()
+#4 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT *\nFROM `...', Array, false)
+#5 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\Model.php(295): CodeIgniter\Database\BaseBuilder->get()
+#6 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\BaseModel.php(714): CodeIgniter\Model->doFirst()
+#7 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\app\Controllers\AuthController.php(108): CodeIgniter\BaseModel->first()
+#8 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\CodeIgniter.php(951): App\Controllers\AuthController->doLoginAdmin()
+#9 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\AuthController))
+#10 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#11 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\Boot.php(417): CodeIgniter\CodeIgniter->run()
+#12 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#13 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\public\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#14 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\rewrite.php(44): require_once('G:\\L2-S4\\EXAMEN...')
+#15 {main}
+
+Next CodeIgniter\Database\Exceptions\DatabaseException: SQLite3 error: Unable to open database: unable to open database file in G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\Database\SQLite3\Connection.php:118
+Stack trace:
+#0 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\Database\BaseConnection.php(555): CodeIgniter\Database\SQLite3\Connection->connect(false)
+#1 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\Database\SQLite3\Connection.php(74): CodeIgniter\Database\BaseConnection->initialize()
+#2 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\Database\BaseConnection.php(795): CodeIgniter\Database\SQLite3\Connection->initialize()
+#3 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT *\nFROM `...', Array, false)
+#4 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\Model.php(295): CodeIgniter\Database\BaseBuilder->get()
+#5 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\BaseModel.php(714): CodeIgniter\Model->doFirst()
+#6 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\app\Controllers\AuthController.php(108): CodeIgniter\BaseModel->first()
+#7 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\CodeIgniter.php(951): App\Controllers\AuthController->doLoginAdmin()
+#8 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\AuthController))
+#9 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#10 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\Boot.php(417): CodeIgniter\CodeIgniter->run()
+#11 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#12 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\public\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#13 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\rewrite.php(44): require_once('G:\\L2-S4\\EXAMEN...')
+#14 {main}
+CRITICAL - 2026-07-20 10:06:21 --> CodeIgniter\Database\Exceptions\DatabaseException: Unable to connect to the database.
+Main connection [SQLite3]: SQLite3 error: Unable to open database: unable to open database file
+[Method: POST, Route: login/admin]
+in SYSTEMPATH\Database\BaseConnection.php on line 606.
+ 1 SYSTEMPATH\Database\SQLite3\Connection.php(74): CodeIgniter\Database\BaseConnection->initialize()
+ 2 SYSTEMPATH\Database\BaseConnection.php(795): CodeIgniter\Database\SQLite3\Connection->initialize()
+ 3 SYSTEMPATH\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT *
+FROM `admin`
+WHERE `email` = :email:
+ LIMIT 1', [...], false)
+ 4 SYSTEMPATH\Model.php(295): CodeIgniter\Database\BaseBuilder->get()
+ 5 SYSTEMPATH\BaseModel.php(714): CodeIgniter\Model->doFirst()
+ 6 APPPATH\Controllers\AuthController.php(108): CodeIgniter\BaseModel->first()
+ 7 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\AuthController->doLoginAdmin()
+ 8 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\AuthController))
+ 9 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+10 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+11 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+12 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+13 SYSTEMPATH\rewrite.php(44): require_once('G:\\L2-S4\\EXAMEN-SI\\EXAMEN_MOBILE_MONEY\\public\\index.php')
+DEBUG - 2026-07-20 10:06:25 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-07-20 10:06:30 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+ERROR - 2026-07-20 10:06:30 --> Error connecting to the database: Exception: Unable to open database: unable to open database file in G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\Database\SQLite3\Connection.php:111
+Stack trace:
+#0 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\Database\SQLite3\Connection.php(111): SQLite3->__construct('G:\\L2-S4\\EXAMEN...')
+#1 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\Database\BaseConnection.php(555): CodeIgniter\Database\SQLite3\Connection->connect(false)
+#2 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\Database\SQLite3\Connection.php(74): CodeIgniter\Database\BaseConnection->initialize()
+#3 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\Database\BaseConnection.php(795): CodeIgniter\Database\SQLite3\Connection->initialize()
+#4 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT *\nFROM `...', Array, false)
+#5 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\Model.php(295): CodeIgniter\Database\BaseBuilder->get()
+#6 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\BaseModel.php(714): CodeIgniter\Model->doFirst()
+#7 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\app\Controllers\AuthController.php(108): CodeIgniter\BaseModel->first()
+#8 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\CodeIgniter.php(951): App\Controllers\AuthController->doLoginAdmin()
+#9 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\AuthController))
+#10 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#11 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\Boot.php(417): CodeIgniter\CodeIgniter->run()
+#12 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#13 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\public\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#14 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\rewrite.php(44): require_once('G:\\L2-S4\\EXAMEN...')
+#15 {main}
+
+Next CodeIgniter\Database\Exceptions\DatabaseException: SQLite3 error: Unable to open database: unable to open database file in G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\Database\SQLite3\Connection.php:118
+Stack trace:
+#0 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\Database\BaseConnection.php(555): CodeIgniter\Database\SQLite3\Connection->connect(false)
+#1 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\Database\SQLite3\Connection.php(74): CodeIgniter\Database\BaseConnection->initialize()
+#2 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\Database\BaseConnection.php(795): CodeIgniter\Database\SQLite3\Connection->initialize()
+#3 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT *\nFROM `...', Array, false)
+#4 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\Model.php(295): CodeIgniter\Database\BaseBuilder->get()
+#5 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\BaseModel.php(714): CodeIgniter\Model->doFirst()
+#6 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\app\Controllers\AuthController.php(108): CodeIgniter\BaseModel->first()
+#7 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\CodeIgniter.php(951): App\Controllers\AuthController->doLoginAdmin()
+#8 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\AuthController))
+#9 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#10 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\Boot.php(417): CodeIgniter\CodeIgniter->run()
+#11 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#12 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\public\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#13 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\rewrite.php(44): require_once('G:\\L2-S4\\EXAMEN...')
+#14 {main}
+CRITICAL - 2026-07-20 10:06:30 --> CodeIgniter\Database\Exceptions\DatabaseException: Unable to connect to the database.
+Main connection [SQLite3]: SQLite3 error: Unable to open database: unable to open database file
+[Method: POST, Route: login/admin]
+in SYSTEMPATH\Database\BaseConnection.php on line 606.
+ 1 SYSTEMPATH\Database\SQLite3\Connection.php(74): CodeIgniter\Database\BaseConnection->initialize()
+ 2 SYSTEMPATH\Database\BaseConnection.php(795): CodeIgniter\Database\SQLite3\Connection->initialize()
+ 3 SYSTEMPATH\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT *
+FROM `admin`
+WHERE `email` = :email:
+ LIMIT 1', [...], false)
+ 4 SYSTEMPATH\Model.php(295): CodeIgniter\Database\BaseBuilder->get()
+ 5 SYSTEMPATH\BaseModel.php(714): CodeIgniter\Model->doFirst()
+ 6 APPPATH\Controllers\AuthController.php(108): CodeIgniter\BaseModel->first()
+ 7 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\AuthController->doLoginAdmin()
+ 8 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\AuthController))
+ 9 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+10 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+11 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+12 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+13 SYSTEMPATH\rewrite.php(44): require_once('G:\\L2-S4\\EXAMEN-SI\\EXAMEN_MOBILE_MONEY\\public\\index.php')
+ERROR - 2026-07-20 10:07:37 --> Error connecting to the database: Exception: Unable to open database: unable to open database file in G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\Database\SQLite3\Connection.php:111
+Stack trace:
+#0 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\Database\SQLite3\Connection.php(111): SQLite3->__construct('G:\\L2-S4\\EXAMEN...')
+#1 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\Database\BaseConnection.php(555): CodeIgniter\Database\SQLite3\Connection->connect(false)
+#2 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\Database\SQLite3\Connection.php(74): CodeIgniter\Database\BaseConnection->initialize()
+#3 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\Database\BaseConnection.php(795): CodeIgniter\Database\SQLite3\Connection->initialize()
+#4 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\Database\BaseConnection.php(1706): CodeIgniter\Database\BaseConnection->query('SELECT "NAME" F...')
+#5 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\Database\BaseConnection.php(1726): CodeIgniter\Database\BaseConnection->listTables()
+#6 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\Database\MigrationRunner.php(821): CodeIgniter\Database\BaseConnection->tableExists('migrations')
+#7 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\Database\MigrationRunner.php(173): CodeIgniter\Database\MigrationRunner->ensureTable()
+#8 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\Commands\Database\Migrate.php(89): CodeIgniter\Database\MigrationRunner->latest(NULL)
+#9 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\CLI\SignalTrait.php(245): CodeIgniter\Commands\Database\Migrate::CodeIgniter\Commands\Database\{closure}()
+#10 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\Commands\Database\Migrate.php(88): CodeIgniter\Commands\Database\Migrate->withSignalsBlocked(Object(Closure))
+#11 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\CLI\Commands.php(74): CodeIgniter\Commands\Database\Migrate->run(Array)
+#12 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\CLI\Console.php(47): CodeIgniter\CLI\Commands->run('migrate', Array)
+#13 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\Boot.php(442): CodeIgniter\CLI\Console->run()
+#14 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\Boot.php(166): CodeIgniter\Boot::runCommand(Object(CodeIgniter\CLI\Console))
+#15 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\spark(87): CodeIgniter\Boot::bootSpark(Object(Config\Paths))
+#16 {main}
+
+Next CodeIgniter\Database\Exceptions\DatabaseException: SQLite3 error: Unable to open database: unable to open database file in G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\Database\SQLite3\Connection.php:118
+Stack trace:
+#0 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\Database\BaseConnection.php(555): CodeIgniter\Database\SQLite3\Connection->connect(false)
+#1 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\Database\SQLite3\Connection.php(74): CodeIgniter\Database\BaseConnection->initialize()
+#2 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\Database\BaseConnection.php(795): CodeIgniter\Database\SQLite3\Connection->initialize()
+#3 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\Database\BaseConnection.php(1706): CodeIgniter\Database\BaseConnection->query('SELECT "NAME" F...')
+#4 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\Database\BaseConnection.php(1726): CodeIgniter\Database\BaseConnection->listTables()
+#5 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\Database\MigrationRunner.php(821): CodeIgniter\Database\BaseConnection->tableExists('migrations')
+#6 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\Database\MigrationRunner.php(173): CodeIgniter\Database\MigrationRunner->ensureTable()
+#7 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\Commands\Database\Migrate.php(89): CodeIgniter\Database\MigrationRunner->latest(NULL)
+#8 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\CLI\SignalTrait.php(245): CodeIgniter\Commands\Database\Migrate::CodeIgniter\Commands\Database\{closure}()
+#9 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\Commands\Database\Migrate.php(88): CodeIgniter\Commands\Database\Migrate->withSignalsBlocked(Object(Closure))
+#10 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\CLI\Commands.php(74): CodeIgniter\Commands\Database\Migrate->run(Array)
+#11 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\CLI\Console.php(47): CodeIgniter\CLI\Commands->run('migrate', Array)
+#12 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\Boot.php(442): CodeIgniter\CLI\Console->run()
+#13 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\Boot.php(166): CodeIgniter\Boot::runCommand(Object(CodeIgniter\CLI\Console))
+#14 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\spark(87): CodeIgniter\Boot::bootSpark(Object(Config\Paths))
+#15 {main}
+ERROR - 2026-07-20 10:09:39 --> Error connecting to the database: Exception: Unable to open database: unable to open database file in G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\Database\SQLite3\Connection.php:111
+Stack trace:
+#0 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\Database\SQLite3\Connection.php(111): SQLite3->__construct('G:\\L2-S4\\EXAMEN...')
+#1 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\Database\BaseConnection.php(555): CodeIgniter\Database\SQLite3\Connection->connect(false)
+#2 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\Database\SQLite3\Connection.php(74): CodeIgniter\Database\BaseConnection->initialize()
+#3 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\Database\BaseConnection.php(795): CodeIgniter\Database\SQLite3\Connection->initialize()
+#4 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\Database\BaseConnection.php(1706): CodeIgniter\Database\BaseConnection->query('SELECT "NAME" F...')
+#5 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\Database\BaseConnection.php(1726): CodeIgniter\Database\BaseConnection->listTables()
+#6 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\Database\MigrationRunner.php(821): CodeIgniter\Database\BaseConnection->tableExists('migrations')
+#7 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\Database\MigrationRunner.php(173): CodeIgniter\Database\MigrationRunner->ensureTable()
+#8 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\Commands\Database\Migrate.php(89): CodeIgniter\Database\MigrationRunner->latest(NULL)
+#9 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\CLI\SignalTrait.php(245): CodeIgniter\Commands\Database\Migrate::CodeIgniter\Commands\Database\{closure}()
+#10 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\Commands\Database\Migrate.php(88): CodeIgniter\Commands\Database\Migrate->withSignalsBlocked(Object(Closure))
+#11 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\CLI\Commands.php(74): CodeIgniter\Commands\Database\Migrate->run(Array)
+#12 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\CLI\Console.php(47): CodeIgniter\CLI\Commands->run('migrate', Array)
+#13 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\Boot.php(442): CodeIgniter\CLI\Console->run()
+#14 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\Boot.php(166): CodeIgniter\Boot::runCommand(Object(CodeIgniter\CLI\Console))
+#15 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\spark(87): CodeIgniter\Boot::bootSpark(Object(Config\Paths))
+#16 {main}
+
+Next CodeIgniter\Database\Exceptions\DatabaseException: SQLite3 error: Unable to open database: unable to open database file in G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\Database\SQLite3\Connection.php:118
+Stack trace:
+#0 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\Database\BaseConnection.php(555): CodeIgniter\Database\SQLite3\Connection->connect(false)
+#1 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\Database\SQLite3\Connection.php(74): CodeIgniter\Database\BaseConnection->initialize()
+#2 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\Database\BaseConnection.php(795): CodeIgniter\Database\SQLite3\Connection->initialize()
+#3 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\Database\BaseConnection.php(1706): CodeIgniter\Database\BaseConnection->query('SELECT "NAME" F...')
+#4 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\Database\BaseConnection.php(1726): CodeIgniter\Database\BaseConnection->listTables()
+#5 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\Database\MigrationRunner.php(821): CodeIgniter\Database\BaseConnection->tableExists('migrations')
+#6 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\Database\MigrationRunner.php(173): CodeIgniter\Database\MigrationRunner->ensureTable()
+#7 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\Commands\Database\Migrate.php(89): CodeIgniter\Database\MigrationRunner->latest(NULL)
+#8 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\CLI\SignalTrait.php(245): CodeIgniter\Commands\Database\Migrate::CodeIgniter\Commands\Database\{closure}()
+#9 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\Commands\Database\Migrate.php(88): CodeIgniter\Commands\Database\Migrate->withSignalsBlocked(Object(Closure))
+#10 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\CLI\Commands.php(74): CodeIgniter\Commands\Database\Migrate->run(Array)
+#11 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\CLI\Console.php(47): CodeIgniter\CLI\Commands->run('migrate', Array)
+#12 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\Boot.php(442): CodeIgniter\CLI\Console->run()
+#13 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\Boot.php(166): CodeIgniter\Boot::runCommand(Object(CodeIgniter\CLI\Console))
+#14 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\spark(87): CodeIgniter\Boot::bootSpark(Object(Config\Paths))
+#15 {main}
+DEBUG - 2026-07-20 10:09:51 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-07-20 10:10:00 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+ERROR - 2026-07-20 10:10:00 --> Error connecting to the database: Exception: Unable to open database: unable to open database file in G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\Database\SQLite3\Connection.php:111
+Stack trace:
+#0 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\Database\SQLite3\Connection.php(111): SQLite3->__construct('G:\\L2-S4\\EXAMEN...')
+#1 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\Database\BaseConnection.php(555): CodeIgniter\Database\SQLite3\Connection->connect(false)
+#2 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\Database\SQLite3\Connection.php(74): CodeIgniter\Database\BaseConnection->initialize()
+#3 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\Database\BaseConnection.php(795): CodeIgniter\Database\SQLite3\Connection->initialize()
+#4 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT *\nFROM `...', Array, false)
+#5 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\Model.php(253): CodeIgniter\Database\BaseBuilder->get()
+#6 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\BaseModel.php(676): CodeIgniter\Model->doFindAll(0, 0)
+#7 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\app\Controllers\AuthController.php(47): CodeIgniter\BaseModel->findAll()
+#8 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\CodeIgniter.php(951): App\Controllers\AuthController->doLoginClient()
+#9 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\AuthController))
+#10 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#11 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\Boot.php(417): CodeIgniter\CodeIgniter->run()
+#12 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#13 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\public\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#14 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\rewrite.php(44): require_once('G:\\L2-S4\\EXAMEN...')
+#15 {main}
+
+Next CodeIgniter\Database\Exceptions\DatabaseException: SQLite3 error: Unable to open database: unable to open database file in G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\Database\SQLite3\Connection.php:118
+Stack trace:
+#0 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\Database\BaseConnection.php(555): CodeIgniter\Database\SQLite3\Connection->connect(false)
+#1 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\Database\SQLite3\Connection.php(74): CodeIgniter\Database\BaseConnection->initialize()
+#2 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\Database\BaseConnection.php(795): CodeIgniter\Database\SQLite3\Connection->initialize()
+#3 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT *\nFROM `...', Array, false)
+#4 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\Model.php(253): CodeIgniter\Database\BaseBuilder->get()
+#5 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\BaseModel.php(676): CodeIgniter\Model->doFindAll(0, 0)
+#6 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\app\Controllers\AuthController.php(47): CodeIgniter\BaseModel->findAll()
+#7 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\CodeIgniter.php(951): App\Controllers\AuthController->doLoginClient()
+#8 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\AuthController))
+#9 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#10 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\Boot.php(417): CodeIgniter\CodeIgniter->run()
+#11 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#12 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\public\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#13 G:\L2-S4\EXAMEN-SI\EXAMEN_MOBILE_MONEY\system\rewrite.php(44): require_once('G:\\L2-S4\\EXAMEN...')
+#14 {main}
+CRITICAL - 2026-07-20 10:10:00 --> CodeIgniter\Database\Exceptions\DatabaseException: Unable to connect to the database.
+Main connection [SQLite3]: SQLite3 error: Unable to open database: unable to open database file
+[Method: POST, Route: login/client]
+in SYSTEMPATH\Database\BaseConnection.php on line 606.
+ 1 SYSTEMPATH\Database\SQLite3\Connection.php(74): CodeIgniter\Database\BaseConnection->initialize()
+ 2 SYSTEMPATH\Database\BaseConnection.php(795): CodeIgniter\Database\SQLite3\Connection->initialize()
+ 3 SYSTEMPATH\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT *
+FROM `operateur_prefixes`', [], false)
+ 4 SYSTEMPATH\Model.php(253): CodeIgniter\Database\BaseBuilder->get()
+ 5 SYSTEMPATH\BaseModel.php(676): CodeIgniter\Model->doFindAll(0, 0)
+ 6 APPPATH\Controllers\AuthController.php(47): CodeIgniter\BaseModel->findAll()
+ 7 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\AuthController->doLoginClient()
+ 8 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\AuthController))
+ 9 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+10 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+11 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+12 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+13 SYSTEMPATH\rewrite.php(44): require_once('G:\\L2-S4\\EXAMEN-SI\\EXAMEN_MOBILE_MONEY\\public\\index.php')
