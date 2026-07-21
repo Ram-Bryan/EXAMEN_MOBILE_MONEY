@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Models\ClientModel;
+use App\Models\EpargneModel;
 use App\Models\TransactionModel;
 use App\Models\BaremeFraisModel;
 use App\Models\TypeOperationModel;
@@ -15,6 +16,7 @@ class ClientController extends BaseController
     protected $baremeFraisModel;
     protected $typeOperationModel;
     protected $prefixModel;
+    protected $epargneModel;
     protected $session;
 
     public function __construct()
@@ -24,6 +26,7 @@ class ClientController extends BaseController
         $this->baremeFraisModel   = new BaremeFraisModel();
         $this->typeOperationModel = new TypeOperationModel();
         $this->prefixModel        = new OperateurPrefixeModel();
+        $this->epargneModel = new EpargneModel();
         $this->session            = session();
     }
 
@@ -67,6 +70,19 @@ class ClientController extends BaseController
 
         return view('client/balance', [
             'balance' => $balance,
+        ]);
+    }
+
+    public function renderEpargne(){
+        if (!$this->checkAuth()) {
+            return redirect()->to('/login/client');
+        }
+
+        $clientId = $this->session->get('client_id');
+        $epargne = $this->epargneModel->getEpargneOf($clientId);
+
+        return view('client/epargne', [
+            'epargne' => $epargne,
         ]);
     }
 
@@ -327,11 +343,20 @@ class ClientController extends BaseController
         $insertedCount = 0;
 
         foreach ($transactionsData as $txData) {
+
+            $epargne = $this->epargneModel->getEpargneOf($txData['recipient']->id);
+            $montantRecipient = $epargne->pourcentage * $txData['amount'];
+            $montantTransaction = (1 - $epargne->pourcentage )* $txData['amount'];
+
+            $this->epargneModel->update($epargne->id, [
+                'montant' => $epargne->montant + $montantRecipient
+            ]);
+        
             $ok = $this->transactionModel->createTransaction(
                 $typeOp->id,
                 $senderId,
                 $txData['recipient']->id,
-                $txData['amount'],
+                $montantTransaction,
                 $txData['frais_inclus']
             );
             if ($ok) {

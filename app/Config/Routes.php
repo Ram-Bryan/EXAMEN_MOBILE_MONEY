@@ -50,6 +50,7 @@ $routes->group('client', ['filter' => 'clientAuth'], function ($routes) {
     $routes->get('transfer', 'ClientController::transfer');
     $routes->post('transfer', 'ClientController::doTransfer');
     $routes->get('history', 'ClientController::history');
+    $routes->get('epargne', 'ClientController::renderEpargne');
 });
 
 $routes->group('api', ['filter' => 'clientAuth'], function ($routes) {

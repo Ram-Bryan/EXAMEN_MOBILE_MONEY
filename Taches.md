@@ -198,3 +198,21 @@
 - [x] Tests des transferts multiples
 - [x] Tests des transferts inter-opérateur (commission)
 - [x] Compléter `Taches.md`
+
+
+Epargne:
+client --> interface avec pourcentage epargne. Enrgistre dans son epargne:
+Si 20% epargne, 20% epargne et 80% le reste dans le solde principale
+Seulement pour les transferts
+
+1. Effectuer les tests sur l'epargne:
+- Quand faire un transfert:
+  - prendre le pourcentage de l epargne des clients
+  - split:
+    - prendre pourcentage * montant --> insret dans montant epargne
+    - prendre (1-pourcentage) * motnant -> insert dans transcations
+
+
+1. Creer l'interface de l epargne:
+   - cree page epargne.php afficher l epargne pour un client
+   - mettre form pour changer le pourcentage
