@@ -45,6 +45,11 @@
             <li class="<?= activeLink($uri, 'client/history') === 'active' ? 'active' : '' ?>">
                 <a href="<?= base_url('client/history') ?>"><i class="fas fa-history"></i> Historique</a>
             </li>
+            
+            <li class="<?= activeLink($uri, 'client/epargne') === 'active' ? 'active' : '' ?>">
+                <a href="<?= base_url('client/epargne') ?>"><i class="fas fa-history"></i> Epargne</a>
+            </li>
+
             <li>
                 <a href="<?= base_url('logout') ?>"><i class="fas fa-sign-out-alt"></i> Déconnexion</a>
             </li>
