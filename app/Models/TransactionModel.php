@@ -120,6 +120,25 @@ class TransactionModel extends Model
         )->getResultObject();
     }
 
+    /**
+     * KPIs pour l'écran Situation des Gains.
+     */
+    public function getKpisGains()
+    {
+        $db = \Config\Database::connect();
+        $sql = "
+            SELECT
+                COALESCE(SUM(commission), 0)        AS total_commission,
+                COALESCE(SUM(COALESCE(frais_fixe, 0)), 0) AS total_frais_fixe,
+                COALESCE(SUM(frais_applique), 0)    AS total_gains,
+                COALESCE(SUM(montant_brut), 0)      AS total_montant_brut,
+                COUNT(transaction_id)                AS nb_transactions
+            FROM v_transactions_frais
+            WHERE frais_applique IS NOT NULL
+        ";
+        return $db->query($sql)->getRow();
+    }
+
     public function getClientTransactions(int $clientId, int $limit = null, array $filters = [])
     {
         $db = $this->db;
@@ -171,7 +190,7 @@ class TransactionModel extends Model
         }
 
         return $results;
-    }
+    } 
 
     /**
      * Toutes les transactions (admin) avec filtres optionnels.

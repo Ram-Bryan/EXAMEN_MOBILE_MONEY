@@ -25,6 +25,7 @@ class ClientController extends BaseController
         $this->typeOperationModel = new TypeOperationModel();
         $this->prefixModel        = new OperateurPrefixeModel();
         $this->session            = session();
+
     }
 
     private function checkAuth(): bool
@@ -85,6 +86,8 @@ class ClientController extends BaseController
             'phone' => $this->session->get('phone'),
             'fees'  => $fees,
         ]);
+
+
     }
 
     public function doDeposit()

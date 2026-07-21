@@ -223,6 +223,7 @@ class AdminController extends BaseController
         $gainsNotreOp = $this->transactionModel->getGainsNotreOperateur();
         $gainsExternes = $this->transactionModel->getGainsExternes();
         $externalOps = $this->transactionModel->getExternalOperateurs();
+        $kpis = $this->transactionModel->getKpisGains();
 
         $gainsExternesParOp = [];
         foreach ($gainsExternes as $g) {
@@ -233,6 +234,7 @@ class AdminController extends BaseController
             'gainsNotreOp'       => $gainsNotreOp,
             'gainsExternesParOp' => $gainsExternesParOp,
             'externalOps'        => $externalOps,
+            'kpis'               => $kpis,
         ]);
     }
 

@@ -15,7 +15,74 @@ $colors = ['DEPOT' => '#16a34a', 'RETRAIT' => '#dc2626', 'TRANSFERT' => '#2563eb
 
 $nouveauTotal = array_sum(array_column($gainsNotreOp, 'total_gains'));
 $nouveauNb    = array_sum(array_column($gainsNotreOp, 'nb_operations'));
+
+$kpisTotal   = (float)($kpis->total_gains ?? 0);
+$kpisComm    = (float)($kpis->total_commission ?? 0);
+$kpisFrais   = (float)($kpis->total_frais_fixe ?? 0);
+$kpisMontant = (float)($kpis->total_montant_brut ?? 0);
+$kpisNb      = (int)($kpis->nb_transactions ?? 0);
+
+$pctComm  = $kpisTotal > 0 ? ($kpisComm / $kpisTotal * 100) : 0;
+$pctFrais = $kpisTotal > 0 ? ($kpisFrais / $kpisTotal * 100) : 0;
+$gainMoyen  = $kpisNb > 0 ? $kpisTotal / $kpisNb : 0;
+$tauxFrais  = $kpisMontant > 0 ? ($kpisTotal / $kpisMontant * 100) : 0;
 ?>
+
+<!-- ============================================================ -->
+<!-- KPIs                                                           -->
+<!-- ============================================================ -->
+<div class="row g-3 mb-4">
+    <!-- KPI 1 : Commission inter-opérateurs vs Frais fixe -->
+    <div class="col-md-4">
+        <div class="stat-card h-100" style="border-left: 4px solid #f59e0b;">
+            <div class="icon" style="background:#fef3c7; color:#f59e0b;"><i class="fas fa-balance-scale"></i></div>
+            <div class="details" style="flex:1;">
+                <p class="mb-1 fw-semibold" style="font-size:12px; color:#64748b;">Commission vs Frais fixes</p>
+                <div class="d-flex align-items-end gap-3 mb-2">
+                    <div>
+                        <h3 class="mb-0" style="color:#d97706;"><?= number_format($kpisComm, 0, ',', ' ') ?> Ar</h3>
+                        <small class="text-muted">Commission inter-op.</small>
+                    </div>
+                    <div>
+                        <h3 class="mb-0 text-dark"><?= number_format($kpisFrais, 0, ',', ' ') ?> Ar</h3>
+                        <small class="text-muted">Frais fixes</small>
+                    </div>
+                </div>
+                <div class="progress" style="height:8px; border-radius:4px;">
+                    <div class="progress-bar" style="width:<?= number_format($pctComm, 1) ?>%; background:#f59e0b;"></div>
+                    <div class="progress-bar bg-success" style="width:<?= number_format($pctFrais, 1) ?>%;"></div>
+                </div>
+                <small class="text-muted mt-1 d-block" style="font-size:11px;">
+                    <?= number_format($pctComm, 1) ?>% commission · <?= number_format($pctFrais, 1) ?>% frais fixes
+                </small>
+            </div>
+        </div>
+    </div>
+
+    <!-- KPI 2 : Gain moyen par transaction -->
+    <div class="col-md-4">
+        <div class="stat-card h-100" style="border-left: 4px solid var(--primary);">
+            <div class="icon green"><i class="fas fa-calculator"></i></div>
+            <div class="details">
+                <p class="mb-1 fw-semibold" style="font-size:12px; color:#64748b;">Gain moyen / transaction</p>
+                <h3 class="mb-0" style="color: var(--primary);"><?= number_format($gainMoyen, 0, ',', ' ') ?> Ar</h3>
+                <small class="text-muted">sur <?= number_format($kpisNb) ?> transactions avec frais</small>
+            </div>
+        </div>
+    </div>
+
+    <!-- KPI 3 : Taux de frais moyen -->
+    <div class="col-md-4">
+        <div class="stat-card h-100" style="border-left: 4px solid #0ea5e9;">
+            <div class="icon" style="background:#e0f2fe; color:#0ea5e9;"><i class="fas fa-percentage"></i></div>
+            <div class="details">
+                <p class="mb-1 fw-semibold" style="font-size:12px; color:#64748b;">Taux de frais moyen</p>
+                <h3 class="mb-0" style="color:#0ea5e9;"><?= number_format($tauxFrais, 2) ?>%</h3>
+                <small class="text-muted">du montant total mové (<?= number_format($kpisMontant, 0, ',', ' ') ?> Ar)</small>
+            </div>
+        </div>
+    </div>
+</div>
 
 <!-- ============================================================ -->
 <!-- SECTION 1 : Notre Opérateur                                   -->
