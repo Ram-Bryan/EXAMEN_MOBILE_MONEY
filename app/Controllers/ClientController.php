@@ -96,6 +96,10 @@ class ClientController extends BaseController
         $amount   = (float)$this->request->getPost('amount');
         $clientId = $this->session->get('client_id');
 
+        if (!$this->clientModel->isNotreOperateur($clientId)) {
+            return redirect()->back()->withInput()->with('error', 'Le dépôt est réservé aux clients de notre opérateur.');
+        }
+
         if ($amount <= 0) {
             return redirect()->back()->withInput()->with('error', 'Montant invalide.');
         }
@@ -140,6 +144,10 @@ class ClientController extends BaseController
 
         $amount   = (float)$this->request->getPost('amount');
         $clientId = $this->session->get('client_id');
+
+        if (!$this->clientModel->isNotreOperateur($clientId)) {
+            return redirect()->back()->withInput()->with('error', 'Le retrait est réservé aux clients de notre opérateur.');
+        }
 
         if ($amount <= 0) {
             return redirect()->back()->withInput()->with('error', 'Montant invalide.');

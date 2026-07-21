@@ -330,8 +330,7 @@ class MigrationV2 extends Migration
                 SUM(tf.frais_applique) AS total_gains
             FROM v_transactions_frais tf
             JOIN types_operation t ON t.id = tf.type_operation_id
-            JOIN clients cd ON cd.id = tf.destinataire_id
-            JOIN operateur_prefixes o ON o.id = cd.operateur_id
+            JOIN operateur_prefixes o ON o.id = tf.operateur_id
             WHERE tf.frais_applique IS NOT NULL
             GROUP BY o.est_notre_operateur, t.code
         ");

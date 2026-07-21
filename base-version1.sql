@@ -408,15 +408,15 @@ VALUES
 
 
 -- telephone nom code solde actuel
--- SELECT c.telephone, c.nom, c.code,
---        COALESCE(SUM(CASE 
---            WHEN tf.destinataire_id = c.id THEN tf.montant_brut
---            WHEN tf.expediteur_id = c.id THEN -(tf.montant_brut + COALESCE(tf.frais_applique, 0))
---        END), 0) AS solde
--- FROM clients c
--- LEFT JOIN v_transactions_frais tf ON tf.expediteur_id = c.id OR tf.destinataire_id = c.id
--- GROUP BY c.id, c.telephone, c.nom, c.code
--- ORDER BY c.nom;
+SELECT c.telephone, c.nom, c.code,
+       COALESCE(SUM(CASE 
+           WHEN tf.destinataire_id = c.id THEN tf.montant_brut
+           WHEN tf.expediteur_id = c.id THEN -(tf.montant_brut + COALESCE(tf.frais_applique, 0))
+       END), 0) AS solde
+FROM clients c
+LEFT JOIN v_transactions_frais tf ON tf.expediteur_id = c.id OR tf.destinataire_id = c.id
+GROUP BY c.id, c.telephone, c.nom, c.code
+ORDER BY c.nom;
 
 -- ============================================================
 -- 6. VÉRIFICATIONS (optionnelles)

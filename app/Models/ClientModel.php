@@ -73,6 +73,19 @@ class ClientModel extends Model
         return $row ? (float)$row->solde : 0.0;
     }
 
+    public function isNotreOperateur(int $clientId): bool
+    {
+        $db = \Config\Database::connect();
+        $row = $db->query(
+            "SELECT o.est_notre_operateur
+             FROM clients c
+             JOIN operateur_prefixes o ON o.id = c.operateur_id
+             WHERE c.id = ?",
+            [$clientId]
+        )->getRow();
+        return $row && (int)$row->est_notre_operateur === 1;
+    }
+
     public function createClient(string $telephone, int $operateurId, string $code = null): int
     {
         $nom = 'Client ' . $telephone;

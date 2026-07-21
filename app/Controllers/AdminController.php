@@ -220,21 +220,19 @@ class AdminController extends BaseController
 
     public function gains()
     {
-        $gainsSepaRes = [];
-        $montantsAEnvoyer = [];
+        $gainsNotreOp = $this->transactionModel->getGainsNotreOperateur();
+        $gainsExternes = $this->transactionModel->getGainsExternes();
+        $externalOps = $this->transactionModel->getExternalOperateurs();
 
-        try {
-            $gainsSepaRes = $this->transactionModel->getGainsSepares();
-            $montantsAEnvoyer = $this->transactionModel->getMontantsAEnvoyer();
-        } catch (\Exception $e) {
-            $gainsSepaRes = [];
-            $montantsAEnvoyer = [];
+        $gainsExternesParOp = [];
+        foreach ($gainsExternes as $g) {
+            $gainsExternesParOp[$g->operateur_id][] = $g;
         }
 
         return view('admin/gains', [
-            'gains'            => $this->transactionModel->getGainsParType(),
-            'gainsSepares'     => $gainsSepaRes,
-            'montantsAEnvoyer' => $montantsAEnvoyer,
+            'gainsNotreOp'       => $gainsNotreOp,
+            'gainsExternesParOp' => $gainsExternesParOp,
+            'externalOps'        => $externalOps,
         ]);
     }
 
@@ -252,6 +250,7 @@ class AdminController extends BaseController
         ];
 
         $transactions = $this->transactionModel->getAllTransactions($filters);
+        
 
         return view('admin/transactions_history', [
             'transactions' => $transactions,

@@ -37,6 +37,7 @@
                 <a href="<?= base_url('admin/transactions') ?>" class="btn btn-outline-secondary">
                     <i class="fas fa-times"></i>
                 </a>
+                
             </div>
         </form>
     </div>

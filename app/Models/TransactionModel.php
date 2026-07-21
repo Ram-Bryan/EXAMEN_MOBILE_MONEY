@@ -45,25 +45,79 @@ class TransactionModel extends Model
     }
 
     /**
-     * Retourne les gains séparés : notre opérateur vs opérateurs externes
-     * Utilise la vue v_situation_gains créée en v2
+     * Gains "Notre opérateur" : DEPOT, RETRAIT, TRANSFERT (interne uniquement).
+     * Toujours 3 lignes, une par type.
      */
-    public function getGainsSepares()
+    public function getGainsNotreOperateur()
     {
         $db = \Config\Database::connect();
-        $sql = "SELECT * FROM v_situation_gains ORDER BY est_notre_operateur DESC, type_operation";
+        $sql = "
+            SELECT
+                t.code AS type_operation,
+                t.nom  AS type_nom,
+                COALESCE(SUM(tf.frais_applique), 0) AS total_gains,
+                COUNT(tf.transaction_id) AS nb_operations
+            FROM types_operation t
+            LEFT JOIN v_transactions_frais tf
+                   ON tf.type_operation_id = t.id
+                  AND tf.frais_applique IS NOT NULL
+                  AND tf.operateur_id IN (
+                      SELECT id FROM operateur_prefixes WHERE est_notre_operateur = 1
+                  )
+                  AND (
+                      t.code != 'TRANSFERT'
+                      OR tf.destinataire_id IN (
+                          SELECT c2.id FROM clients c2
+                          JOIN operateur_prefixes o2 ON o2.id = c2.operateur_id
+                          WHERE o2.est_notre_operateur = 1
+                      )
+                  )
+            GROUP BY t.id, t.code, t.nom
+            ORDER BY CASE t.code WHEN 'DEPOT' THEN 1 WHEN 'RETRAIT' THEN 2 WHEN 'TRANSFERT' THEN 3 END
+        ";
         return $db->query($sql)->getResultObject();
     }
 
     /**
-     * Retourne les montants totaux à envoyer à chaque opérateur externe
-     * Utilise la vue v_montants_a_envoyer créée en v2
+     * Gains par opérateur externe : uniquement les TRANSFERTS vers cet opérateur.
+     * Retourne toutes les données groupées par operateur_id + type.
      */
-    public function getMontantsAEnvoyer()
+    public function getGainsExternes()
     {
         $db = \Config\Database::connect();
-        $sql = "SELECT * FROM v_montants_a_envoyer ORDER BY montant_total_a_envoyer DESC";
+        $sql = "
+            SELECT
+                o.id   AS operateur_id,
+                o.nom  AS operateur_nom,
+                t.code AS type_operation,
+                t.nom  AS type_nom,
+                COALESCE(SUM(tf.frais_applique), 0) AS total_gains,
+                COUNT(tf.transaction_id) AS nb_operations
+            FROM operateur_prefixes o
+            CROSS JOIN types_operation t
+            LEFT JOIN v_transactions_frais tf
+                   ON tf.type_operation_id = t.id
+                  AND tf.frais_applique IS NOT NULL
+                  AND t.code = 'TRANSFERT'
+                  AND tf.destinataire_id IN (
+                      SELECT c.id FROM clients c WHERE c.operateur_id = o.id
+                  )
+            WHERE o.est_notre_operateur = 0
+            GROUP BY o.id, o.nom, t.id, t.code, t.nom
+            ORDER BY o.nom, CASE t.code WHEN 'DEPOT' THEN 1 WHEN 'RETRAIT' THEN 2 WHEN 'TRANSFERT' THEN 3 END
+        ";
         return $db->query($sql)->getResultObject();
+    }
+
+    /**
+     * Liste des opérateurs externes.
+     */
+    public function getExternalOperateurs()
+    {
+        $db = \Config\Database::connect();
+        return $db->query(
+            "SELECT id, nom FROM operateur_prefixes WHERE est_notre_operateur = 0 ORDER BY nom"
+        )->getResultObject();
     }
 
     public function getClientTransactions(int $clientId, int $limit = null, array $filters = [])

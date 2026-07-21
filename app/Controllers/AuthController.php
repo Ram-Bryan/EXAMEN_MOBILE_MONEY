@@ -76,6 +76,11 @@ class AuthController extends BaseController
             $client = $this->clientModel->find($clientId);
         }
 
+        // Contrainte : seuls les clients de notre opérateur peuvent se connecter
+        if (!$this->clientModel->isNotreOperateur($client->id)) {
+            return redirect()->back()->withInput()->with('error', 'Seuls les clients de notre opérateur (Mobile Money — 033) peuvent se connecter.');
+        }
+
         // Open Client Session
         $this->session->set([
             'isLoggedIn'  => true,
