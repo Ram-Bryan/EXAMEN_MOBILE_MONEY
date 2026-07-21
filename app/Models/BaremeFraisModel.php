@@ -15,7 +15,7 @@ class BaremeFraisModel extends Model
 
     public function getCurrentBaremes()
     {
-        $db = \Config\Database::connect();
+        $db = $this->db;
         $sql = "SELECT b.id AS bareme_id, b.type_operation_id, b.operateur_id, 
                        o.prefixe, t.nom AS type_nom,
                        h.montant_min, h.montant_max, h.frais_fixe, h.date_modif
@@ -34,7 +34,7 @@ class BaremeFraisModel extends Model
 
     public function getBaremesByOperateur(int $operateurId)
     {
-        $db = \Config\Database::connect();
+        $db = $this->db;
         $sql = "SELECT b.id AS bareme_id, b.type_operation_id, b.operateur_id,
                        o.prefixe, t.code AS type_code, t.nom AS type_nom,
                        h.montant_min, h.montant_max, h.frais_fixe, h.date_modif
@@ -54,7 +54,7 @@ class BaremeFraisModel extends Model
 
     public function getAllBaremesByOperateur(int $operateurId)
     {
-        $db = \Config\Database::connect();
+        $db = $this->db;
         $sql = "SELECT b.id AS bareme_id, b.type_operation_id, b.operateur_id,
                        o.prefixe, t.code AS type_code, t.nom AS type_nom,
                        h.id AS historique_id,
@@ -70,7 +70,7 @@ class BaremeFraisModel extends Model
 
     public function addTranche($type_operation_id, $operateur_id, $montant_min, $montant_max, $frais_fixe)
     {
-        $db = \Config\Database::connect();
+        $db = $this->db;
         $db->transStart();
 
         $bareme = $this->where(['type_operation_id' => $type_operation_id, 'operateur_id' => $operateur_id])->first();
@@ -84,7 +84,7 @@ class BaremeFraisModel extends Model
             $baremeId = $bareme->id;
         }
 
-        $historiqueModel = new \App\Models\BaremeFraisHistoriqueModel();
+        $historiqueModel = new BaremeFraisHistoriqueModel();
         $now = date('Y-m-d H:i:s');
 
         $latestDate = $historiqueModel->select('MAX(date_modif) AS max_date')

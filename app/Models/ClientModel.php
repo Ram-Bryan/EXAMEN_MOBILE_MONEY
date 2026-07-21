@@ -18,7 +18,7 @@ class ClientModel extends Model
 
     public function getClientsSoldes()
     {
-        $db = \Config\Database::connect();
+        $db = $this->db;
         $sql = "SELECT
                     c.id AS client_id,
                     c.telephone,
@@ -75,7 +75,7 @@ class ClientModel extends Model
 
     public function isNotreOperateur(int $clientId): bool
     {
-        $db = \Config\Database::connect();
+        $db = $this->db;
         $row = $db->query(
             "SELECT o.est_notre_operateur
              FROM clients c

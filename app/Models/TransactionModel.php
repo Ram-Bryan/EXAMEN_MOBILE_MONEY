@@ -18,7 +18,7 @@ class TransactionModel extends Model
 
     public function getGainsParType()
     {
-        $db = \Config\Database::connect();
+        $db = $this->db;
         $sql = "SELECT t.nom AS type_operation, SUM(COALESCE(vf.frais_applique, 0)) AS total_gains
                 FROM v_transactions_frais vf
                 JOIN types_operation t ON vf.type_operation_id = t.id
@@ -28,7 +28,7 @@ class TransactionModel extends Model
 
     public function getGainsParOperateur(int $operateurId)
     {
-        $db = \Config\Database::connect();
+        $db = $this->db;
         $sql = "
             SELECT
                 t.code AS type_operation,
@@ -50,7 +50,7 @@ class TransactionModel extends Model
      */
     public function getGainsNotreOperateur()
     {
-        $db = \Config\Database::connect();
+        $db = $this->db;
         $sql = "
             SELECT
                 t.code AS type_operation,
@@ -84,7 +84,7 @@ class TransactionModel extends Model
      */
     public function getGainsExternes()
     {
-        $db = \Config\Database::connect();
+        $db = $this->db;
         $sql = "
             SELECT
                 o.id   AS operateur_id,
@@ -114,7 +114,7 @@ class TransactionModel extends Model
      */
     public function getExternalOperateurs()
     {
-        $db = \Config\Database::connect();
+        $db = $this->db;
         return $db->query(
             "SELECT id, nom FROM operateur_prefixes WHERE est_notre_operateur = 0 ORDER BY nom"
         )->getResultObject();
@@ -125,7 +125,7 @@ class TransactionModel extends Model
      */
     public function getKpisGains()
     {
-        $db = \Config\Database::connect();
+        $db = $this->db;
         $sql = "
             SELECT
                 COALESCE(SUM(commission), 0)        AS total_commission,
@@ -182,7 +182,7 @@ class TransactionModel extends Model
         $results = $db->query($sql, $params)->getResult();
 
         // Fallback pour les frais manquants (dus aux dates)
-        $baremeModel = new \App\Models\BaremeFraisModel();
+        $baremeModel = new BaremeFraisModel();
         foreach ($results as $tx) {
             if ($tx->frais_applique === null && $tx->type_code !== 'DEPOT') {
                 $tx->frais_applique = (float)$baremeModel->getFrais($tx->type_operation_id, $tx->operateur_id, $tx->montant_brut);
@@ -241,7 +241,7 @@ class TransactionModel extends Model
 
         $results = $db->query($sql, $params)->getResult();
 
-        $baremeModel = new \App\Models\BaremeFraisModel();
+        $baremeModel = new BaremeFraisModel();
         foreach ($results as $tx) {
             if ($tx->frais_applique === null && $tx->type_code !== 'DEPOT') {
                 $tx->frais_applique = (float)$baremeModel->getFrais($tx->type_operation_id, $tx->operateur_id, $tx->montant_brut);
