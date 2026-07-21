@@ -45,7 +45,7 @@
                             <label for="recipient_phone" class="form-label">Numéro de téléphone du destinataire</label>
                             <div class="input-group">
                                 <span class="input-group-text"><i class="fas fa-user-friends"></i></span>
-                                <input type="tel" class="form-control" id="recipient_phone" name="recipient_phone" placeholder="Ex: 0349876543" oninput="previewTransferFee()">
+                                <input type="tel" class="form-control" id="recipient_phone" name="c" placeholder="Ex: 0349876543" oninput="previewTransferFee()">
                             </div>
                             <small class="text-muted mt-2 d-block">
                                 Numéros acceptés : 031, 032, 033, 034, 037, 038.

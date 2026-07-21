@@ -108,4 +108,6 @@ class ClientModel extends Model
 
         return $this->insert($data, true);
     }
+
+    
 }

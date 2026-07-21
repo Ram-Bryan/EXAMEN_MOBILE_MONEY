@@ -225,12 +225,15 @@ class ClientController extends BaseController
         $transferMode  = $this->request->getPost('transfer_mode') ?? 'single';
         $recipientsRaw = $this->request->getPost('recipients');
         $recipientPhone= trim($this->request->getPost('recipient_phone') ?? '');
-
+        
         if ($transferMode === 'multiple' && is_array($recipientsRaw)) {
             $recipients = array_filter(array_map('trim', $recipientsRaw), fn($p) => $p !== '');
         } else {
             $recipients = $recipientPhone !== '' ? [$recipientPhone] : [];
         }
+        /*if (!$this->clientModel->isNotreOperateur($clientId)) {
+            return redirect()->back()->withInput()->with('error', 'Le dépôt est réservé aux clients de notre opérateur.');
+        }*/
 
         if ($amount <= 0) {
             return redirect()->back()->withInput()->with('error', 'Montant invalide.');
@@ -351,6 +354,7 @@ class ClientController extends BaseController
 
         return redirect()->back()->withInput()->with('error', 'Erreur lors du transfert. Seulement ' . $insertedCount . '/' . $count . ' transactions effectuées.');
     }
+    
 
     public function history()
     {

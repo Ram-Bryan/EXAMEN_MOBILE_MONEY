@@ -198,3 +198,6 @@
 - [x] Tests des transferts multiples
 - [x] Tests des transferts inter-opérateur (commission)
 - [x] Compléter `Taches.md`
+
+promotion fris de transfert , meme operateur 
+creer le promotion , refa lasa  
