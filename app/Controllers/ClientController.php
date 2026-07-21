@@ -8,7 +8,7 @@ use App\Models\BaremeFraisModel;
 use App\Models\TypeOperationModel;
 use App\Models\OperateurPrefixeModel;
 
-class Client extends BaseController
+class ClientController extends BaseController
 {
     protected $clientModel;
     protected $transactionModel;

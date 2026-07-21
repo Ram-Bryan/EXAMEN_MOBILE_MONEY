@@ -60,19 +60,19 @@ $routes->group('admin', function($routes) {
 
 // ==================== CLIENT ROUTES (protégées par ClientFilter) ====================
 $routes->group('client', function($routes) {
-    $routes->get('dashboard', 'Client::dashboard');
-    $routes->get('balance', 'Client::balance');
-    $routes->get('deposit', 'Client::deposit');
-    $routes->post('deposit', 'Client::doDeposit');
-    $routes->get('withdraw', 'Client::withdraw');
-    $routes->post('withdraw', 'Client::doWithdraw');
-    $routes->get('transfer', 'Client::transfer');
-    $routes->post('transfer', 'Client::doTransfer');
-    $routes->get('history', 'Client::history');
+    $routes->get('dashboard', 'ClientModel::dashboard');
+    $routes->get('balance', 'ClientModel::balance');
+    $routes->get('deposit', 'ClientModel::deposit');
+    $routes->post('deposit', 'ClientModel::doDeposit');
+    $routes->get('withdraw', 'ClientModel::withdraw');
+    $routes->post('withdraw', 'ClientModel::doWithdraw');
+    $routes->get('transfer', 'ClientModel::transfer');
+    $routes->post('transfer', 'ClientModel::doTransfer');
+    $routes->get('history', 'ClientModel::history');
 });
 
 // ==================== API ROUTES (protégées par ClientFilter) ====================
 $routes->group('api', function($routes) {
-    $routes->get('client/balance', 'Api::getBalance');
-    $routes->get('fees/calculate', 'Api::calculateFees');
+    $routes->get('client/balance', 'ApiController::getBalance');
+    $routes->get('fees/calculate', 'ApiController::calculateFees');
 });

@@ -15,7 +15,7 @@ class BaremeFraisModel extends Model
 
     public function getCurrentBaremes()
     {
-        $db = \Config\Database::connect();
+        
         $sql = "SELECT b.id AS bareme_id, b.type_operation_id, b.operateur_id, 
                        o.prefixe, t.nom AS type_nom,
                        h.montant_min, h.montant_max, h.frais_fixe, h.date_modif
@@ -29,12 +29,11 @@ class BaremeFraisModel extends Model
                     WHERE h2.bareme_id = h.bareme_id
                 )
                 ORDER BY t.nom, o.prefixe, h.montant_min";
-        return $db->query($sql)->getResultObject();
+        return $this->query($sql)->getResultObject();
     }
 
     public function getBaremesByOperateur(int $operateurId)
     {
-        $db = \Config\Database::connect();
         $sql = "SELECT b.id AS bareme_id, b.type_operation_id, b.operateur_id,
                        o.prefixe, t.code AS type_code, t.nom AS type_nom,
                        h.montant_min, h.montant_max, h.frais_fixe, h.date_modif
@@ -49,12 +48,11 @@ class BaremeFraisModel extends Model
                       WHERE h2.bareme_id = h.bareme_id
                   )
                 ORDER BY t.nom, h.montant_min";
-        return $db->query($sql, [$operateurId])->getResultObject();
+        return $this->query($sql, [$operateurId])->getResultObject();
     }
 
     public function getAllBaremesByOperateur(int $operateurId)
     {
-        $db = \Config\Database::connect();
         $sql = "SELECT b.id AS bareme_id, b.type_operation_id, b.operateur_id,
                        o.prefixe, t.code AS type_code, t.nom AS type_nom,
                        h.id AS historique_id,
@@ -65,13 +63,13 @@ class BaremeFraisModel extends Model
                 JOIN baremes_frais_historique h ON h.bareme_id = b.id
                 WHERE b.operateur_id = ?
                 ORDER BY t.nom, h.date_modif DESC, h.montant_min";
-        return $db->query($sql, [$operateurId])->getResultObject();
+        return $this->query($sql, [$operateurId])->getResultObject();
     }
 
     public function addTranche($type_operation_id, $operateur_id, $montant_min, $montant_max, $frais_fixe)
     {
-        $db = \Config\Database::connect();
-        $db->transStart();
+       
+        $this->transStart();
 
         $bareme = $this->where(['type_operation_id' => $type_operation_id, 'operateur_id' => $operateur_id])->first();
         if (!$bareme) {
@@ -116,9 +114,9 @@ class BaremeFraisModel extends Model
             'date_modif'  => $now
         ]);
 
-        $db->transComplete();
+        $this->transComplete();
 
-        return $db->transStatus();
+        return $this->transStatus();
     }
     
     public function getFrais(int $typeOperationId, int $operateurId, float $montantBrut, string $dateTransaction = null)
@@ -126,8 +124,6 @@ class BaremeFraisModel extends Model
         if ($dateTransaction === null) {
             $dateTransaction = date('Y-m-d H:i:s');
         }
-        
-        $db = $this->db;
         $sql = "
             SELECT h.frais_fixe
             FROM baremes_frais b
@@ -145,7 +141,7 @@ class BaremeFraisModel extends Model
             LIMIT 1
         ";
         
-        $query = $db->query($sql, [
+        $query = $this->query($sql, [
             $typeOperationId,
             $operateurId,
             $montantBrut,
@@ -159,7 +155,6 @@ class BaremeFraisModel extends Model
 
     public function getCommission(int $destinationOperateurId, float $montant): float
     {
-        $db = $this->db;
         $sql = "
             SELECT ch.pourcentage
             FROM commissions_historique ch
@@ -172,17 +167,16 @@ class BaremeFraisModel extends Model
               )
             LIMIT 1
         ";
-        $query = $db->query($sql, [$destinationOperateurId]);
+        $query = $this->query($sql, [$destinationOperateurId]);
         $row = $query->getRow();
         return $row ? (float)$row->pourcentage * $montant / 100 : 0.0;
     }
 
     public function isInterOperator(int $senderOperateurId, int $recipientOperateurId): bool
     {
-        $db = $this->db;
         $sql = "SELECT est_notre_operateur FROM operateur_prefixes WHERE id = ?";
-        $senderOp = $db->query($sql, [$senderOperateurId])->getRow();
-        $recipientOp = $db->query($sql, [$recipientOperateurId])->getRow();
+        $senderOp = $this->query($sql, [$senderOperateurId])->getRow();
+        $recipientOp = $this->query($sql, [$recipientOperateurId])->getRow();
 
         if (!$senderOp || !$recipientOp) return false;
         return $senderOp->est_notre_operateur == 1 && $recipientOp->est_notre_operateur == 0;
@@ -193,7 +187,6 @@ class BaremeFraisModel extends Model
      */
     public function getFeesSchedules(string $typeCode, int $operateurId)
     {
-        $db = $this->db;
         $now = date('Y-m-d H:i:s');
         $sql = "
             SELECT h.montant_min, h.montant_max, h.frais_fixe
@@ -211,7 +204,7 @@ class BaremeFraisModel extends Model
             ORDER BY h.montant_min ASC
         ";
         
-        $query = $db->query($sql, [$typeCode, $operateurId, $now]);
+        $query = $this->query($sql, [$typeCode, $operateurId, $now]);
         return $query->getResult();
     }
 }

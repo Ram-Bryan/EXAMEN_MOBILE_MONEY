@@ -6,7 +6,7 @@ use App\Models\ClientModel;
 use App\Models\TypeOperationModel;
 use App\Models\BaremeFraisModel;
 
-class Api extends BaseController
+class ApiController extends BaseController
 {
     protected $clientModel;
     protected $typeOperationModel;
